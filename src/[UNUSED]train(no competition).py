@@ -4,7 +4,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 
-path_df = r'src\data\processed\processed_diamonds_1.csv'
+path_df = r'src\data\processed\[UNUSED]processed_diamonds_1.csv'
 df_diamonds = pd.read_csv(os.path.abspath(path_df))
 
 X = df_diamonds.drop(columns='price (dollars)')
