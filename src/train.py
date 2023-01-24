@@ -15,4 +15,4 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.7, random
 regression.fit(X_train, y_train)
 y_pred = regression.predict(X_test)
 
-print(r2_score(y_test, y_pred))
+print(f'r2 score: {r2_score(y_test, y_pred)}')
