@@ -7,8 +7,8 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, m
 from sklearn.metrics import accuracy_score, recall_score, precision_score, confusion_matrix, f1_score
 
 
-class Data_modeling:
-    
+class Model:
+
     def __init__(self, dataframe, target_name, type='regression', index=None):
         self.target_name = target_name
         if index:
@@ -17,11 +17,11 @@ class Data_modeling:
             self.dataframe = dataframe
         self.type = type
 
-    def split_dataframe(self, train_size):
+    def split_dataframe(self, train_size, random_num=43):
         '''Splits the dataframe, required to apply the models'''
         X = self.dataframe.drop(columns=self.target_name)
         y = self.dataframe[self.target_name]
-        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, train_size=train_size, random_state=43)
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, train_size=train_size, random_state=random_num)
     
     def apply_models(self, selection=None, params=None):
         '''Applies every selected model, all of them if none is selected'''
@@ -42,10 +42,10 @@ class Data_modeling:
         for model_name, model in self.models.items():
             model.fit(self.X_train, self.y_train)
             self.y_pred = model.predict(self.X_test)
-            self.models[model_name] = {'test': np.array(self.y_test), 'prediction': self.y_pred}
+            self.models[model_name] = {'test': np.array(self.y_test), 'prediction': self.y_pred, 'model': model}
         return self.models
 
-    def evaluate_metrics(self, selection=None):
+    def evaluate_metrics(self, selection=None, pickle=False):
         '''Anotates regression metrics based on the real values and the predicion'''
         self.models_evaluated_previous = self.models
         self.models_evaluated = copy(self.models_evaluated_previous)
@@ -66,12 +66,9 @@ class Data_modeling:
                 accuracy = accuracy_score(model_results['test'], model_results['prediction'])
                 recall = recall_score(model_results['test'], model_results['prediction'])
                 precision = precision_score(model_results['test'], model_results['prediction'])
-                confusion = confusion_matrix(model_results['test'], model_results['prediction'])
-                diagonal_total = 0
-                for index, element in enumerate(confusion):
-                    diagonal_total += element[index]
+                confusion = [element for element in confusion_matrix(model_results['test'], model_results['prediction'])]
                 f1 = f1_score(model_results['test'], model_results['prediction'])
-                self.models_evaluated[model_name]['metrics'] = {'accuracy': accuracy, 'recall': recall, 'precision': precision, 'confusion_diagonal': diagonal_total, 'f1_score': f1}
+                self.models_evaluated[model_name]['metrics'] = {'accuracy': accuracy, 'recall': recall, 'precision': precision, 'confusion_matrix': confusion, 'f1_score': f1}
         return self.models_evaluated
 
     def create_dataframe(self):

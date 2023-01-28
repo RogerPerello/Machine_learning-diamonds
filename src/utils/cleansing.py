@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 
-class Data_cleansing:
+class Cleansing:
 
     def __init__(self, dataframes, target_name, index=None):
         self.train = dataframes[0]
