@@ -90,7 +90,6 @@ class Model:
             print(f'-- {self.type.capitalize()} --')
         total_time = time.time() - current_time
         for model_name, model in self.models.items():
-            print(model)
             start_time = time.time()
             print(f'Starting {model_name}:')
             if kfolds_num:
@@ -110,13 +109,13 @@ class Model:
             print(f'- {model_name} done in {round(execution_time, 2)} sec(s). Total time: {round(total_time, 2)}')
         return self.models
 
-    def evaluate_metrics(self, selection=None, params_list=False):
+    def evaluate_metrics(self, models_dict, selection_list=None, params_list=None):
         '''Anotates regression metrics based on the real values and the predicion'''
-        self.models_evaluated_previous = self.models
+        self.models_evaluated_previous = models_dict
         self.models_evaluated = copy(self.models_evaluated_previous)
-        if selection:
+        if selection_list:
             for element in self.models_evaluated_previous.keys():
-                if element not in selection:
+                if element not in selection_list:
                     self.models_evaluated.pop(element)
         if self.type == 'regression':
             for model_name, model_results in self.models_evaluated.items():
@@ -148,17 +147,17 @@ class Model:
                 self.models_evaluated[model_name]['metrics'] = {'accuracy': list_of_metrics[0], 'recall': list_of_metrics[1], 'precision': list_of_metrics[2], 'f1_score': list_of_metrics[3], 'confusion_matrix': confusion}
         return self.models_evaluated
 
-    def create_dataframe(self):
+    def create_dataframe(self, metrics_dict):
         '''Returns a dataframe with the metrics of each model'''
-        self.models_metrics = self.models_evaluated.copy()
+        self.models_metrics = metrics_dict.copy()
         metrics_list = []
         best_values_list = []
         worst_values_list = []
-        for model_name, model_results in self.models_evaluated.items():
+        for model_name in metrics_dict.keys():
             self.models_metrics[model_name] = self.models_metrics[model_name]['metrics']
-            model_values = [value if type(value) is not list else sum([row[index] for index, row in enumerate(value)]) for value in self.models_evaluated[model_name]['metrics'].values()]
+            model_values = [value if type(value) is not list else sum([row[index] for index, row in enumerate(value)]) for value in metrics_dict[model_name]['metrics'].values()]
             if not metrics_list:
-                metrics_list += [key for key in self.models_evaluated[model_name]['metrics'].keys()]
+                metrics_list += [key for key in metrics_dict[model_name]['metrics'].keys()]
             if not best_values_list:
                 best_values_list = [[model_name, value] for value in model_values]
                 worst_values_list = [[model_name, value] for value in model_values]
