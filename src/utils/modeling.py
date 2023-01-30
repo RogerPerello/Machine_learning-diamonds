@@ -14,7 +14,7 @@ from sklearn.neighbors import KNeighborsRegressor, KNeighborsClassifier
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 from sklearn.svm import SVR, SVC
 
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, KFold, StratifiedKFold, cross_validate
 
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, mean_absolute_percentage_error
 from sklearn.metrics import accuracy_score, recall_score, precision_score, confusion_matrix, f1_score
@@ -31,18 +31,20 @@ class Model:
         self.type = type
 
     def split_dataframe(self, train_num=0.7, random_num=43):
+        self.random_num = random_num
         '''Splits the dataframe, required to apply the models'''
         X = self.dataframe.drop(columns=self.target_name)
         y = self.dataframe[self.target_name]
-        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, train_size=train_num, random_state=random_num)
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, train_size=train_num, random_state=self.random_num)
         return (self.X_train, self.X_test, self.y_train, self.y_test)
     
-    def apply_models(self, selected_list=None, excluded_list=None, params_list=None):
+    def apply_models(self, selected_list=None, excluded_list=None, params_list=None, kfolds_num=None):
         '''Applies every selected model, all of them if none is selected'''
         if not excluded_list:
             excluded_list = []
         if not selected_list:
             selected_list = []
+        fold = 'KFold'
         current_time = time.time()
         self.models_regression = {'LinearRegression': '', # Write your regression models names as keys of the dict. Must be imported
                                     'Ridge': '', 
@@ -62,8 +64,13 @@ class Model:
                                         }
         if self.type == 'regression':
             self.models = copy(self.models_regression)
+            if kfolds_num:
+                kfolds = KFold(n_splits=kfolds_num, shuffle=True, random_state=self.random_num)
         elif self.type == 'classification':
             self.models = copy(self.models_classification)
+            if kfolds_num:
+                kfolds = StratifiedKFold(n_splits=kfolds_num, shuffle=True, random_state=self.random_num)
+                fold = 'StratifiedKFold'
         self.models_previous = self.models.copy()
         for element in self.models_previous.keys():
             if (len(selected_list) >= 1 and element not in selected_list) or element in excluded_list:
@@ -73,12 +80,29 @@ class Model:
         if params_list:
             for params in params_list:
                 self.models[params[0]] = eval(params[0] + '(' + params[1] + ')')
-                self.models[params[0] + ': ' + params[1]] = self.models.pop(params[0])
+                self.models[params[0] + ': ' + params[1]] = self.models[params[0]]
+            for params in params_list:
+                    if params[0] in self.models:
+                        self.models.pop(params[0])
+        if kfolds_num:
+            print(f'-- {self.type.capitalize()}: using best of {fold} --')
+        else:
+            print(f'-- {self.type.capitalize()} --')
         total_time = time.time() - current_time
         for model_name, model in self.models.items():
+            print(model)
             start_time = time.time()
             print(f'Starting {model_name}:')
-            model.fit(self.X_train, self.y_train)
+            if kfolds_num:
+                cross_val = cross_validate(model, self.X_train, self.y_train, cv=kfolds, return_estimator=True)
+                best_score = cross_val['test_score'][0]
+                for index, element in enumerate(cross_val['test_score']):
+                    if element is not cross_val['test_score'][0]:
+                        if element > cross_val['test_score'][index - 1]:
+                            best_score = index
+                model = cross_val['estimator'][best_score]
+            else:
+                model.fit(self.X_train, self.y_train)
             self.y_pred = model.predict(self.X_test)
             self.models[model_name] = {'test': np.array(self.y_test), 'prediction': self.y_pred, 'model': model}
             execution_time = time.time() - start_time
