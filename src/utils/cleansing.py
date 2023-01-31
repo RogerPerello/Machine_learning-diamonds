@@ -1,5 +1,7 @@
 import numpy as np
-from sklearn.preprocessing import StandardScaler
+
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+
 
 class Cleansing:
 
@@ -21,7 +23,7 @@ class Cleansing:
                 self.train.loc[self.train[column] < q1 - 1.5*iqr, column] = q1 - 1.5*iqr
             if max:
                 self.train.loc[self.train[column] > q3 + 1.5*iqr, column] = q3 + 1.5*iqr
-        return self.train
+
 
     def remove_elements(self, conditioned_columns_list, condition, number):
         '''Removes the rows of a dataframe based on a condition'''
@@ -36,7 +38,7 @@ class Cleansing:
                 self.train.drop(self.train[(self.train[column] < number)].index, inplace=True)   
             elif condition == 'smaller_or_equal':
                 self.train.drop(self.train[(self.train[column] <= number)].index, inplace=True)
-            return self.train
+
 
     def apply_scalar(self, method, list_of_columns=None):
         '''Applies the selected scalar method to a list of train and test dataframes for the chosen columns'''
@@ -46,8 +48,14 @@ class Cleansing:
                     df[column] = np.log(df[column])
         elif method == 'standard':
             scaler = StandardScaler().fit(self.train.values)
-            self.test = self.test.join(self.target)
-            for df in (self.train, self.test):
+            scaled_test = self.test.join(self.target)
+            for df in (self.train, scaled_test):
                 df.loc[:, :] = scaler.transform(df.values)
-            self.test = self.test.drop(columns=self.target_name)
-        return (self.train, self.test)
+            self.test = scaled_test.drop(columns=self.target_name)
+        elif method == 'minmax':
+            scaler = MinMaxScaler().fit(self.train.values)
+            scaled_test = self.test.join(self.target)
+            for df in (self.train, scaled_test):
+                df.loc[:, :] = scaler.transform(df.values)
+            self.test = scaled_test.drop(columns=self.target_name)
+        print(f'{method.capitalize()} scaler completed')
