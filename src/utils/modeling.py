@@ -4,6 +4,8 @@ from copy import copy
 import time
 import pickle
 
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+
 from sklearn.naive_bayes import BernoulliNB, GaussianNB
 from sklearn.linear_model import LinearRegression, Ridge, LogisticRegression
 from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
@@ -15,6 +17,8 @@ from sklearn.model_selection import train_test_split, KFold, StratifiedKFold, cr
 
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, mean_absolute_percentage_error
 from sklearn.metrics import accuracy_score, recall_score, precision_score, confusion_matrix, f1_score
+
+from xgboost import XGBRegressor
 
 
 class Model:
@@ -36,11 +40,18 @@ class Model:
     def send_pickle():
         pass
 
-    def split_dataframe(self, train_num=0.7, random_num=43):
+    def split_dataframe(self, train_num=0.7, random_num=43, scaler=None):
         self.random_num = random_num
         X = self.dataframe.drop(columns=self.target_name)
         y = self.dataframe[self.target_name]
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, train_size=train_num, random_state=self.random_num)
+        if scaler:
+            self.scaler = eval(scaler + '()')
+            self.scaler_name = ' (' + scaler + ')'
+            self.X_train = self.scaler.fit_transform(self.X_train)
+            self.X_test = self.scaler.transform(self.X_test)        
+        else:
+            self.scaler_name = ''
         return (self.X_train, self.X_test, self.y_train, self.y_test)
 
     def apply_models(self, selected_list=None, excluded_list=None, params_list=None):
@@ -66,7 +77,7 @@ class Model:
                         except Exception:
                             continue
         if self.kfolds_num:
-            print(f'-- {self.type.capitalize()}: using best of {self.kfolds_num} {self.kfold}s --')
+            print(f'-- {self.type.capitalize()}{self.scaler_name}: using best of {self.kfolds_num} {self.kfold}s --')
         else:
             print(f'-- {self.type.capitalize()} --')
         total_time = time.time() - current_time
@@ -151,17 +162,22 @@ class Regression(Model):
             else:
                 for index, value in enumerate(model_values):
                     if value < best_values_list[index][1]:
-                        best_values_list[index][1] = value
-                        best_values_list[index][0] = model_name
+                        if index != 3:
+                            best_values_list[index][1] = value
+                            best_values_list[index][0] = model_name
+                        else:
+                            worst_values_list[index][1] = value
+                            worst_values_list[index][0] = model_name
                     if value > worst_values_list[index][1]:
-                        worst_values_list[index][1] = value
-                        worst_values_list[index][0] = model_name
+                        if index != 3:
+                            worst_values_list[index][1] = value
+                            worst_values_list[index][0] = model_name
+                        else:
+                            best_values_list[index][1] = value
+                            best_values_list[index][0] = model_name
         df = pd.DataFrame(data=self.models_metrics)
         best_values_list = [element[0] for element in best_values_list]
         worst_values_list = [element[0] for element in worst_values_list]
-        not_worst_r2, not_best_r2 = worst_values_list[-2], best_values_list[-2]
-        worst_values_list = [element if element is not not_worst_r2 else not_best_r2 for element in worst_values_list]
-        best_values_list = [element if element is not not_best_r2 else not_worst_r2 for element in worst_values_list]
         df['BEST'] = best_values_list
         df['WORST'] = worst_values_list
         return df
