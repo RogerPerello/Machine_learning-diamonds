@@ -1,6 +1,9 @@
 import numpy as np
 import pandas as pd
+
 from sklearn.linear_model import Ridge
+
+from sklearn.metrics import mean_squared_error
 
 
 def remove_all(df, zeros_only=False):
@@ -19,11 +22,12 @@ def remove_all(df, zeros_only=False):
     return df
 
 
-def assign_values(df):
+def assign_values(df, outlier=True):
     '''Assigns especific values for the diamonds dataframe'''
     df.loc[df.index == 34815, 'lenght (millimeters)'] = 6.62
-    df.loc[df['lenght (millimeters)'] > 10.7, 'lenght (millimeters)'] = 10.54
     df.loc[df['depth (millimeters)'] == 0, 'depth (millimeters)'] = df['depth (percentage)'] / 100 * (df['lenght (millimeters)']+df['width (millimeters)']) / 2
+    if outlier:
+        df.loc[df['lenght (millimeters)'] > 10.7, 'lenght (millimeters)'] = 10.54
     return df
 
 
@@ -65,3 +69,8 @@ def impute_next_higher(df, log=True):
     else:
         df.loc[df['weight (carat)'] > q3 + 1.5*iqr, 'weight (carat)'] = np.exp(1.3862943611198906)
     return df
+
+
+def calculate_rmse(y_test, y_pred):
+    '''Returns rmse metric result'''
+    return mean_squared_error(y_test, y_pred, squared=False)
