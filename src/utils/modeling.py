@@ -85,12 +85,14 @@ class Model:
             start_time = time.time()
             print(f'Starting {model_name}:')
             if self.kfolds_num:
-                cross_val = cross_validate(model, self.X_train, self.y_train, cv=self.kfolds, return_estimator=True)
-                best_score = cross_val['test_score'][0]
+                score_string = 'accuracy'
+                if self.type == 'regression':
+                    score_string = 'neg_mean_absolute_error'
+                cross_val = cross_validate(model, self.X_train, self.y_train, cv=self.kfolds, return_estimator=True, scoring=score_string)
+                best_score = max(cross_val['test_score'])             
                 for index, element in enumerate(cross_val['test_score']):
-                    if element is not cross_val['test_score'][0]:
-                        if element > cross_val['test_score'][index - 1]:
-                            best_score = index
+                    if element == best_score:
+                        best_score = index
                 model = cross_val['estimator'][best_score]
             else:
                 model.fit(self.X_train, self.y_train)
