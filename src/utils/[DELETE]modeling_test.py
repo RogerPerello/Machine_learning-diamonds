@@ -21,15 +21,13 @@ from sklearn.metrics import accuracy_score, recall_score, precision_score, confu
 from xgboost import XGBRegressor
 
 
-
 class Model:
-
+    chosen_models = dict()
 
     def __init__(self, df, target_name, index=None):
         self.target_name = target_name
         self.index = index
         self.df = df
-
 
     @property
     def dataframe(self):
@@ -38,11 +36,9 @@ class Model:
         else:
             return self.df
 
-
     @staticmethod
     def send_pickle():
         pass
-
 
     def split_dataframe(self, train_num=0.7, random_num=43, scaler=None):
         self.random_num = random_num
@@ -58,13 +54,13 @@ class Model:
             self.scaler_name = ''
         return (self.X_train, self.X_test, self.y_train, self.y_test)
 
-
-    def prepare_models(self, selected_list=None, excluded_list=None, params_list=None):
+    def apply_models(self, selected_list=None, excluded_list=None, params_list=None):
         self.models = self.chosen_models.copy()
         if not excluded_list:
             excluded_list = []
         if not selected_list:
             selected_list = []
+        current_time = time.time()
         self.models_previous = self.models.copy()
         for element in self.models_previous.keys():
             if (len(selected_list) >= 1 and element not in selected_list) or element in excluded_list:
@@ -80,17 +76,26 @@ class Model:
                             self.models.pop(params[0])
                         except Exception:
                             continue
-        return 'Models prepared. Apply them or use kfold (apply + evaluate)'
-
-
-    def apply_models(self):
-        print(f'-- {self.type.capitalize()} --')
-        current_time = time.time()
+        if self.kfolds_num:
+            print(f'-- {self.type.capitalize()}{self.scaler_name}: using best of {self.kfolds_num} {self.kfold}s --')
+        else:
+            print(f'-- {self.type.capitalize()} --')
         total_time = time.time() - current_time
         for model_name, model in self.models.items():
             start_time = time.time()
             print(f'Starting {model_name}:')
-            model.fit(self.X_train, self.y_train)
+            if self.kfolds_num:
+                score_string = 'accuracy'
+                if self.type == 'regression':
+                    score_string = 'neg_mean_absolute_error'
+                cross_val = cross_validate(model, self.X_train, self.y_train, cv=self.kfolds, return_estimator=True, scoring=score_string)
+                best_score = max(cross_val['test_score'])             
+                for index, element in enumerate(cross_val['test_score']):
+                    if element == best_score:
+                        best_score = index
+                model = cross_val['estimator'][best_score]
+            else:
+                model.fit(self.X_train, self.y_train)
             self.y_pred = model.predict(self.X_test)
             self.models[model_name] = {'test': np.array(self.y_test), 'prediction': self.y_pred, 'model': model}
             execution_time = time.time() - start_time
@@ -98,25 +103,20 @@ class Model:
             print(f'- {model_name} done in {round(execution_time, 2)} sec(s). Total time: {round(total_time, 2)}')
         return self.models
 
-
-    def create_dataframe(self, best_values_list, worst_values_list, models_metrics):
-        self.df = pd.DataFrame(data=models_metrics)
-        if best_values_list:
-            best_values_list = [element[0] for element in best_values_list]
-            worst_values_list = [element[0] for element in worst_values_list]
-            self.df['BEST'] = best_values_list
-            self.df['WORST'] = worst_values_list
-
+    def evaluate_metrics(self, selection_list=None):
+        self.models_evaluated_previous = self.models
+        self.models_evaluated = copy(self.models_evaluated_previous)
+        if selection_list:
+            for element in self.models_evaluated_previous.keys():
+                if element not in selection_list:
+                    self.models_evaluated.pop(element)
 
 
 class Regression(Model):
-    chosen_models = dict()
-
 
     def __init__(self, dataframe, target_name, index=None):
         super().__init__(dataframe, target_name, index)
         self.type = 'regression'
-
 
     @classmethod
     def add_models(cls, regression_list):
@@ -124,53 +124,21 @@ class Regression(Model):
             for element in regression_list:
                 cls.chosen_models[element] = ''
 
-
     @classmethod
     def remove_models(cls, regression_list):
         if regression_list:
             for element in regression_list:
                 cls.chosen_models.pop(element)
 
-  
-    def apply_and_evaluate_kfolds(self, kfolds_num=5):
+    def apply_models(self, selected_list=None, excluded_list=None, params_list=None, kfolds_num=None):
         self.kfolds_num = kfolds_num
-        self.kfolds = KFold(n_splits=kfolds_num, shuffle=True, random_state=self.random_num)
-        self.kfold = 'fold'
-        metrics = ['neg_root_mean_squared_error', 'neg_mean_squared_error', 'neg_mean_absolute_error', 'r2', 'neg_mean_absolute_percentage_error']
-        self.models_evaluated = dict()
-        print(f'-- {self.type.capitalize()}{self.scaler_name}: using mean of {self.kfolds_num} {self.kfold}s --')
-        current_time = time.time()
-        total_time = time.time() - current_time
-        for model_name, model in self.models.items():
-            print(f'Starting {model_name}:')
-            start_time = time.time()
-            cross_val = cross_validate(model, self.X_train, self.y_train, cv=self.kfolds, return_estimator=True, scoring=metrics)
-            list_of_metrics = list(cross_val.keys())[3:]
-            self.models_evaluated[model_name] = dict()
-            self.models_evaluated[model_name]['models'] = cross_val['estimator']
-            self.models_evaluated[model_name]['metrics'] = {'rmse': abs(np.mean(list(cross_val.values())[3:][0])), 
-                                                            'mse': abs(np.mean(list(cross_val.values())[3:][1])), 
-                                                            'mae': abs(np.mean(list(cross_val.values())[3:][2])), 
-                                                            'r2_score': np.mean(list(cross_val.values())[3:][3]), 
-                                                            'mape': abs(np.mean(list(cross_val.values())[3:][4]))}
-            self.models_evaluated[model_name]['all_metrics'] = {'rmse': list(map(abs, list(cross_val.values())[3:][0])), 
-                                                            'mse': list(map(abs, list(cross_val.values())[3:][1])), 
-                                                            'mae': list(map(abs, list(cross_val.values())[3:][2])), 
-                                                            'r2_score': list(map(abs, list(cross_val.values())[3:][3])), 
-                                                            'mape': list(map(abs, list(cross_val.values())[3:][4]))}
-            self.models_evaluated[model_name]['variances'] = {'rmse': np.var(list(cross_val.values())[3:][0]), 
-                                                            'mse': np.var(list(cross_val.values())[3:][1]), 
-                                                            'mae': np.var(list(cross_val.values())[3:][2]), 
-                                                            'r2_score': np.var(list(cross_val.values())[3:][3]), 
-                                                            'mape': np.var(list(cross_val.values())[3:][4])}
-            execution_time = time.time() - start_time
-            total_time += execution_time
-            print(f'- {model_name} done in {round(execution_time, 2)} sec(s). Total time: {round(total_time, 2)}')
-        return self.models_evaluated
-
+        if kfolds_num:
+            self.kfolds = KFold(n_splits=kfolds_num, shuffle=True, random_state=self.random_num)
+            self.kfold = 'fold'
+        super().apply_models(selected_list, excluded_list, params_list)
 
     def evaluate_metrics(self):
-        self.models_evaluated = self.models.copy()
+        super().evaluate_metrics(selection_list=None)
         for model_name, model_results in self.models_evaluated.items():
             rmse = mean_squared_error(model_results['test'], model_results['prediction'], squared=False)
             mse = mean_squared_error(model_results['test'], model_results['prediction'])
@@ -180,14 +148,13 @@ class Regression(Model):
             self.models_evaluated[model_name]['metrics'] = {'rmse': rmse, 'mse': mse, 'mae': mae, 'r2_score': r2, 'mape': mape}
         return self.models_evaluated
 
-
     def create_dataframe(self):
-        models_metrics = self.models_evaluated.copy()
+        self.models_metrics = self.models_evaluated.copy()
         best_values_list = []
         worst_values_list = []
         for model_name, model_results in self.models_evaluated.items():
-            models_metrics[model_name] = models_metrics[model_name]['metrics']
-            if len(models_metrics) > 1:
+            self.models_metrics[model_name] = self.models_metrics[model_name]['metrics']
+            if len(self.models_metrics) > 1:
                 model_values = [value if type(value) is not list else sum([row[index] for index, row in enumerate(value)]) for value in self.models_evaluated[model_name]['metrics'].values()]
                 if not best_values_list:
                     best_values_list = [[model_name, value] for value in model_values]
@@ -208,18 +175,20 @@ class Regression(Model):
                             else:
                                 best_values_list[index][1] = value
                                 best_values_list[index][0] = model_name
-        super().create_dataframe(best_values_list, worst_values_list, models_metrics)
-        return self.df
+        df = pd.DataFrame(data=self.models_metrics)
+        if best_values_list:
+            best_values_list = [element[0] for element in best_values_list]
+            worst_values_list = [element[0] for element in worst_values_list]
+            df['BEST'] = best_values_list
+            df['WORST'] = worst_values_list
+        return df
 
 
 class Classification(Model):
-    chosen_models = dict()
-
 
     def __init__(self, dataframe, target_name, index=None):
         super().__init__(dataframe, target_name, index)
         self.type = 'classification'
-
 
     @classmethod
     def add_models(cls, classification_list):
@@ -227,57 +196,21 @@ class Classification(Model):
             for element in classification_list:
                 cls.chosen_models[element] = ''
 
-
     @classmethod
     def remove_models(cls, classification_list):
         if classification_list:
             for element in classification_list:
                 cls.chosen_models.pop(element)
 
-
-    def apply_and_evaluate_kfolds(self, kfolds_num=5, multiclass_average=None):
-        self.kfolds = StratifiedKFold(n_splits=kfolds_num, shuffle=True, random_state=self.random_num)
-        self.kfolds_num = kfolds_num
-        self.kfold = 'stratified fold'
-        metrics = ['accuracy', 'recall', 'precision', 'f1']
-        if multiclass_average == 'micro':
-            metrics = ['accuracy', 'precision_micro', 'recall_micro', 'f1_micro'] 
-        elif multiclass_average == 'macro':
-            metrics = ['accuracy', 'precision_macro', 'recall_macro', 'f1_macro'] 
-        elif multiclass_average == 'samples':
-            metrics = ['accuracy', 'precision_samples', 'recall_samples', 'f1_samples'] 
-        elif multiclass_average == 'weighted':
-            metrics = ['accuracy', 'precision_weighted', 'recall_weighted', 'f1_weighted'] 
-        self.models_evaluated = dict()
-        print(f'-- {self.type.capitalize()}{self.scaler_name}: using mean of {self.kfolds_num} {self.kfold}s --')
-        current_time = time.time()
-        total_time = time.time() - current_time
-        for model_name, model in self.models.items():
-            print(f'Starting {model_name}:')
-            start_time = time.time()
-            cross_val = cross_validate(model, self.X_train, self.y_train, cv=self.kfolds, return_estimator=True, scoring=metrics)
-            self.models_evaluated[model_name] = dict()
-            self.models_evaluated[model_name]['models'] = cross_val['estimator']
-            self.models_evaluated[model_name]['metrics'] = {'accuracy': abs(np.mean(list(cross_val.values())[3:][0])), 
-                                                            'recall': abs(np.mean(list(cross_val.values())[3:][1])), 
-                                                            'precision': abs(np.mean(list(cross_val.values())[3:][2])), 
-                                                            'f1_score': np.mean(list(cross_val.values())[3:][3])}
-            self.models_evaluated[model_name]['all_metrics'] = {'accuracy': list(map(abs, list(cross_val.values())[3:][0])), 
-                                                            'recall': list(map(abs, list(cross_val.values())[3:][1])), 
-                                                            'precision': list(map(abs, list(cross_val.values())[3:][2])), 
-                                                            'f1_score': list(map(abs, list(cross_val.values())[3:][3]))}
-            self.models_evaluated[model_name]['variances'] = {'accuracy': np.var(list(cross_val.values())[3:][0]), 
-                                                            'recall': np.var(list(cross_val.values())[3:][1]), 
-                                                            'precision': np.var(list(cross_val.values())[3:][2]), 
-                                                            'f1_score': np.var(list(cross_val.values())[3:][3])}
-            execution_time = time.time() - start_time
-            total_time += execution_time
-            print(f'- {model_name} done in {round(execution_time, 2)} sec(s). Total time: {round(total_time, 2)}')
-        return self.models_evaluated
-
+    def apply_models(self, selected_list=None, excluded_list=None, params_list=None, kfolds_num=None):
+        if kfolds_num:
+            self.kfolds = StratifiedKFold(n_splits=kfolds_num, shuffle=True, random_state=self.random_num)
+            self.kfolds_num = kfolds_num
+            self.kfold = 'stratified fold'
+        super().apply_models(selected_list, excluded_list, params_list)
 
     def evaluate_metrics(self, params_list=None):
-        self.models_evaluated = self.models.copy()
+        super().evaluate_metrics(selection_list=None)
         for model_name, model_results in self.models_evaluated.items():
             accuracy = "accuracy_score (model_results['test'], model_results['prediction']"
             recall = "recall_score (model_results['test'], model_results['prediction']"
@@ -285,27 +218,27 @@ class Classification(Model):
             f1 = "f1_score (model_results['test'], model_results['prediction']"
             matrix = "confusion_matrix (model_results['test'], model_results['prediction']"
             list_of_metrics = []
-            for index, element in enumerate([accuracy, recall, precision, f1, matrix], 1):
+            for element in (accuracy, recall, precision, f1, matrix):
                 if params_list:
                     for params in params_list:
                         if params[0] == element.split()[0]:
-                            element += ', ' + params[1] + ')'
-                if element[-1] == ']':
-                    element += ')'
-                list_of_metrics.append(eval(element))
-            print(list_of_metrics)
+                            list_of_metrics.append(eval(element + "," + params[1] + ")"))
+                        else:
+                            list_of_metrics.append(eval(element + ")"))
+                            continue
+                else:
+                    list_of_metrics.append(eval(element + ")"))
             confusion = [element for element in list_of_metrics[-1]]
             self.models_evaluated[model_name]['metrics'] = {'accuracy': list_of_metrics[0], 'recall': list_of_metrics[1], 'precision': list_of_metrics[2], 'f1_score': list_of_metrics[3], 'confusion_matrix': confusion}
         return self.models_evaluated
 
-
     def create_dataframe(self):
-        models_metrics = self.models_evaluated.copy()
+        self.models_metrics = self.models_evaluated.copy()
         best_values_list = []
         worst_values_list = []
         for model_name, model_results in self.models_evaluated.items():
-            models_metrics[model_name] = models_metrics[model_name]['metrics']
-            if len(models_metrics) > 1:
+            self.models_metrics[model_name] = self.models_metrics[model_name]['metrics']
+            if len(self.models_metrics) > 1:
                 model_values = [value if type(value) is not list else sum([row[index] for index, row in enumerate(value)]) for value in self.models_evaluated[model_name]['metrics'].values()]
                 if not best_values_list:
                     best_values_list = [[model_name, value] for value in model_values]
@@ -318,5 +251,10 @@ class Classification(Model):
                         if value < worst_values_list[index][1]:
                             worst_values_list[index][1] = value
                             worst_values_list[index][0] = model_name
-        super().create_dataframe(best_values_list, worst_values_list, models_metrics)
-        return self.df
+        df = pd.DataFrame(data=self.models_metrics)
+        if best_values_list:
+            best_values_list = [element[0] for element in best_values_list]
+            worst_values_list = [element[0] for element in worst_values_list]
+            df['BEST'] = best_values_list
+            df['WORST'] = worst_values_list
+        return df
