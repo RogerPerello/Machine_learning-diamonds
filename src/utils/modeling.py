@@ -44,7 +44,7 @@ class Model:
         pass
 
 
-    def split_dataframe(self, train_num=0.7, random_num=43, scaler=None):
+    def split_dataframe(self, train_num=0.7, random_num=43, scaler=None, return_entire_Xy=False):
         self.random_num = random_num
         X = self.dataframe.drop(columns=self.target_name)
         y = self.dataframe[self.target_name]
@@ -54,9 +54,15 @@ class Model:
             self.scaler_name = ' (' + scaler + ')'
             self.X_train = self.scaler.fit_transform(self.X_train)
             self.X_test = self.scaler.transform(self.X_test)        
+            if return_entire_Xy:
+                self.scaler = eval(scaler + '()')
+                X = self.scaler.fit_transform(X)
         else:
             self.scaler_name = ''
-        return (self.X_train, self.X_test, self.y_train, self.y_test)
+        if return_entire_Xy:
+            return (X, y)
+        else:
+            return (self.X_train, self.X_test, self.y_train, self.y_test)
 
 
     def prepare_models(self, selected_list=None, excluded_list=None, params_list=None):
