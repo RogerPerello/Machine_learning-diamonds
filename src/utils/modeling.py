@@ -4,6 +4,9 @@ from copy import copy
 import time
 import pickle
 
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 from sklearn.naive_bayes import BernoulliNB, GaussianNB
@@ -105,13 +108,24 @@ class Model:
         return self.models
 
 
-    def create_dataframe(self, best_values_list, worst_values_list, models_metrics):
-        self.df = pd.DataFrame(data=models_metrics)
+    def create_dataframe(self, best_values_list, worst_values_list):
+        self.df = pd.DataFrame(data=self.models_metrics)
         if best_values_list:
             best_values_list = [element[0] for element in best_values_list]
             worst_values_list = [element[0] for element in worst_values_list]
             self.df['BEST'] = best_values_list
             self.df['WORST'] = worst_values_list
+
+
+    def visualize(self, metrics_selection=None):
+        visualization_dict = {'models': [model_name for model_name in self.models_metrics.keys() for metric in self.models_metrics[model_name] if (not metrics_selection or metric in metrics_selection)],
+                              'metrics': [metric for model_name in self.models_metrics.keys() for metric in self.models_metrics[model_name] if (not metrics_selection or metric in metrics_selection)],
+                              'values': [self.models_metrics[model_name][metric] for model_name in self.models_metrics.keys() for metric in self.models_metrics[model_name] if (not metrics_selection or metric in metrics_selection)]
+                              }
+        sns.lineplot(data=visualization_dict, x='models', y='values', hue='metrics')
+        plt.tick_params(axis='x', labelrotation = 90)
+        plt.title(f'{self.chosen_metric.capitalize()} comparison')
+        plt.show()
 
 
 
@@ -164,7 +178,7 @@ class Regression(Model):
                                                             'mae': list(map(abs, list(cross_val.values())[3:][2])), 
                                                             'r2_score': list(map(abs, list(cross_val.values())[3:][3])), 
                                                             'mape': list(map(abs, list(cross_val.values())[3:][4]))}
-            self.models_evaluated[model_name]['variances'] = {'rmse': np.var(list(cross_val.values())[3:][0]), 
+            self.models_evaluated[model_name]['variance'] = {'rmse': np.var(list(cross_val.values())[3:][0]), 
                                                             'mse': np.var(list(cross_val.values())[3:][1]), 
                                                             'mae': np.var(list(cross_val.values())[3:][2]), 
                                                             'r2_score': np.var(list(cross_val.values())[3:][3]), 
@@ -187,14 +201,18 @@ class Regression(Model):
         return self.models_evaluated
 
 
-    def create_dataframe(self):
-        models_metrics = self.models_evaluated.copy()
+    def create_dataframe(self, chosen_metric='mean'):
+        self.models_metrics = self.models_evaluated.copy()
         best_values_list = []
         worst_values_list = []
+        if chosen_metric == 'mean':
+            chosen_metric = 'metrics'
+        else:
+            self.chosen_metric = chosen_metric
         for model_name, model_results in self.models_evaluated.items():
-            models_metrics[model_name] = models_metrics[model_name]['metrics']
-            if len(models_metrics) > 1:
-                model_values = [value if type(value) is not list else sum([row[index] for index, row in enumerate(value)]) for value in self.models_evaluated[model_name]['metrics'].values()]
+            self.models_metrics[model_name] = self.models_metrics[model_name][self.chosen_metric]
+            if len(self.models_metrics) > 1:
+                model_values = [value if type(value) is not list else sum([row[index] for index, row in enumerate(value)]) for value in self.models_evaluated[model_name][self.chosen_metric].values()]
                 if not best_values_list:
                     best_values_list = [[model_name, value] for value in model_values]
                     worst_values_list = [[model_name, value] for value in model_values]
@@ -214,8 +232,9 @@ class Regression(Model):
                             else:
                                 best_values_list[index][1] = value
                                 best_values_list[index][0] = model_name
-        super().create_dataframe(best_values_list, worst_values_list, models_metrics)
+        super().create_dataframe(best_values_list, worst_values_list)
         return self.df
+
 
 
 class Classification(Model):
@@ -272,7 +291,7 @@ class Classification(Model):
                                                             'recall': list(map(abs, list(cross_val.values())[3:][1])), 
                                                             'precision': list(map(abs, list(cross_val.values())[3:][2])), 
                                                             'f1_score': list(map(abs, list(cross_val.values())[3:][3]))}
-            self.models_evaluated[model_name]['variances'] = {'accuracy': np.var(list(cross_val.values())[3:][0]), 
+            self.models_evaluated[model_name]['variance'] = {'accuracy': np.var(list(cross_val.values())[3:][0]), 
                                                             'recall': np.var(list(cross_val.values())[3:][1]), 
                                                             'precision': np.var(list(cross_val.values())[3:][2]), 
                                                             'f1_score': np.var(list(cross_val.values())[3:][3])}
@@ -305,14 +324,18 @@ class Classification(Model):
         return self.models_evaluated
 
 
-    def create_dataframe(self):
-        models_metrics = self.models_evaluated.copy()
+    def create_dataframe(self, chosen_metric='metrics'):
+        self.models_metrics = self.models_evaluated.copy()
         best_values_list = []
         worst_values_list = []
+        if chosen_metric == 'mean':
+            self.chosen_metric = 'metrics'
+        else:
+            self.chosen_metric = chosen_metric
         for model_name, model_results in self.models_evaluated.items():
-            models_metrics[model_name] = models_metrics[model_name]['metrics']
-            if len(models_metrics) > 1:
-                model_values = [value if type(value) is not list else sum([row[index] for index, row in enumerate(value)]) for value in self.models_evaluated[model_name]['metrics'].values()]
+            self.models_metrics[model_name] = self.models_metrics[model_name][self.chosen_metric]
+            if len(self.models_metrics) > 1:
+                model_values = [value if type(value) is not list else sum([row[index] for index, row in enumerate(value)]) for value in self.models_evaluated[model_name][self.chosen_metric].values()]
                 if not best_values_list:
                     best_values_list = [[model_name, value] for value in model_values]
                     worst_values_list = [[model_name, value] for value in model_values]
@@ -324,5 +347,5 @@ class Classification(Model):
                         if value < worst_values_list[index][1]:
                             worst_values_list[index][1] = value
                             worst_values_list[index][0] = model_name
-        super().create_dataframe(best_values_list, worst_values_list, models_metrics)
+        super().create_dataframe(best_values_list, worst_values_list)
         return self.df
