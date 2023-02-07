@@ -123,7 +123,7 @@ class Model:
                               'values': [self.models_metrics[model_name][metric] for model_name in self.models_metrics.keys() for metric in self.models_metrics[model_name] if (not metrics_selection or metric in metrics_selection)]
                               }
         sns.lineplot(data=visualization_dict, x='models', y='values', hue='metrics')
-        plt.tick_params(axis='x', labelrotation = 90)
+        plt.tick_params(axis='x', labelrotation=90)
         plt.title(f'{self.chosen_metric.capitalize()} comparison')
         plt.show()
 
@@ -206,7 +206,7 @@ class Regression(Model):
         best_values_list = []
         worst_values_list = []
         if chosen_metric == 'mean':
-            chosen_metric = 'metrics'
+            self.chosen_metric = 'metrics'
         else:
             self.chosen_metric = chosen_metric
         for model_name, model_results in self.models_evaluated.items():
