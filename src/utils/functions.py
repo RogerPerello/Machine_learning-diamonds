@@ -6,6 +6,7 @@ from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_squared_error
 
 
+# Aviso: estas funciones, exceptuando "impute_boxplot_min_max" y "calculate_rmse", solo valen para este proyecto
 def remove_all(df, zeros_only=False):
     '''Removes specific values from the diamonds dataframe'''
     df = df.drop(df[(df['width (millimeters)'] == 0)
