@@ -34,6 +34,7 @@ def assign_values(df, outlier=True):
 
 def impute_boxplot_min_max(df, list_of_columns, min=True, max=True):
     '''Imputes the values above the min or the max of the boxplot to the min or the max for the selected columns'''
+    '''Requires numpy as np'''
     for column in list_of_columns:
         q3, q1 = np.percentile(df[column], [75, 25])
         iqr = q3 - q1
@@ -46,6 +47,7 @@ def impute_boxplot_min_max(df, list_of_columns, min=True, max=True):
 
 def apply_ridge(df):
     '''Uses ridge to impute a few outliers from the depth (millimeters) column of the diamonds dataframe'''
+    '''Requires pandas as pd, numpy as np and from sklearn.linear_model import Ridge'''
     q3, q1 = np.percentile(df['depth (millimeters)'], [75, 25])
     iqr = q3 - q1
     y_test = df[(df['depth (millimeters)'] > q3 + 1.5*iqr) | (df['depth (millimeters)'] < q1 - 1.5*iqr)]['depth (millimeters)']
@@ -63,6 +65,7 @@ def apply_ridge(df):
 
 def impute_next_higher(df, log=True):
     '''Imputes the outliers of the column weight (carat) of the diamonds dataframe to the next higher number'''
+    '''Requires numpy as np'''
     q3, q1 = np.percentile(df['weight (carat)'], [75, 25])
     iqr = q3 - q1
     if log:
@@ -74,4 +77,5 @@ def impute_next_higher(df, log=True):
 
 def calculate_rmse(y_test, y_pred):
     '''Returns rmse metric result'''
+    '''Requires from sklearn.metrics import mean_squared_error'''
     return mean_squared_error(y_test, y_pred, squared=False)
