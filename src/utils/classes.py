@@ -28,10 +28,11 @@ from xgboost import XGBRegressor
 class Model:
     '''
     Parent class of Regression and Classification. Used only through child classes
+    Check child classes documentation for a full overview of the available methods as well as the recommended order of use
 
     ...
 
-    Methods
+    Methods (Model class only)
     -------
     send_pickle(model, path)
         Saves model as pickle at the chosen path
@@ -264,27 +265,51 @@ class Model:
 class Regression(Model):
     '''
     Child class of Model for regression algorithms. To be used directly instead of Model
+    Methods are numbered by recommended order of use
 
     ...
 
     Methods
     -------
     add_models(regression_list)
-        Adds models of the list to the class attribute chosen_models. Required first, since chosen_models is empy by default
+        1) Adds models of the list to the class attribute chosen_models. Required first, since chosen_models is empy by default
     
     remove_models(regression_list)
         Removes models of the list from the class attribute chosen_models
 
     apply_and_evaluate_kfolds(kfolds_num=5)
-        Applies the model to the splits of the dataframe using kfolds and gets the metrics. 
+        4 & 5) Applies the model to the splits of the dataframe using kfolds and gets the metrics. 
         Can use apply_models (see parent class) + evaluate_metrics instead if kfolds are not wanted
     
     evaluate_metrics()
-        Extracts the metrics for models already applied with apply_models (no kfolds)
+        5) Extracts the metrics for models already applied with apply_models (no kfolds)
     
     create_dataframe(chosen_metric='mean')
-        Creates a dataframe with the metrics of each model. Complemented by a function in parent class. 
+        6) Creates a dataframe with the metrics of each model. Complemented by a function in parent class. 
         Used after evaluate_metrics or apply_and_evaluate_kfolds
+
+    Methods inherited from parent class
+    -------
+    send_pickle(model, path)
+        8) Saves model as pickle at the chosen path
+
+    split_dataframe(train_num=0.7, random_num=43, scaler=None, return_entire_Xy=False)
+        2) Splits dataframe into X_train, X_test, y_train and y_test. 
+        Used after adding models to the choosen_models attribute of the selected child class
+    
+    prepare_models(selected_list=None, excluded_list=None, params_list=None)
+        3) Makes models suitable for application. Used after the split
+    
+    apply_models()
+        4) Predicts using the split dataframe and the prepared models. No folds. 
+        Used after prepare_models; can use apply_and_evaluate_kfolds (see in child class) instead
+    
+    create_dataframe(best_values_list, worst_values_list)
+        6) Creates a dataframe with the metrics of each model. Complements a function in child class. 
+        Used after evaluate_metrics or apply_and_evaluate_kfolds (see both in child class)
+    
+    visualize()
+        7) Creates a lineplot with the metrics of the models. Used after create_dataframe
     '''
 
     chosen_models = dict()
@@ -460,28 +485,52 @@ class Regression(Model):
 
 class Classification(Model):
     '''
-    Child class of Model for classification algorithms. To be used directly instead of Model
+    Child class of Model for classification algorithms. To be used directly instead of Model. 
+    Methods are numbered by recommended order of use
 
     ...
 
     Methods
     -------
     add_models(classification_list)
-        Adds models of the list to the class attribute chosen_models. Required first, since chosen_models is empy by default
+        1) Adds models of the list to the class attribute chosen_models. Required first, since chosen_models is empy by default
     
     remove_models(classification_list)
         Removes models of the list from the class attribute chosen_models
 
     apply_and_evaluate_kfolds(kfolds_num=5)
-        Applies the model to the splits of the dataframe using stratified kfolds and gets the metrics. 
+        4 & 5) Applies the model to the splits of the dataframe using stratified kfolds and gets the metrics. 
         Can use apply_models (see parent class) + evaluate_metrics instead if kfolds are not wanted
     
     evaluate_metrics()
-        Extracts the metrics for models already applied with apply_models (no kfolds)
+        5) Extracts the metrics for models already applied with apply_models (no kfolds)
     
     create_dataframe(chosen_metric='mean')
-        Creates a dataframe with the metrics of each model. Complemented by a function in parent class. 
+        6) Creates a dataframe with the metrics of each model. Complemented by a function in parent class. 
         Used after evaluate_metrics or apply_and_evaluate_kfolds
+
+    Methods inherited from parent class
+    -------
+    send_pickle(model, path)
+        8) Saves model as pickle at the chosen path
+
+    split_dataframe(train_num=0.7, random_num=43, scaler=None, return_entire_Xy=False)
+        2) Splits dataframe into X_train, X_test, y_train and y_test. 
+        Used after adding models to the choosen_models attribute of the selected child class
+    
+    prepare_models(selected_list=None, excluded_list=None, params_list=None)
+        3) Makes models suitable for application. Used after the split
+    
+    apply_models()
+        4) Predicts using the split dataframe and the prepared models. No folds. 
+        Used after prepare_models; can use apply_and_evaluate_kfolds (see in child class) instead
+    
+    create_dataframe(best_values_list, worst_values_list)
+        6) Creates a dataframe with the metrics of each model. Complements a function in child class. 
+        Used after evaluate_metrics or apply_and_evaluate_kfolds (see both in child class)
+    
+    visualize()
+        7) Creates a lineplot with the metrics of the models. Used after create_dataframe
     '''
 
     chosen_models = dict()
