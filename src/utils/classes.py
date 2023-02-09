@@ -35,7 +35,7 @@ class Model:
     Methods (Model class only)
     -------
     send_pickle(model, path)
-        Saves model as pickle at the chosen path
+        Saves model as pickle to the chosen path
 
     split_dataframe(train_num=0.7, random_num=43, scaler=None, return_entire_Xy=False)
         Splits dataframe into X_train, X_test, y_train and y_test. 
@@ -93,7 +93,7 @@ class Model:
 
     @staticmethod
     def send_pickle(model, path):
-        '''Saves model as pickle at the chosen path
+        '''Saves model as pickle to the chosen path
 
         Parameters
         ----------
