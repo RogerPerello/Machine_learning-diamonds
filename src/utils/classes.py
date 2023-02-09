@@ -49,7 +49,7 @@ class Model:
         Used after prepare_models; can use apply_and_evaluate_kfolds (see in child class) instead
     
     create_dataframe(best_values_list, worst_values_list)
-        Creates a dataframe with the metrics of each model. Complements a function in child class. 
+        Creates a dataframe with the metrics of each model. Complements a method in child class. 
         Used after evaluate_metrics or apply_and_evaluate_kfolds (see both in child class)
     
     visualize()
@@ -269,6 +269,11 @@ class Regression(Model):
 
     ...
 
+    Attributes
+    -------
+    chosen_models : dict
+        Empty dict of models to be filled using add_models class method
+
     Methods
     -------
     add_models(regression_list)
@@ -285,7 +290,7 @@ class Regression(Model):
         5) Extracts the metrics for models already applied with apply_models (no kfolds)
     
     create_dataframe(chosen_metric='mean')
-        6) Creates a dataframe with the metrics of each model. Complemented by a function in parent class. 
+        6) Creates a dataframe with the metrics of each model. Complemented by a method in parent class. 
         Used after evaluate_metrics or apply_and_evaluate_kfolds
 
     Methods inherited from parent class
@@ -295,18 +300,18 @@ class Regression(Model):
 
     split_dataframe(train_num=0.7, random_num=43, scaler=None, return_entire_Xy=False)
         2) Splits dataframe into X_train, X_test, y_train and y_test. 
-        Used after adding models to the choosen_models attribute of the selected child class
+        Used after adding models to the choosen_models attribute
     
     prepare_models(selected_list=None, excluded_list=None, params_list=None)
         3) Makes models suitable for application. Used after the split
     
     apply_models()
         4) Predicts using the split dataframe and the prepared models. No folds. 
-        Used after prepare_models; can use apply_and_evaluate_kfolds (see in child class) instead
+        Used after prepare_models; can use apply_and_evaluate_kfolds instead
     
     create_dataframe(best_values_list, worst_values_list)
-        6) Creates a dataframe with the metrics of each model. Complements a function in child class. 
-        Used after evaluate_metrics or apply_and_evaluate_kfolds (see both in child class)
+        6) Creates a dataframe with the metrics of each model. Complements create_dataframe of Regression class
+        Used after evaluate_metrics or apply_and_evaluate_kfolds
     
     visualize()
         7) Creates a lineplot with the metrics of the models. Used after create_dataframe
@@ -434,7 +439,7 @@ class Regression(Model):
 
 
     def create_dataframe(self, chosen_metric='mean'):
-        '''Creates a dataframe with the metrics of each model. Complemented by a function in parent class. 
+        '''Creates a dataframe with the metrics of each model. Complemented by a method in parent class. 
         Used after evaluate_metrics or apply_and_evaluate_kfolds
 
         Parameters
@@ -490,6 +495,11 @@ class Classification(Model):
 
     ...
 
+    Attributes
+    -------
+    chosen_models : dict
+        Empty dict of models to be filled using add_models class method
+
     Methods
     -------
     add_models(classification_list)
@@ -506,7 +516,7 @@ class Classification(Model):
         5) Extracts the metrics for models already applied with apply_models (no kfolds)
     
     create_dataframe(chosen_metric='mean')
-        6) Creates a dataframe with the metrics of each model. Complemented by a function in parent class. 
+        6) Creates a dataframe with the metrics of each model. Complemented by a method in parent class. 
         Used after evaluate_metrics or apply_and_evaluate_kfolds
 
     Methods inherited from parent class
@@ -516,18 +526,18 @@ class Classification(Model):
 
     split_dataframe(train_num=0.7, random_num=43, scaler=None, return_entire_Xy=False)
         2) Splits dataframe into X_train, X_test, y_train and y_test. 
-        Used after adding models to the choosen_models attribute of the selected child class
+        Used after adding models to the choosen_models attribute
     
     prepare_models(selected_list=None, excluded_list=None, params_list=None)
         3) Makes models suitable for application. Used after the split
     
     apply_models()
         4) Predicts using the split dataframe and the prepared models. No folds. 
-        Used after prepare_models; can use apply_and_evaluate_kfolds (see in child class) instead
+        Used after prepare_models; can use apply_and_evaluate_kfolds instead
     
     create_dataframe(best_values_list, worst_values_list)
-        6) Creates a dataframe with the metrics of each model. Complements a function in child class. 
-        Used after evaluate_metrics or apply_and_evaluate_kfolds (see both in child class)
+        6) Creates a dataframe with the metrics of each model. Complements create_dataframe of Classification class
+        Used after evaluate_metrics or apply_and_evaluate_kfolds
     
     visualize()
         7) Creates a lineplot with the metrics of the models. Used after create_dataframe
@@ -673,7 +683,7 @@ class Classification(Model):
 
 
     def create_dataframe(self, chosen_metric='metrics'):
-        '''Creates a dataframe with the metrics of each model. Complemented by a function in parent class. 
+        '''Creates a dataframe with the metrics of each model. Complemented by a method in parent class. 
         Used after evaluate_metrics or apply_and_evaluate_kfolds
 
         Parameters
