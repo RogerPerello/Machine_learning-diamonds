@@ -2,25 +2,21 @@ import pandas as pd
 import numpy as np
 import time
 import pickle
+from xgboost import XGBRegressor
 
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
-
 from sklearn.naive_bayes import BernoulliNB, GaussianNB
 from sklearn.linear_model import LinearRegression, Ridge, LogisticRegression
 from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsRegressor, KNeighborsClassifier
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 from sklearn.svm import SVR, SVC
-
 from sklearn.model_selection import train_test_split, KFold, StratifiedKFold, cross_validate
-
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, mean_absolute_percentage_error
 from sklearn.metrics import accuracy_score, recall_score, precision_score, confusion_matrix, f1_score
-
-from xgboost import XGBRegressor
 
 
 
