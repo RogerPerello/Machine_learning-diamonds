@@ -131,7 +131,7 @@ Preferably used after adding models to the chosen_models attribute with add_mode
         scaler : str (default=None)
             The name of the chosen scaler, if any
         return_entire_Xy: boolean (default=False)
-            Changes return to take in the entire X and y insted of its splits
+            Changes return to take in the entire X and y instead of the splits
 
         Returns
         -------
