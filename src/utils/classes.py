@@ -22,33 +22,33 @@ from sklearn.metrics import accuracy_score, recall_score, precision_score, confu
 
 class Model:
     '''
-    Parent class of Regression and Classification. Used only through child classes.
+    Parent class of Regression and Classification. Used only through child classes, never directly.
     Check child classes documentation for a full overview of the available methods as well as the recommended order of use
 
     ...
 
-    Methods (Model class only)
+    Methods
     -------
     send_pickle(model, path)
-        Saves model as pickle to the chosen path. This is a static method and theoretically could be used anytime
+        Saves model as pickle to the chosen path. This is a static method and theoretically could be used at any time
 
     split_dataframe(train_num=0.7, random_num=43, scaler=None, return_entire_Xy=False)
         Splits dataframe into X_train, X_test, y_train and y_test. 
-        Used after adding models to the choosen_models attribute of the selected child class
+        Used after adding models to the chosen_models attribute of the selected child class
     
     prepare_models(selected_list=None, excluded_list=None, params_list=None)
         Makes models suitable for application. Used after the split
     
     apply_models()
         Predicts using the split dataframe and the prepared models. No folds. 
-        Used after prepare_models; can use apply_and_evaluate_kfolds (see in child class) instead
+        Used after prepare_models(); can use apply_and_evaluate_kfolds() (see in child class) instead
     
     create_dataframe(best_values_list, worst_values_list)
         Creates a dataframe with the metrics of the models. Complements a method in child class. 
-        Used after evaluate_metrics or apply_and_evaluate_kfolds (see both in child class)
+        Used after evaluate_metrics() or apply_and_evaluate_kfolds() (see both in child class)
     
-    visualize(metrics_selection=None)
-        Creates a lineplot with the metrics of the models. Used after create_dataframe
+    visualize(*metrics_selection)
+        Creates a lineplot with the metrics of the models. Used after create_dataframe()
     '''
 
 
@@ -61,8 +61,8 @@ class Model:
             The dataframe to which the models will be used
         target_name : str
             The name of the target column
-        index : str, optional
-            The name of the column to become index
+        index : str (defaut=None)
+            The name of the column to become index, if any
         '''
 
         self.target_name = target_name
@@ -70,9 +70,21 @@ class Model:
         self.df = df
 
 
+    def __str__ (self):
+        '''
+
+        Returns
+        -------
+        str
+           Type of instance and recommended next step
+        '''
+
+        return f'{self.type.capitalize()}. Progress: {self.progress}'
+
+
     @property
     def dataframe(self):
-        '''Automaticaly changes the index if any is passed to the constructor
+        '''Automatically changes the index if any is passed to the constructor
 
         Returns
         -------
@@ -92,12 +104,10 @@ class Model:
 
         Parameters
         ----------
-        model : model
+        model : model object
             The model to be saved
-        target_name : str
-            The name of the target column
-        index : str, optional
-            The name of the column to become index
+        path : string
+            The path where the model will be saved
 
         Returns
         -------
@@ -110,17 +120,17 @@ class Model:
 
     def split_dataframe(self, train_num=0.7, random_num=43, scaler=None, return_entire_Xy=False):
         '''Splits dataframe into X_train, X_test, y_train and y_test.  
-        Used after adding models to the choosen_models attribute of the selected child class with add_models
+Preferably used after adding models to the chosen_models attribute with add_models()
 
         Parameters
         ----------
         train_num : float (default=0.7)
             Proportion of the train splits
         random_num : int (default=43)
-            random_state for the train_test_split function
-        scaler : str, optional
+            random_state for the split
+        scaler : str (default=None)
             The name of the chosen scaler, if any
-        return_entire_Xy: boolean, optional
+        return_entire_Xy: boolean (default=False)
             Changes return to take in the entire X and y insted of its splits
 
         Returns
@@ -143,6 +153,7 @@ class Model:
                 X = self.scaler.fit_transform(X)
         else:
             self.scaler_name = ''
+        self.progress = 'the dataframe has been split. Now, you may prepare your models with the prepare_models() method'
         if return_entire_Xy:
             return (X, y)
         else:
@@ -154,13 +165,13 @@ class Model:
 
         Parameters
         ----------
-        selected_list : list of str
-            Limits the models to be prepared to the ones in this list
-        excluded_list : list of str
-            Excludes the models of the list from the preparation
-        params_list : list of lists
+        selected_list : list of str (default=None)
+            Limits the models to be prepared to the ones in this list, if any
+        excluded_list : list of str (default=None)
+            Excludes the models of the list from the preparation, if any
+        params_list : list of lists (default=None)
             For every model (first element of each inner list), applies the chosen hiperparameters 
-            (second element of each inner list, all together in a string)
+            (second element of each inner list, all together in a string), if any
 
         Returns
         -------
@@ -188,17 +199,18 @@ class Model:
                             self.models.pop(params[0])
                         except Exception:
                             continue
-        return 'Models prepared. Apply them or use kfold (apply + evaluate)'
+        self.progress = 'your models are now prepared. Apply them with apply_models() or use apply_and_evaluate_kfolds() instead if you want kfolds to be used'
+        return 'Done'
 
 
     def apply_models(self):
         '''Predicts using the split dataframe and the prepared models. No folds.
-        Used after prepare_models; can use apply_and_evaluate_kfolds (see in child class) instead
+Used after prepare_models(); may use apply_and_evaluate_kfolds() instead
 
         Returns
         -------
         dict
-            Dictionary with the test, prediction and model function for each model
+            Dictionary with the test, prediction and model function for each model string
         '''
 
         print(f'-- {self.type.capitalize()} --')
@@ -213,12 +225,13 @@ class Model:
             execution_time = time.time() - start_time
             total_time += execution_time
             print(f'- {model_name} done in {round(execution_time, 2)} sec(s). Total time: {round(total_time, 2)}')
+        self.progress = 'your models have been applied to the data passed. Get the metrics using evaluate_metrics()'
         return self.models
 
 
     def create_dataframe(self, best_values_list, worst_values_list):
-        '''Creates a dataframe with the metrics of each model
-        Used after evaluate_metrics or apply_and_evaluate_kfolds (see both in child class)
+        '''Creates a dataframe with the metrics of each model.
+Used after evaluate_metrics() or apply_and_evaluate_kfolds()
 
         Parameters
         ----------
@@ -237,13 +250,13 @@ class Model:
             self.df['WORST'] = worst_values_list
 
 
-    def visualize(self, metrics_selection=None):
-        '''Makes models suitable for application. Has no return but shows a graphic for a jupiter notebook. Used after create_dataframe
+    def visualize(self, *metrics_selection):
+        '''Creates a lineplot with the metrics of the models. Has no return but shows a graphic for a jupiter notebook. Used after create_dataframe()
 
         Parameters
         ----------
-        metrics_selection : list of str
-            Selects the metrics of the list for visualization
+        metrics_selection : str (*args)
+            Selects the metrics for visualization. If none provided, selects all
         '''
 
         visualization_dict = {'models': [model_name for model_name in self.models_metrics.keys() for metric in self.models_metrics[model_name] if (not metrics_selection or metric in metrics_selection)],
@@ -252,7 +265,8 @@ class Model:
                               }
         sns.lineplot(data=visualization_dict, x='models', y='values', hue='metrics')
         plt.tick_params(axis='x', labelrotation=90)
-        plt.title(f'{self.chosen_metric.capitalize()} comparison')
+        plt.title(f'{self.chosen_format.capitalize()} comparison')
+        self.progress = 'you may call create_dataframe() and visualize() multiple times to change how and which metrics are displayed (mean, variance...), or use send_pickle() to save your chosen model'
         plt.show()
 
 
@@ -260,55 +274,56 @@ class Model:
 class Regression(Model):
     '''
     Child class of Model for regression algorithms. To be used directly instead of Model.
-    Methods are numbered by recommended order of use
+    Methods are numbered by recommended order of use.
+    Print instance at any time to see the recommended next step
 
     ...
 
     Attributes
     -------
     chosen_models : dict
-         Empty dict of models to work with (to be filled using add_models class method)
+        Empty dict of models to work with (to be filled with empty keys using add_models class method)
 
     Class methods
     -------
-    add_models(regression_list)
-        1) Adds models of the list to the class attribute chosen_models. Required first, since chosen_models is empty by default.
+    add_models(*regression)
+        1) Adds models to the class attribute chosen_models. Required first, before putting instances to work, since chosen_models is empty by default.
         It should be called only once, except if more models are needed at some point for further analysis
 
-    remove_models(regression_list)
-        Removes models of the list from the class attribute chosen_models
+    remove_models(*regression)
+        Removes models from the class attribute chosen_models
 
     Instance methods
     -------
     apply_and_evaluate_kfolds(kfolds_num=5)
         4 & 5) Used when models are prepared (3). Applies the models to the splits of the dataframe using kfolds and gets the metrics. 
-        Can use apply_models (4) + evaluate_metrics (5) instead if kfolds are not wanted
+        Can use apply_models() (4) + evaluate_metrics() (5) instead if kfolds are not wanted
     
     evaluate_metrics()
-       5) Extracts the metrics for models already applied with apply_models (4). No folds
+       5) Extracts the metrics for models already applied with apply_models() (4). No folds
     
-    create_dataframe(chosen_metric='mean')
+    create_dataframe(chosen_format='mean')
         6) Creates a dataframe with the metrics of the models. Partially inherited.
-        Used after evaluate_metrics (5) or apply_and_evaluate_kfolds (4 & 5)
+        Used after evaluate_metrics() (5) or apply_and_evaluate_kfolds() (4 & 5)
 
     Methods inherited from parent class
     -------
     send_pickle(model, path)
-        8) Saves model as pickle to the chosen path. This is a static method and theoretically could be used anytime
+        8) Saves model as pickle to the chosen path. This is a static method and theoretically could be used at any time
 
     split_dataframe(train_num=0.7, random_num=43, scaler=None, return_entire_Xy=False)
         2) Splits dataframe into X_train, X_test, y_train and y_test. 
-        Used after adding models to the choosen_models attribute (1)
+        Used after adding models to the chosen_models attribute (1)
     
     prepare_models(selected_list=None, excluded_list=None, params_list=None)
         3) Makes models suitable for application. Used after the split (2)
     
     apply_models()
-        4) Comes after prepare_models (3). Predicts using the split dataframe and the prepared models. 
-        No folds. Can use apply_and_evaluate_kfolds (4 & 5) instead
+        4) Comes after prepare_models() (3). Predicts using the split dataframe and the prepared models. 
+        No folds. Can use apply_and_evaluate_kfolds() (4 & 5) instead
     
-    visualize(metrics_selection=None)
-        7) Creates a lineplot with the metrics of the models. Used after create_dataframe (6)
+    visualize(*metrics_selection)
+        7) Creates a lineplot with the metrics of the models. Used after create_dataframe() (6)
     '''
 
     chosen_models = dict()
@@ -323,47 +338,58 @@ class Regression(Model):
             The dataframe to which the models will be used
         target_name : str
             The name of the target column
-        index : str, optional
-            The name of the column to become index
+        index : str (defaut=None)
+            The name of the column to become index, if any
         '''
        
         super().__init__(dataframe, target_name, index)
         self.type = 'regression'
+        self.progress = f'if you have not already, add some models to the class with {self.type.capitalize()}.add_models(). Then, use split_dataframe() with your instance'
+
+
+    def __str__ (self):
+        '''
+
+        Returns
+        -------
+        str
+           Type of instance and recommended next step
+        '''
+        
+        return super().__str__()
 
 
     @classmethod
-    def add_models(cls, regression_list):
-        '''Adds models of the list to the class attribute chosen_models. Required first, since chosen_models is empty by default
+    def add_models(cls, *regression):
+        '''Adds models of the list to the class attribute chosen_models. Required first, before putting the instance to work, since chosen_models is empty by default
 
         Parameters
         ----------
-        regression_list : list of str
-            List of model names to be put into the chosen_models class attribute
+        regression : str (*args)
+            Model names to be put into the chosen_models class attribute
         '''
 
-        if regression_list:
-            for element in regression_list:
-                cls.chosen_models[element] = ''
+        for element in regression:
+            cls.chosen_models[element] = ''
 
 
     @classmethod
-    def remove_models(cls, regression_list):
+    def remove_models(cls, *regression):
         '''Removes models of the list from the class attribute chosen_models
 
         Parameters
         ----------
-        regression_list : list of str
+        regression : str (*args)
              List of model names to be removed from the chosen_models class attribute
         '''
 
-        if regression_list:
-            for element in regression_list:
-                cls.chosen_models.pop(element)
+        for element in regression:
+            cls.chosen_models.pop(element)
 
   
     def apply_and_evaluate_kfolds(self, kfolds_num=5):
-        '''Applies models to the dataframe splits using kfolds an evaluates the subsequent metrics
-            Can use apply_models (see parent class) + evaluate_metrics instead if kfolds are not wanted
+        '''Applies models to the dataframe splits using kfolds and evaluates the subsequent metrics.
+Can use apply_models() + evaluate_metrics() instead if kfolds are not wanted
 
         Parameters
         ----------
@@ -409,16 +435,17 @@ class Regression(Model):
             execution_time = time.time() - start_time
             total_time += execution_time
             print(f'- {model_name} done in {round(execution_time, 2)} sec(s). Total time: {round(total_time, 2)}')
+        self.progress = 'your folds have been applied and the metrics evaluated. Put the results into a dataframe with create_dataframe()'
         return self.models_evaluated
 
 
     def evaluate_metrics(self):
-        '''Extracts the metrics for models already applied with apply_models (no kfolds)
+        '''Extracts the metrics for models already applied with apply_models(). No kfolds
 
         Returns
         -------
         dict
-            Dictionary including models, predictions, test and metrics
+           Dictionary with the test, prediction, metrics and model function for each model string
         '''
 
         self.models_evaluated = self.models.copy()
@@ -429,17 +456,18 @@ class Regression(Model):
             r2 = r2_score(model_results['test'], model_results['prediction'])
             mape = mean_absolute_percentage_error(model_results['test'], model_results['prediction'])
             self.models_evaluated[model_name]['metrics'] = {'rmse': rmse, 'mse': mse, 'mae': mae, 'r2_score': r2, 'mape': mape}
+            self.progress = 'your metrics have been evaluated. Put the results into a dataframe with create_dataframe()'
         return self.models_evaluated
 
 
-    def create_dataframe(self, chosen_metric='mean'):
-        '''Creates a dataframe with the metrics of each model. Complemented by a method in parent class. 
-        Used after evaluate_metrics or apply_and_evaluate_kfolds
+    def create_dataframe(self, chosen_format='mean'):
+        '''Creates a dataframe with the metrics of each model.
+Used after evaluate_metrics() or apply_and_evaluate_kfolds()
 
         Parameters
         ----------
-        chosen_metric : str (default=mean)
-            Selected metric to appear in the resulting dataframe
+        chosen_format : str (default='mean')
+            Selected metric format to appear in the resulting dataframe
 
         Returns
         -------
@@ -450,14 +478,14 @@ class Regression(Model):
         self.models_metrics = self.models_evaluated.copy()
         best_values_list = []
         worst_values_list = []
-        if chosen_metric == 'mean':
-            self.chosen_metric = 'metrics'
+        if chosen_format == 'mean':
+            self.chosen_format = 'metrics'
         else:
-            self.chosen_metric = chosen_metric
+            self.chosen_format = chosen_format
         for model_name, model_results in self.models_evaluated.items():
-            self.models_metrics[model_name] = self.models_metrics[model_name][self.chosen_metric]
+            self.models_metrics[model_name] = self.models_metrics[model_name][self.chosen_format]
             if len(self.models_metrics) > 1:
-                model_values = [value if type(value) is not list else sum([row[index] for index, row in enumerate(value)]) for value in self.models_evaluated[model_name][self.chosen_metric].values()]
+                model_values = [value if type(value) is not list else sum([row[index] for index, row in enumerate(value)]) for value in self.models_evaluated[model_name][self.chosen_format].values()]
                 if not best_values_list:
                     best_values_list = [[model_name, value] for value in model_values]
                     worst_values_list = [[model_name, value] for value in model_values]
@@ -478,6 +506,8 @@ class Regression(Model):
                                 best_values_list[index][1] = value
                                 best_values_list[index][0] = model_name
         super().create_dataframe(best_values_list, worst_values_list)
+        self.progress = 'your dataframe with metrics has been created. You may use visualize() to display it graphically'
+
         return self.df
 
 
@@ -485,55 +515,56 @@ class Regression(Model):
 class Classification(Model):
     '''
     Child class of Model for classification algorithms. To be used directly instead of Model. 
-    Methods are numbered by recommended order of use
+    Methods are numbered by recommended order of use.
+    Print instance at any time to see the recommended next step
 
     ...
 
     Attributes
     -------
     chosen_models : dict
-        Empty dict of models to work with (to be filled using add_models class method)
+        Empty dict of models to work with (to be filled with empty keys using add_models class method)
 
     Class methods
     -------
-    add_models(classification_list)
-        1) Adds models of the list to the class attribute chosen_models. Required first, since chosen_models is empty by default.
+    add_models(*classification)
+        1) Adds models to the class attribute chosen_models. Required first, before putting instances to work, since chosen_models is empty by default.
         It should be called only once, except if more models are needed at some point for further analysis
 
-    remove_models(classification_list)
-        Removes models of the list from the class attribute chosen_models
+    remove_models(*classification)
+        Removes models from the class attribute chosen_models
 
     Instance methods
     -------
     apply_and_evaluate_kfolds(kfolds_num=5)
-        4 & 5) Used when models are prepared (3). Applies the models to the splits of the dataframe using kfolds and gets the metrics. 
-        Can use apply_models (4) + evaluate_metrics (5) instead if kfolds are not wanted
+        4 & 5) Used when models are prepared (3). Applies the models to the splits of the dataframe using stratified kfolds and gets the metrics. 
+        Can use apply_models() (4) + evaluate_metrics() (5) instead if kfolds are not wanted
     
     evaluate_metrics()
-        5) Extracts the metrics for models already applied with apply_models (4). No folds
+        5) Extracts the metrics for models already applied with apply_models() (4). No folds
     
-    create_dataframe(chosen_metric='mean')
+    create_dataframe(chosen_format='mean')
         6) Creates a dataframe with the metrics of the models. Partially inherited.
-        Used after evaluate_metrics (5) or apply_and_evaluate_kfolds (4 & 5)
+        Used after evaluate_metrics() (5) or apply_and_evaluate_kfolds() (4 & 5)
 
     Methods inherited from parent class
     -------
     send_pickle(model, path)
-        8) Saves model as pickle to the chosen path. This is a static method and theoretically could be used anytime
+        8) Saves model as pickle to the chosen path. This is a static method and theoretically could be used at any time
 
     split_dataframe(train_num=0.7, random_num=43, scaler=None, return_entire_Xy=False)
         2) Splits dataframe into X_train, X_test, y_train and y_test. 
-        Used after adding models to the choosen_models attribute (1)
+        Used after adding models to the chosen_models attribute (1)
     
     prepare_models(selected_list=None, excluded_list=None, params_list=None)
         3) Makes models suitable for application. Used after the split (2)
     
     apply_models()
-        4) Comes after prepare_models (3). Predicts using the split dataframe and the prepared models. 
-        No folds. Can use apply_and_evaluate_kfolds (4 & 5) instead
+        4) Comes after prepare_models() (3). Predicts using the split dataframe and the prepared models. 
+        No folds. Can use apply_and_evaluate_kfolds() (4 & 5) instead
     
-    visualize(metrics_selection=None)
-        7) Creates a lineplot with the metrics of the models. Used after create_dataframe (6)
+    visualize(*metrics_selection)
+        7) Creates a lineplot with the metrics of the models. Used after create_dataframe() (6)
     '''
 
     chosen_models = dict()
@@ -548,55 +579,53 @@ class Classification(Model):
             The dataframe to which the models will be used
         target_name : str
             The name of the target column
-        index : str, optional
-            The name of the column to become index
+        index : str (defaut=None)
+            The name of the column to become index, if any
         '''
 
         super().__init__(dataframe, target_name, index)
         self.type = 'classification'
-
+        self.progress = f'if you have not already, add some models to the class with {self.type.capitalize()}.add_models(). Then, use split_dataframe() with your instance'
 
 
     @classmethod
-    def add_models(cls, classification_list):
-        '''Adds models of the list to the class attribute chosen_models. Required first, since chosen_models is empty by default
+    def add_models(cls, *classification):
+        '''Adds models of the list to the class attribute chosen_models. Required first, before instantiation, since chosen_models is empty by default
 
         Parameters
         ----------
-        classification_list : list of str
-            List of model names to be put into the chosen_models class attribute
+        classification_list : str (*args)
+            Model names to be put into the chosen_models class attribute
         '''
 
-        if classification_list:
-            for element in classification_list:
-                cls.chosen_models[element] = ''
+        for element in classification:
+            cls.chosen_models[element] = ''
 
 
     @classmethod
-    def remove_models(cls, classification_list):
+    def remove_models(cls, *classification):
         '''Removes models of the list from the class attribute chosen_models
 
         Parameters
         ----------
-        classification_list : list of str
-             List of model names to be removed from the chosen_models class attribute
+        classification_list : str (*args)
+             Model names to be removed from the chosen_models class attribute
         '''
 
-        if classification_list:
-            for element in classification_list:
-                cls.chosen_models.pop(element)
+        for element in classification:
+            cls.chosen_models.pop(element)
 
 
     def apply_and_evaluate_kfolds(self, kfolds_num=5, multiclass_average=None):
-        '''Applies models to the dataframe splits using kfolds an evaluates the subsequent metrics
-            Can use apply_models (see parent class) + evaluate_metrics instead if kfolds are not wanted
+        '''Applies models to the dataframe splits using stratified kfolds and evaluates the subsequent metrics.
+Can use apply_models() + evaluate_metrics() instead if kfolds are not wanted
 
         Parameters
         ----------
         kfolds_num : int (default=5)
             Number of stratified folds
-        multiclass_average: str (required only if target is multiclass)
-            Type of evaluation for multiclass precision, recall and f1 (micro, macro, samples or weighted)
+        multiclass_average: str (default=None)
+            Type of evaluation, if any. Used generally for multiclass precision, recall and f1 (micro, macro, samples or weighted)
 
         Returns
         -------
@@ -641,16 +670,23 @@ class Classification(Model):
             execution_time = time.time() - start_time
             total_time += execution_time
             print(f'- {model_name} done in {round(execution_time, 2)} sec(s). Total time: {round(total_time, 2)}')
+        self.progress = 'your folds have been applied and the metrics evaluated. Put the results into a dataframe with create_dataframe()'
         return self.models_evaluated
 
 
-    def evaluate_metrics(self, params_list=None):
-        '''Extracts the metrics for models already applied with apply_models (no kfolds)
+    def evaluate_metrics(self, **params):
+        '''Extracts the metrics for models already applied with apply_models(). No kfolds
+
+        Parameters
+        ----------
+        params : dict (**kwargs)
+            Parameters to be added for each metric, if any. The key is the metric, and the value is conformed by all the parameters in a single string
+            Usually used only if the target column is multiclass
 
         Returns
         -------
         dict
-            Dictionary including models, predictions, test and metrics
+            Dictionary with the test, prediction, metrics and model function for each model string
         '''
 
         self.models_evaluated = self.models.copy()
@@ -662,26 +698,25 @@ class Classification(Model):
             matrix = "confusion_matrix (model_results['test'], model_results['prediction']"
             list_of_metrics = []
             for index, element in enumerate([accuracy, recall, precision, f1, matrix], 1):
-                if params_list:
-                    for params in params_list:
-                        if params[0] == element.split()[0]:
-                            element += ', ' + params[1] + ')'
+                for key, value in params.items():
+                    if key == element.split()[0]:
+                        element += ', ' + value + ')'
                 if element[-1] == ']':
                     element += ')'
                 list_of_metrics.append(eval(element))
-            print(list_of_metrics)
             confusion = [element for element in list_of_metrics[-1]]
             self.models_evaluated[model_name]['metrics'] = {'accuracy': list_of_metrics[0], 'recall': list_of_metrics[1], 'precision': list_of_metrics[2], 'f1_score': list_of_metrics[3], 'confusion_matrix': confusion}
+        self.progress = 'your metrics have been evaluated. Put the results into a dataframe with create_dataframe()'
         return self.models_evaluated
 
 
-    def create_dataframe(self, chosen_metric='metrics'):
-        '''Creates a dataframe with the metrics of each model. Complemented by a method in parent class. 
-        Used after evaluate_metrics or apply_and_evaluate_kfolds
+    def create_dataframe(self, chosen_format='mean'):
+        '''Creates a dataframe with the metrics of each model.
+Used after evaluate_metrics() or apply_and_evaluate_kfolds()
 
         Parameters
         ----------
-        chosen_metric : str (default=mean)
+        chosen_format : str (default='mean')
             Selected metric to appear in the resulting dataframe
 
         Returns
@@ -693,14 +728,14 @@ class Classification(Model):
         self.models_metrics = self.models_evaluated.copy()
         best_values_list = []
         worst_values_list = []
-        if chosen_metric == 'mean':
-            self.chosen_metric = 'metrics'
+        if chosen_format == 'mean':
+            self.chosen_format = 'metrics'
         else:
-            self.chosen_metric = chosen_metric
+            self.chosen_format = chosen_format
         for model_name, model_results in self.models_evaluated.items():
-            self.models_metrics[model_name] = self.models_metrics[model_name][self.chosen_metric]
+            self.models_metrics[model_name] = self.models_metrics[model_name][self.chosen_format]
             if len(self.models_metrics) > 1:
-                model_values = [value if type(value) is not list else sum([row[index] for index, row in enumerate(value)]) for value in self.models_evaluated[model_name][self.chosen_metric].values()]
+                model_values = [value if type(value) is not list else sum([row[index] for index, row in enumerate(value)]) for value in self.models_evaluated[model_name][self.chosen_format].values()]
                 if not best_values_list:
                     best_values_list = [[model_name, value] for value in model_values]
                     worst_values_list = [[model_name, value] for value in model_values]
@@ -713,4 +748,5 @@ class Classification(Model):
                             worst_values_list[index][1] = value
                             worst_values_list[index][0] = model_name
         super().create_dataframe(best_values_list, worst_values_list)
+        self.progress = 'your dataframe with metrics has been created. You may use visualize() to display it graphically'
         return self.df
