@@ -364,3 +364,6 @@ venv.bak/
 # Rope project settings
 .ropeproject
 src.rar
+
+# Others
+Github_rep.txt
