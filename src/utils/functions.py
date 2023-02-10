@@ -32,7 +32,7 @@ def assign_values(df, outlier=True):
 
 
 def impute_boxplot_min_max(df, list_of_columns, min=True, max=True):
-    '''Imputes the values above the min or the max of the boxplot to the min or the max for the selected columns'''
+    '''Imputes the values that are above the max or below the min of the boxplot to the min or the max for the selected columns'''
     '''Requires numpy as np'''
     for column in list_of_columns:
         q3, q1 = np.percentile(df[column], [75, 25])

@@ -30,7 +30,7 @@ class Model:
     Methods (Model class only)
     -------
     send_pickle(model, path)
-        Saves model as pickle to the chosen path. This is a static method an theoretically could be used anytime
+        Saves model as pickle to the chosen path. This is a static method and theoretically could be used anytime
 
     split_dataframe(train_num=0.7, random_num=43, scaler=None, return_entire_Xy=False)
         Splits dataframe into X_train, X_test, y_train and y_test. 
@@ -44,10 +44,10 @@ class Model:
         Used after prepare_models; can use apply_and_evaluate_kfolds (see in child class) instead
     
     create_dataframe(best_values_list, worst_values_list)
-        Creates a dataframe with the metrics of each model. Complements a method in child class. 
+        Creates a dataframe with the metrics of the models. Complements a method in child class. 
         Used after evaluate_metrics or apply_and_evaluate_kfolds (see both in child class)
     
-    visualize()
+    visualize(metrics_selection=None)
         Creates a lineplot with the metrics of the models. Used after create_dataframe
     '''
 
@@ -288,13 +288,13 @@ class Regression(Model):
        5) Extracts the metrics for models already applied with apply_models (4). No folds
     
     create_dataframe(chosen_metric='mean')
-        6) Creates a dataframe with the metrics of each model. Partially inherited.
+        6) Creates a dataframe with the metrics of the models. Partially inherited.
         Used after evaluate_metrics (5) or apply_and_evaluate_kfolds (4 & 5)
 
     Methods inherited from parent class
     -------
     send_pickle(model, path)
-        8) Saves model as pickle to the chosen path. This is a static method an theoretically could be used anytime
+        8) Saves model as pickle to the chosen path. This is a static method and theoretically could be used anytime
 
     split_dataframe(train_num=0.7, random_num=43, scaler=None, return_entire_Xy=False)
         2) Splits dataframe into X_train, X_test, y_train and y_test. 
@@ -307,7 +307,7 @@ class Regression(Model):
         4) Comes after prepare_models (3). Predicts using the split dataframe and the prepared models. 
         No folds. Can use apply_and_evaluate_kfolds (4 & 5) instead
     
-    visualize()
+    visualize(metrics_selection=None)
         7) Creates a lineplot with the metrics of the models. Used after create_dataframe (6)
     '''
 
@@ -513,13 +513,13 @@ class Classification(Model):
         5) Extracts the metrics for models already applied with apply_models (4). No folds
     
     create_dataframe(chosen_metric='mean')
-        6) Creates a dataframe with the metrics of each model. Partially inherited.
+        6) Creates a dataframe with the metrics of the models. Partially inherited.
         Used after evaluate_metrics (5) or apply_and_evaluate_kfolds (4 & 5)
 
     Methods inherited from parent class
     -------
     send_pickle(model, path)
-        8) Saves model as pickle to the chosen path. This is a static method an theoretically could be used anytime
+        8) Saves model as pickle to the chosen path. This is a static method and theoretically could be used anytime
 
     split_dataframe(train_num=0.7, random_num=43, scaler=None, return_entire_Xy=False)
         2) Splits dataframe into X_train, X_test, y_train and y_test. 
@@ -532,7 +532,7 @@ class Classification(Model):
         4) Comes after prepare_models (3). Predicts using the split dataframe and the prepared models. 
         No folds. Can use apply_and_evaluate_kfolds (4 & 5) instead
     
-    visualize()
+    visualize(metrics_selection=None)
         7) Creates a lineplot with the metrics of the models. Used after create_dataframe (6)
     '''
 
