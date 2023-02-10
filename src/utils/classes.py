@@ -440,7 +440,7 @@ Can use apply_models() + evaluate_metrics() instead if kfolds are not wanted
 
 
     def evaluate_metrics(self):
-        '''Extracts the metrics for models already applied with apply_models(). No kfolds
+        '''Extracts the metrics for the models already applied with apply_models(). No kfolds
 
         Returns
         -------
@@ -675,7 +675,7 @@ Can use apply_models() + evaluate_metrics() instead if kfolds are not wanted
 
 
     def evaluate_metrics(self, **params):
-        '''Extracts the metrics for models already applied with apply_models(). No kfolds
+        '''Extracts the metrics for the models already applied with apply_models(). No kfolds
 
         Parameters
         ----------
