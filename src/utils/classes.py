@@ -62,7 +62,8 @@ class Model:
         target_name : str
             The name of the target column
         index : str (defaut=None)
-            The name of the column to become index, if any
+            The name of the column to become index, if any. 
+            Useful if the dataframe has not been cleaned and/or the analysis is to be performed without changing it directly
         '''
 
         self.target_name = target_name
