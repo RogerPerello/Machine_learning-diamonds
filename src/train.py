@@ -4,7 +4,7 @@ from utils.classes import *
 df_diamonds = pd.read_csv(r'src\data\processed\diamonds_training.csv')
 
 # Entrenamiento
-print('--- Training starting ---')
+print('--- Training started ---')
 
 start_time = time.time()
 
