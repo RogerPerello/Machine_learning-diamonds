@@ -24,7 +24,7 @@ def remove_all(df, zeros_only=False):
 
 def assign_values(df, outlier=True):
     '''Assigns especific values for the diamonds dataframe'''
-    df.loc[df.index == 34815, 'lenght (millimeters)'] = 6.62
+    df.loc[df['lenght (millimeters)'] == 0, 'lenght (millimeters)'] = 6.62
     df.loc[df['depth (millimeters)'] == 0, 'depth (millimeters)'] = df['depth (percentage)'] / 100 * (df['lenght (millimeters)']+df['width (millimeters)']) / 2
     if outlier:
         df.loc[df['lenght (millimeters)'] > 10.7, 'lenght (millimeters)'] = 10.54

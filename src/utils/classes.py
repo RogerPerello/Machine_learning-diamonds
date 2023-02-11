@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import time
-import pickle
+import joblib
 from xgboost import XGBRegressor
 
 import matplotlib.pyplot as plt
@@ -114,8 +114,8 @@ class Model:
         string
             Confirmation
         '''
-
-        pass
+        joblib.dump(model, path)
+        return 'Done'
 
 
     def split_dataframe(self, train_num=0.7, random_num=43, scaler=None, return_entire_Xy=False):
@@ -142,7 +142,10 @@ Preferably used after adding models to the chosen_models attribute with add_mode
         self.random_num = random_num
         X = self.dataframe.drop(columns=self.target_name)
         y = self.dataframe[self.target_name]
-        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, train_size=train_num, random_state=self.random_num)
+        stratify_option = None
+        if self.type == 'classification':
+            stratify_option = y
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, train_size=train_num, random_state=self.random_num, stratify=stratify_option)
         if scaler:
             self.scaler = eval(scaler + '()')
             self.scaler_name = ' (' + scaler + ')'
