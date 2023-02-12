@@ -30,6 +30,6 @@ execution_time = time.time() - start_time
 print(f'--- Training done in {round(execution_time, 2)} sec/s ---')
 
 # Serialización
-training.send_pickle(model, r'src\model\new_model.pkl')
+training.send_pickle(model, r'src\model\new_model_competition.pkl')
 
 print('--- Serialization done ---')
