@@ -1,0 +1,3 @@
+Las imágenes pesan demasiado para subirse a Github. Pueden descargarse de Kaggle (carpeta diamonds2):
+
+https://www.kaggle.com/datasets/harshitlakhani/natural-diamonds-prices-images
