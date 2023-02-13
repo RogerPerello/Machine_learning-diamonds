@@ -23,7 +23,8 @@ from sklearn.metrics import accuracy_score, recall_score, precision_score, confu
 class Model:
     '''
     Parent class of Regression and Classification. Used only through child classes, never directly.
-    Check child classes documentation for a full overview of the available methods as well as the recommended order of use
+    Check child classes documentation for a full overview of the available methods as well as the recommended order of use.
+    The info below is not complete and only shows some of the features accessible through the child classes
 
     ...
 
