@@ -2,11 +2,10 @@ from utils.classes import *
 from utils.functions import *
 
 
-df_diamonds = pd.read_csv(r'src\data\processed\diamonds_training.csv')
+df_diamonds = pd.read_csv(r'src\data\processed\original_processed.csv')
 
 df_diamonds = remove_all(df_diamonds, zeros_only=True)
 df_diamonds = assign_values(df_diamonds, outlier=False)
-df_diamonds = df_diamonds.drop(columns='table (percentage)')
 
 # Entrenamiento
 print('--- Training started ---')
