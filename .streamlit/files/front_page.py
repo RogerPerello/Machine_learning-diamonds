@@ -26,11 +26,11 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
     st.write('After taking into account this long process, only one thing remains unanswered: how much they cost?')
     st.subheader('The answer')
     st.write('As a response to that question, the Diamond APPraiser detects the weight and dimensions of a diamond, as well as its clarity, color and cut.')
-    st.write('Then, uses those measures to predict an approximate price.')
+    st.write('Subsequently, uses those measures to predict an approximate price.')
     st.subheader('How to make it work')
     st.write('If you have a photo of a diamond, click on "Prediction from images" from the sidebar menu.')
     st.write('Otherwise, if you prefer to annotate its characteristics yourself, click on "Prediction from characteristics".')
-    st.write('Click on "A peek into the process" below to check some of the inner workings of the app.')
+    st.write('Through the dropdown below you may check some of the inner workings of the app.')
 
     # Additional information about the data
     with st.expander('A peek into the process'):
@@ -46,7 +46,7 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         st.write('Once the characteristics of the given diamond are determined, a supervised machine learning model trained with a larger pool of diamonds decides the appropiate price.')
         st.write('The dataset used to train that second model can be found [here](https://www.kaggle.com/datasets/swatikhedekar/price-prediction-of-diamond).')
         st.subheader('Prices data sample')
-        st.write('To evaluate the prediction, the resulting price is compared to the price of the diamonds in the previous data frame.')
+        st.write('To evaluate the prediction, the resulting price is compared to the price of the diamonds reserved in the previous data frame.')
         df_prices = pd.read_csv(r'src\data\processed\original_processed.csv')
         data_sample_prices = df_prices.head(100)
         st.write(data_sample_prices)
