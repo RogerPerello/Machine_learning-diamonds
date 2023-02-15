@@ -17,7 +17,7 @@ def predict_from_characteristics():
         input_depth = st.number_input('Depth (millimeters)', min_value=0.01, max_value=50.0, step=0.01)
         st.write('----- Fill only the diameter, if your diamond is rounded, or the lenght/width if it is squared. -----')
         st.write('- For squared diamonds:')
-        input_lenght = st.number_input('Lenght (millimeters)', min_value=0.0, max_value=20.0, step=0.01)
+        input_lenght = st.number_input('Lenght (millimeters)', min_value=0.0, max_value=80.0, step=0.01)
         input_width = st.number_input('Width (millimeters)', min_value=0.0, max_value=80.0, step=0.01)
         st.write('- For rounded diamonds:')
         input_diameter = st.number_input('Diameter (millimeters)', min_value=0.0, max_value=60.0, step=0.01)
