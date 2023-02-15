@@ -9,7 +9,7 @@ import pandas as pd
 
 def front_page():
     '''Title and subtitle'''
-    st.header('Diamond price predictor')
+    st.header('Diamond APPraiser')
     st.write('by Roger Perelló Gumbau')
 
     '''Main image'''
@@ -17,21 +17,38 @@ def front_page():
     image_array = np.array(image)/255
     st.image(image_array)
 
-    '''Some info'''
-    with st.expander('Learn more'):
-        st.write('This radar data was collected by a system in Goose Bay, Labrador. This system consists of a phased array of 16 high-frequency antennas with a total transmitted power on the order of 6.4 kilowatts. See the paper for more details. The targets were free electrons in the ionosphere. "Good" radar returns are those showing evidence of some type of structure in the ionosphere. "Bad" returns are those that do not; their signals pass through the ionosphere.')
-        st.write("")
-        st.write('Received signals were processed using an autocorrelation function whose arguments are the time of a pulse and the pulse number. There were 17 pulse numbers for the Goose Bay system. Instances in this databse are described by 2 attributes per pulse number, corresponding to the complex values returned by the function resulting from the complex electromagnetic signal.')
+    '''Introduction'''
+    st.write('')
+    st.subheader('The question')
+    st.write('''Forming a diamond deep down the Earth's mantle takes at least one billion years.
+Under high pressure and temperature, carbon-containing fluids dissolve various minerals, and their atoms are arranged in an extremely rigid way, unyielding.
+Defects and impurities try to permeate them, which determines what color will be adopted, if any, as well as their clarity.
+The resulting diamonds, which may come in many weights and shapes, are later carried to the surface in volcanic eruptions and deposited in igneous rocks.
+''')
+    st.write('After taking into account this long process, only one thing remains unanswered: how much they cost?')
+    st.subheader('The answer')
+    st.write('As a response to that question, the Diamond APPraiser detects the weight and dimensions of a diamond, as well as its clarity, color and cut.')
+    st.write('Then, uses those measures to predict an approximate price.')
+    st.subheader('How to make it work')
+    st.write('If you have a photo of a diamond, click on "Image prediction" from the sidebar menu.')
+    st.write('Otherwise, if you prefer to annotate its characteristics yourself and evaluate the price directly, click on "Data prediction".')
+    st.write('Click on "A peek into the process" below to check some of the inner workings of the app.')
 
-
-    data = pd.read_csv(r'src\data\processed\original_processed.csv')
-    st.title('About the data')
-
-    data_load_state = st.text('Loading data...')
-
-    data_sample = data.head(100)
-
-    data_load_state.text("Done! (using st.cache_data)")
-
-    st.subheader('Data sample')
-    st.write(data_sample)
+    '''Extra information about the data'''
+    with st.expander('A peek into the process'):
+        st.subheader('Image recognition')
+        st.write('If an image of a diamond is given, the app uses a deep learning model to obtain its characteristics')
+        st.write('The dataset used to train that first model can be found [here](https://www.kaggle.com/datasets/harshitlakhani/natural-diamonds-prices-images)')
+        st.subheader('Images data sample')
+        st.write('The column "Id" represents each of the images. The column "price" is set aside before the training')
+        df_images = pd.read_csv(r'src\data\processed\images_data_processed.csv')
+        data_sample_images = df_images.head(100)
+        st.write(data_sample_images)
+        st.subheader('Price prediction')
+        st.write('Once the characteristics of the given diamond are determined, a supervised machine learning model trained with a larger pool of diamonds decides the appropiate price')
+        st.write('The dataset used to train that second model can be found [here](https://www.kaggle.com/datasets/swatikhedekar/price-prediction-of-diamond)')
+        st.subheader('Prices data sample')
+        st.write('To evaluate the prediction, the resulting price is compared to the price of the diamonds in the previous data frame')
+        df_prices = pd.read_csv(r'src\data\processed\original_processed.csv')
+        data_sample_prices = df_prices.head(100)
+        st.write(data_sample_prices)
