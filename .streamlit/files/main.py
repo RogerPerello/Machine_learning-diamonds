@@ -1,9 +1,12 @@
+import os
 import streamlit as st
 
 from front_page import *
 from prediction_from_images_page import *
 from prediction_from_characteristics_page import *
 
+
+os.chdir(os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)))
 
 # Configuration
 st.set_page_config(page_title='Diamond APPraiser', layout='wide', page_icon='💠')
