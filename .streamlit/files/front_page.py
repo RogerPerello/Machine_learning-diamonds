@@ -10,7 +10,7 @@ def set_front_page():
     st.write('by Roger Perelló Gumbau')
 
     # Main image
-    image = Image.open(r'.streamlit\images\front_picture.png').resize((1022, 400))
+    image = Image.open('.streamlit/images/front_picture.png').resize((1022, 400))
     image_array = np.array(image)/255
     st.image(image_array)
 
@@ -39,7 +39,7 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         st.write('The dataset used to train that first model can be found [here](https://www.kaggle.com/datasets/harshitlakhani/natural-diamonds-prices-images).')
         st.subheader('Images data sample')
         st.write('The column "Id" represents each of the images. The column "price" is set aside before the training.')
-        df_images = pd.read_csv(r'src\data\processed\images_data_processed.csv')
+        df_images = pd.read_csv('src/data/processed/images_data_processed.csv')
         data_sample_images = df_images.head(10)
         st.write(data_sample_images)
         st.header('Price prediction')
@@ -47,6 +47,6 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         st.write('The dataset used to train that second model can be found [here](https://www.kaggle.com/datasets/swatikhedekar/price-prediction-of-diamond).')
         st.subheader('Prices data sample')
         st.write('To evaluate the prediction, the resulting price is compared to the price of the diamonds reserved in the previous data frame.')
-        df_prices = pd.read_csv(r'src\data\processed\original_processed.csv')
+        df_prices = pd.read_csv('src/data/processed/original_processed.csv')
         data_sample_prices = df_prices.head(10)
         st.write(data_sample_prices)

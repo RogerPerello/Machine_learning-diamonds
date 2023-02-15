@@ -136,7 +136,7 @@ def predict_from_characteristics():
         data_array = np.array([[input_weight, slider_cut, slider_color, slider_clarity, depth_percentage, input_lenght, input_width, input_depth]])
 
         # Prediction
-        model = pickle.load(open(r'src\models\new_model_price_prediction.pkl', 'rb'))
+        model = pickle.load(open('src/models/new_model_price_prediction.pkl', 'rb'))
         prediction = np.exp(model.predict(data_array)[0])
         data_load_state.text('Prediction loaded:')
         st.write(f'Your diamond costs {str(prediction).split(".")[0] + "." + str(prediction).split(".")[1][:2]} dollars approximately.')
