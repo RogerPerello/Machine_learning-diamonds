@@ -5,7 +5,7 @@ from front_page import *
 from prediction_from_images_page import *
 from prediction_from_characteristics_page import *
 
-print(os.chdir())
+print(os.getcwd())
 
 # Configuration
 st.set_page_config(page_title='Diamond APPraiser', layout='wide', page_icon='💠')
