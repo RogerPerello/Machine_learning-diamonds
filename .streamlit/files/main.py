@@ -1,22 +1,20 @@
-import os
 import streamlit as st
-import pandas as pd
-import numpy as np
-from sklearn.model_selection import train_test_split
-import joblib
-from pages.front_page import *
+
+from front_page import *
+from prediction_from_images_page import *
+from prediction_from_characteristics_page import *
 
 
-# CONFIGURACIÓN --------------------------------------------------------------------
-# ----------------------------------------------------------------------------------
-st.set_page_config(page_title='Diamonds price predictor', layout='wide', page_icon='🔹') # menu_items (about & report a bug)
+# Configuration
+st.set_page_config(page_title='Diamond APPraiser', layout='wide', page_icon='🔹') # menu_items (about & report a bug)
 
 
-# CARGAR y ENTRENAR DF --------------------------------------------------------------------------
-# -----------------------------------------------------------------------------------------------
-
-
-page_names_to_funcs = {"Main page: historical data": front_page,
+# Page selection and execution
+page_names_to_funcs = {'Introduction': set_front_page,
+                       'Prediction from images': predict_from_images,
+                       'Prediction from characteristics': predict_from_characteristics
                         }
-selected_page = st.sidebar.selectbox("Possible predictions", page_names_to_funcs.keys())
+
+selected_page = st.sidebar.selectbox('Sidebar menu', page_names_to_funcs.keys())
+
 page_names_to_funcs[selected_page]()
