@@ -9,11 +9,11 @@ import pandas as pd
 
 def front_page():
     '''Title and subtitle'''
-    st.header('Diamonds price predictor')
+    st.header('Diamond price predictor')
     st.write('by Roger Perelló Gumbau')
 
     '''Main image'''
-    image = Image.open(r'streamlit\images\front_picture.png').resize((1022, 400))
+    image = Image.open(r'.streamlit\images\front_picture.png').resize((1022, 400))
     image_array = np.array(image)/255
     st.image(image_array)
 
