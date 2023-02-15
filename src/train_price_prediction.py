@@ -41,6 +41,6 @@ print(f'--- Training done in {round(execution_time, 2)} sec/s ---\n')
 print(f'Predicted rmse: {mean_squared_error(y_test, y_pred, squared=False)}\n')
 
 # Serialización
-training.send_pickle(model, r'src\model\new_model_price_prediction.pkl')
+training.send_pickle(model, r'src\models\new_model_price_prediction.pkl')
 
 print('--- Serialization done ---')
