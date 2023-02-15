@@ -3,5 +3,7 @@ pickleshare==0.7.5
 numpy==1.24.1
 pandas==1.5.3
 pillow==9.4.0
+
+# Not directly used, but necessary to prevent a bug when opening an xgboost pickle
 xgboost==1.7.3
 scikit-learn==1.2.0
