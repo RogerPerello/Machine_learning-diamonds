@@ -6,7 +6,7 @@ from prediction_from_characteristics_page import *
 
 
 # Configuration
-st.set_page_config(page_title='Diamond APPraiser', layout='wide', page_icon='🔹') # menu_items (about & report a bug)
+st.set_page_config(page_title='Diamond APPraiser', layout='wide', page_icon='💠')
 
 
 # Page selection and execution
