@@ -6,9 +6,8 @@ import numpy as np
 def predict_from_characteristics():
     # Title and subtitle
     st.header('Prediction from characteristics')
-    st.write('Use the attributes of a diamond to predict its price (rembember to write decimals in dot notation!).')
+    st.write('Use the attributes of a diamond to predict its price.')
     st.write('If you prefer to simply upload a photo, click on "Prediction from image" from the sidebar menu.')
-
 
     # Form
     with st.form('Diamond characteristics'):
@@ -81,7 +80,6 @@ def predict_from_characteristics():
             st.write(f'Weight: {input_weight}. Depth: {input_depth}. Lenght: {input_lenght}. Width: {input_width}. Cut: {slider_cut.lower()}. Color: {slider_color.lower()}. Clarity: {slider_clarity.lower()}.')
         else:
             st.write(f'Weight: {input_weight}. Depth: {input_depth}. Diameter: {input_diameter}. Lenght: {input_lenght}. Width: {input_width}. Cut: {slider_cut.lower()}. Color: {slider_color.lower()}. Clarity: {slider_clarity.lower()}.')
-
 
     # Prediction preparation
     prediction_button = st.button('Begin prediction', type='primary', disabled=deactivated_button)
