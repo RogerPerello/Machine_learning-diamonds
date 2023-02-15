@@ -1,9 +1,9 @@
 import os
 import streamlit as st
 
-from front_page import *
-from prediction_from_images_page import *
-from prediction_from_characteristics_page import *
+from front_page import set_front_page
+from prediction_from_images_page import predict_from_images
+from prediction_from_characteristics_page import predict_from_characteristics
 
 
 # Configuration
