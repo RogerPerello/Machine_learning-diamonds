@@ -2,12 +2,12 @@ from utils.classes import *
 from utils.functions import *
 
 
-df_diamonds = pd.read_csv(r'src\data\processed\competition\train_processed.csv')
+df_diamonds = pd.read_csv('src/data/processed/competition/train_processed.csv')
 
 df_diamonds = remove_all(df_diamonds, zeros_only=True)
 df_diamonds = assign_values(df_diamonds, outlier=False)
 
-# Entrenamiento
+# Training
 print('--- Training started ---')
 
 start_time = time.time()
@@ -38,7 +38,7 @@ print(f'--- Training done in {round(execution_time, 2)} sec/s ---\n')
 
 print(f'Predicted rmse: {mean_squared_error(y_test, y_pred, squared=False)}\n')
 
-# Serialización
-training.send_pickle(model, r'src\models\new_model_competition_only.pkl')
+# Serialization
+training.send_pickle(model, open('src/models/new_model_competition_only.pkl', 'wb'))
 
 print('--- Serialization done ---')
