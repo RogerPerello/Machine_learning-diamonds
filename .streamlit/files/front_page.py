@@ -23,7 +23,7 @@ Defects and impurities try to permeate them, which determines what color will be
 The resulting stones, which may come in many weights and shapes, are later carried to the surface in volcanic eruptions and deposited in igneous rocks.
 Those deposits are prospected and mined. Then, the diamonds are sliced, studied, splitted, bruted, polished and inspected to meet quality standards.
 ''')
-    st.write('After taking into account this long process, only one thing remains unanswered: how much they cost?')
+    st.write('After taking into account this long process, only one thing remains unanswered: how much do they cost?')
     st.subheader('The answer')
     st.write('As a response to that question, the Diamond APPraiser detects the weight and dimensions of a diamond, as well as its clarity, color and cut.')
     st.write('Subsequently, uses those measures to predict an approximate price.')
