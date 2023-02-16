@@ -1,7 +1,7 @@
 import streamlit as st
 
 
-def predict_from_images(inflation):
+def predict_from_images():
     # Title and subtitle
     st.header('Prediction from images (INCOMPLETE)')
     st.write('Use photos of a diamond to predict its price.')

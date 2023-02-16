@@ -4,7 +4,7 @@ from PIL import Image
 import pandas as pd
 
 
-def set_front_page(inflation):
+def set_front_page():
     # Title and subtitle
     st.header('Diamond APPraiser')
     st.write('by Roger Perelló Gumbau')

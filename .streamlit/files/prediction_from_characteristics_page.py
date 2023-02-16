@@ -1,9 +1,13 @@
 import streamlit as st
 import numpy as np
 import joblib
+from datetime import datetime
+import requests
+from bs4 import BeautifulSoup as bs
+import re
 
 
-def predict_from_characteristics(inflation):
+def predict_from_characteristics():
     # Title and subtitle
     st.header('Prediction from characteristics')
     st.write('Use the attributes of a diamond to predict its price.')
@@ -141,10 +145,22 @@ def predict_from_characteristics(inflation):
             depth_percentage = (input_depth / ((input_lenght + input_width) / 2)) * 100
             data_array = np.array([[input_weight, slider_cut, slider_color, slider_clarity, depth_percentage, input_lenght, input_width, input_depth]])
 
+            # Inflation webscrapping
+            current_year = datetime.now().year
+            try:
+                url = f'https://www.in2013dollars.com/Jewelry/price-inflation/2017-to-{current_year}'
+                r = requests.get(url)
+                soup = bs(r.text, 'html')
+                info = soup.find_all(class_='highlight')[0].text
+                inflation = float(re.search('^(.+)%', info)[0][:-1])
+            except Exception:
+                inflation = (int(current_year) - 2017) * 1.78
+
             # Prediction
             model = joblib.load('src/models/price_prediction.pkl')
             prediction = np.exp(model.predict(data_array)[0])
             inflated_prediction = ((prediction / 100) * inflation) + prediction
+
         # Prediction display
         st.success('Prediction loaded:')
         st.write(f'Your diamond costs {str(inflated_prediction).split(".")[0] + "." + str(inflated_prediction).split(".")[1][:2]} dollars approximately.')
