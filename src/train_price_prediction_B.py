@@ -14,7 +14,7 @@ print('--- Training started ---')
 start_time = time.time()
 
 training = Regression(df_diamonds, 'price')
-X_train, X_test, y_train, y_test = training.split_dataframe()
+X, y = training.split_dataframe(return_entire_Xy=True)
 
 model = KNeighborsRegressor(algorithm='ball_tree', 
                             leaf_size=2,
@@ -23,15 +23,11 @@ model = KNeighborsRegressor(algorithm='ball_tree',
                             weights='distance'
                             )
 
-model.fit(X_train, y_train)
-
-y_pred = model.predict(X_test)
+model.fit(X, y)
 
 execution_time = time.time() - start_time
 
 print(f'--- Training done in {round(execution_time, 2)} sec/s ---\n')
-
-print(f'Predicted rmse: {mean_squared_error(y_test, y_pred, squared=False)}\n')
 
 # Serialization
 training.send_pickle(model, open('src/models/price_prediction_B.pkl', 'wb'))

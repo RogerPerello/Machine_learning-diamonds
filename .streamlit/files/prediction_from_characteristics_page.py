@@ -148,19 +148,26 @@ def predict_from_characteristics():
 
             # Model selection based on input
             model = joblib.load('src/models/price_prediction_A.pkl')
+            model_name = 'n Xgboost'
             df_original = pd.read_csv('src/data/processed/original_processed.csv').drop(columns='price')
             max_array = [df_original[column].max() for column in df_original.columns]
             min_array = [df_original[column].min() for column in df_original.columns]
-            for element in np.subtract(data_array, max_array)[0]:
-                if element > 0:
+            st.write(data_array)
+            st.write(max_array)
+            st.write(min_array)
+            for element in np.subtract(max_array, data_array)[0]:
+                if element < 0:
                     model = joblib.load('src/models/price_prediction_B.pkl')
+                    model_name = ' K Neighbours'
                     break
             for element in np.subtract(min_array, data_array)[0]:
                 if element > 0:
                     model = joblib.load('src/models/price_prediction_B.pkl')
+                    model_name = ' K Neighbours'
                     break
                 
             # Prediction
             prediction = np.exp(model.predict(data_array)[0])
-        st.success('Prediction loaded:')
+        st.success('Loaded.')
+        st.write(f'The following prediction was made with a{model_name} regression model:')
         st.write(f'Your diamond costs {str(prediction).split(".")[0] + "." + str(prediction).split(".")[1][:2]} dollars approximately.')
