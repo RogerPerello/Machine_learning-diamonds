@@ -80,11 +80,11 @@ def predict_from_characteristics():
              st.write('You assigned a value higher than zero to lenght. Please, put a zero to ensure a proper prediction.')
         elif submitted and (input_diameter != 0 and input_lenght == 0 and input_width != 0):
              st.write('You assigned a value higher than zero to width. Please, put a zero to ensure a proper prediction.')
-        if input_diameter and not (input_lenght and input_width):
+        if submitted and input_diameter and not (input_lenght and input_width):
             st.write(f'Weight: {input_weight}. Depth: {input_depth}. Diameter: {input_diameter}. Cut: {slider_cut.lower()}. Color: {slider_color.lower()}. Clarity: {slider_clarity.lower()}.')
-        elif (input_lenght and input_width) and not input_diameter:
+        elif submitted and (input_lenght and input_width) and not input_diameter:
             st.write(f'Weight: {input_weight}. Depth: {input_depth}. Lenght: {input_lenght}. Width: {input_width}. Cut: {slider_cut.lower()}. Color: {slider_color.lower()}. Clarity: {slider_clarity.lower()}.')
-        else:
+        elif submitted:
             st.write(f'Weight: {input_weight}. Depth: {input_depth}. Diameter: {input_diameter}. Lenght: {input_lenght}. Width: {input_width}. Cut: {slider_cut.lower()}. Color: {slider_color.lower()}. Clarity: {slider_clarity.lower()}.')
 
     # Prediction preparation
