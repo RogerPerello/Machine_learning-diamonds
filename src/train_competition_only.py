@@ -3,6 +3,8 @@ from utils.functions import *
 
 
 df_diamonds = pd.read_csv('src/data/processed/competition/train_processed.csv')
+df_diamonds_test = pd.read_csv('src/data/processed/competition/test_processed.csv')
+
 
 df_diamonds = remove_all(df_diamonds, zeros_only=True)
 df_diamonds = assign_values(df_diamonds, outlier=False)
@@ -13,7 +15,7 @@ print('--- Training started ---')
 start_time = time.time()
 
 training = Regression(df_diamonds, 'price')
-X_train, X_test, y_train, y_test = training.split_dataframe()
+X, y = training.split_dataframe(return_entire_Xy=True)
 
 model = XGBRegressor(colsample_bytree=0.9, 
                         eta=0.15,
@@ -28,15 +30,11 @@ model = XGBRegressor(colsample_bytree=0.9,
                         subsample=0.8,
                     )
 
-model.fit(X_train, y_train)
-
-y_pred = model.predict(X_test)
+model.fit(X, y)
 
 execution_time = time.time() - start_time
 
 print(f'--- Training done in {round(execution_time, 2)} sec/s ---\n')
-
-print(f'Predicted rmse: {mean_squared_error(y_test, y_pred, squared=False)}\n')
 
 # Serialization
 training.send_pickle(model, open('src/models/competition_only.pkl', 'wb'))
