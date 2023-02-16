@@ -149,14 +149,14 @@ def predict_from_characteristics():
 
             # Inflation webscrapping
             current_year = datetime.now().year
-            inflation_check = ' (inflation estimated)'
+            inflation_estimated = ' (inflation estimated)'
             try:
                 url = f'https://www.in2013dollars.com/Jewelry/price-inflation/2017-to-{current_year}'
                 r = requests.get(url)
                 soup = bs(r.text, 'html')
                 info = soup.find_all(class_='highlight')[0].text
                 inflation = float(re.search('^(.+)%', info)[0][:-1])
-                inflation_check = ''
+                inflation_estimated = ''
             except Exception:
                 inflation = (int(current_year) - 2017) * 1.78
 
@@ -166,5 +166,5 @@ def predict_from_characteristics():
             inflated_prediction = ((prediction / 100) * inflation) + prediction
 
         # Prediction display
-        st.success(f'Prediction loaded{inflation_check}:')
+        st.success(f'Prediction loaded{inflation_estimated}:')
         st.write(f'Your diamond costs {str(inflated_prediction).split(".")[0] + "." + str(inflated_prediction).split(".")[1][:2]} dollars approximately.')
