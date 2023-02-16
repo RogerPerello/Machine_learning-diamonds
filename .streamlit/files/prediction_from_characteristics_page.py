@@ -1,6 +1,10 @@
 import streamlit as st
 import pickle
 import numpy as np
+import pandas as pd
+import sklearn
+import xgboost
+from sklearn.neighbors import KNeighborsRegressor
 
 
 def predict_from_characteristics():
@@ -90,59 +94,72 @@ def predict_from_characteristics():
     # Prediction preparation
     prediction_button = st.button('Begin prediction', type='primary', disabled=deactivated_button)
     if prediction_button:
-        data_load_state = st.text('Loading prediction...')
-        if not input_diameter:
-            input_diameter = (input_lenght + input_width) / 2
-        else:
-            input_lenght = input_diameter / 2
-            input_width = input_lenght
-        for key, value in {'Y-Z (light)': -12, 
-                            'W-X (light)': -11, 
-                            'W (light)': -10, 
-                            'U-V (light)': -9, 
-                            'S-T (light)': -8, 
-                            'Q-R (very light)': -7, 
-                            'O-P (very light)': -6, 
-                            'O (very light)': -5, 
-                            'N (very light)': -4, 
-                            'M (faint)': -3, 
-                            'L (faint)': -2, 
-                            'K (faint)': -1, 
-                            'J (near colorless)': 0, 
-                            'I (near colorless)': 1, 
-                            'H (near colorless)': 2, 
-                            'G (near colorless)': 3, 
-                            'F (colorless)': 4, 
-                            'E (colorless)': 5, 
-                            'D (colorless)': 6
-                            }.items():
-            if slider_color == key:
-                slider_color = value
-        for key, value in {'Fair (F)':0, 
-                            'Good (GD)': 1, 
-                            'Very Good (VG)': 2,
-                            'Premium': 3, 
-                            'Ideal or Excelent (EX)': 4
-                            }.items():
-            if slider_cut == key:
-                slider_cut = value
-        for key, value in {'Included (I1)':0, 
-                            'Slightly included 2 (SI2)': 1, 
-                            'Slightly included 1 (SI1)': 2, 
-                            'Very slightly included 2 (VS2)': 3, 
-                            'Very slightly included 1 (VS1)': 4,
-                            'Very, very slightly included 2 (VVS2)': 5,
-                            'Very, very slightly included 1 (VVS1)': 6,
-                            'Internally flawless (IF)': 7,
-                            'Flawless (FL)': 8
-                            }.items():
-            if slider_clarity == key:
-                slider_clarity = value      
-        depth_percentage = (input_depth / ((input_lenght + input_width) / 2)) * 100
-        data_array = np.array([[input_weight, slider_cut, slider_color, slider_clarity, depth_percentage, input_lenght, input_width, input_depth]])
+        with st.spinner('Loading prediction...'):
+            if not input_diameter:
+                input_diameter = (input_lenght + input_width) / 2
+            else:
+                input_lenght = input_diameter / 2
+                input_width = input_lenght
+            for key, value in {'Y-Z (light)': -12, 
+                                'W-X (light)': -11, 
+                                'W (light)': -10, 
+                                'U-V (light)': -9, 
+                                'S-T (light)': -8, 
+                                'Q-R (very light)': -7, 
+                                'O-P (very light)': -6, 
+                                'O (very light)': -5, 
+                                'N (very light)': -4, 
+                                'M (faint)': -3, 
+                                'L (faint)': -2, 
+                                'K (faint)': -1, 
+                                'J (near colorless)': 0, 
+                                'I (near colorless)': 1, 
+                                'H (near colorless)': 2, 
+                                'G (near colorless)': 3, 
+                                'F (colorless)': 4, 
+                                'E (colorless)': 5, 
+                                'D (colorless)': 6
+                                }.items():
+                if slider_color == key:
+                    slider_color = value
+            for key, value in {'Fair (F)':0, 
+                                'Good (GD)': 1, 
+                                'Very Good (VG)': 2,
+                                'Premium': 3, 
+                                'Ideal or Excelent (EX)': 4
+                                }.items():
+                if slider_cut == key:
+                    slider_cut = value
+            for key, value in {'Included (I1)':0, 
+                                'Slightly included 2 (SI2)': 1, 
+                                'Slightly included 1 (SI1)': 2, 
+                                'Very slightly included 2 (VS2)': 3, 
+                                'Very slightly included 1 (VS1)': 4,
+                                'Very, very slightly included 2 (VVS2)': 5,
+                                'Very, very slightly included 1 (VVS1)': 6,
+                                'Internally flawless (IF)': 7,
+                                'Flawless (FL)': 8
+                                }.items():
+                if slider_clarity == key:
+                    slider_clarity = value      
+            depth_percentage = (input_depth / ((input_lenght + input_width) / 2)) * 100
+            data_array = np.array([[input_weight, slider_cut, slider_color, slider_clarity, depth_percentage, input_lenght, input_width, input_depth]])
 
-        # Prediction
-        model = pickle.load(open('src/models/price_prediction_A.pkl', 'rb'))
-        prediction = np.exp(model.predict(data_array)[0])
-        data_load_state.text('Prediction loaded:')
+            # Model selection based on input
+            model = pickle.load(open('src/models/price_prediction_A.pkl', 'rb'))
+            df_original = pd.read_csv('src/data/processed/original_processed.csv').drop(columns='price')
+            max_array = [df_original[column].max() for column in df_original.columns]
+            min_array = [df_original[column].min() for column in df_original.columns]
+            for element in np.subtract(data_array, max_array)[0]:
+                if element > 0:
+                    model = pickle.load(open('src/models/price_prediction_B.pkl', 'rb'))
+                    break
+            for element in np.subtract(min_array, data_array)[0]:
+                if element > 0:
+                    model = pickle.load(open('src/models/price_prediction_B.pkl', 'rb'))
+                    break
+                
+            # Prediction
+            prediction = np.exp(model.predict(data_array)[0])
+        st.success('Prediction loaded:')
         st.write(f'Your diamond costs {str(prediction).split(".")[0] + "." + str(prediction).split(".")[1][:2]} dollars approximately.')

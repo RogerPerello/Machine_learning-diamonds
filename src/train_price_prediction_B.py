@@ -16,7 +16,12 @@ start_time = time.time()
 training = Regression(df_diamonds, 'price')
 X_train, X_test, y_train, y_test = training.split_dataframe()
 
-model = KNeighborsRegressor()
+model = KNeighborsRegressor(algorithm='ball_tree', 
+                            leaf_size=2,
+                            metric='cityblock', 
+                            n_neighbors=12, 
+                            weights='distance'
+                            )
 
 model.fit(X_train, y_train)
 
