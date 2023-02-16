@@ -1,8 +1,4 @@
-import os
 import streamlit as st
-import sklearn
-import xgboost
-from sklearn.neighbors import KNeighborsRegressor
 
 from front_page import set_front_page
 from prediction_from_images_page import predict_from_images

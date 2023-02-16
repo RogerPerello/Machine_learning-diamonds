@@ -1,11 +1,6 @@
 import streamlit as st
-import pickle
 import numpy as np
-import pandas as pd
 import joblib
-import sklearn
-import xgboost
-from sklearn.neighbors import KNeighborsRegressor
 
 
 def predict_from_characteristics():
@@ -16,7 +11,7 @@ def predict_from_characteristics():
 
     # Form
     with st.form('Diamond characteristics'):
-        st.subheader('Key values')
+        st.subheader('Primary values')
         st.write('Try to be precise when assigning key values.')
         input_weight = st.number_input('Weight (carat)', min_value=0.01, max_value=10.0, step=0.01)
         input_depth = st.number_input('Depth (millimeters)', min_value=0.01, max_value=50.0, step=0.01)
@@ -146,13 +141,9 @@ def predict_from_characteristics():
             depth_percentage = (input_depth / ((input_lenght + input_width) / 2)) * 100
             data_array = np.array([[input_weight, slider_cut, slider_color, slider_clarity, depth_percentage, input_lenght, input_width, input_depth]])
 
-            # Model selection based on input
+            # Prediction
             model = joblib.load('src/models/price_prediction.pkl')
-            # model_name = 'n Xgboost'
-            df_original = pd.read_csv('src/data/processed/original_processed.csv').drop(columns='price')
-            max_array = [df_original[column].max() for column in df_original.columns]
-            min_array = [df_original[column].min() for column in df_original.columns]
             prediction = np.exp(model.predict(data_array)[0])
+        # Prediction display
         st.success('Prediction loaded:')
-        # st.write(f'The following prediction was made with a{model_name} regression model:')
         st.write(f'Your diamond costs {str(prediction).split(".")[0] + "." + str(prediction).split(".")[1][:2]} dollars approximately.')
