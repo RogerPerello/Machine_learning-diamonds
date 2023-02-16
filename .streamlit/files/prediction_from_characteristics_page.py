@@ -156,7 +156,7 @@ def predict_from_characteristics():
                 soup = bs(r.text, 'html')
                 info = soup.find_all(class_='highlight')[0].text
                 inflation = float(re.search('^(.+)%', info)[0][:-1])
-                inflation_check = None
+                inflation_check = ''
             except Exception:
                 inflation = (int(current_year) - 2017) * 1.78
 
