@@ -6,6 +6,8 @@ import requests
 from bs4 import BeautifulSoup as bs
 import re
 import sklearn
+import xgboost
+
 
 def predict_from_characteristics():
     # Title and subtitle
@@ -146,15 +148,21 @@ def predict_from_characteristics():
             data_array = np.array([[input_weight, slider_cut, slider_color, slider_clarity, depth_percentage, input_lenght, input_width, input_depth]])
 
             # Inflation webscrapping
+            #current_year = datetime.now().year
+            #try:
+            #    url = f'https://www.in2013dollars.com/Jewelry/price-inflation/2017-to-{current_year}'
+            #    r = requests.get(url)
+            #    soup = bs(r.text, 'html')
+            #    info = soup.find_all(class_='highlight')[0].text
+            #    inflation = float(re.search('^(.+)%', info)[0][:-1])
+            #except Exception:
+            #    inflation = (int(current_year) - 2017) * 1.78
             current_year = datetime.now().year
-            try:
-                url = f'https://www.in2013dollars.com/Jewelry/price-inflation/2017-to-{current_year}'
-                r = requests.get(url)
-                soup = bs(r.text, 'html')
-                info = soup.find_all(class_='highlight')[0].text
-                inflation = float(re.search('^(.+)%', info)[0][:-1])
-            except Exception:
-                inflation = (int(current_year) - 2017) * 1.78
+            url = f'https://www.in2013dollars.com/Jewelry/price-inflation/2017-to-{current_year}'
+            r = requests.get(url)
+            soup = bs(r.text, 'html')
+            info = soup.find_all(class_='highlight')[0].text
+            inflation = float(re.search('^(.+)%', info)[0][:-1])
 
             # Prediction
             model = joblib.load('src/models/price_prediction.pkl')
