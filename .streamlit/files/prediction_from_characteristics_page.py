@@ -2,6 +2,7 @@ import streamlit as st
 import pickle
 import numpy as np
 import pandas as pd
+import joblib
 import sklearn
 import xgboost
 from sklearn.neighbors import KNeighborsRegressor
@@ -146,17 +147,17 @@ def predict_from_characteristics():
             data_array = np.array([[input_weight, slider_cut, slider_color, slider_clarity, depth_percentage, input_lenght, input_width, input_depth]])
 
             # Model selection based on input
-            model = pickle.load(open('src/models/price_prediction_A.pkl', 'rb'))
+            model = joblib.load('src/models/price_prediction_A.pkl')
             df_original = pd.read_csv('src/data/processed/original_processed.csv').drop(columns='price')
             max_array = [df_original[column].max() for column in df_original.columns]
             min_array = [df_original[column].min() for column in df_original.columns]
             for element in np.subtract(data_array, max_array)[0]:
                 if element > 0:
-                    model = pickle.load(open('src/models/price_prediction_B.pkl', 'rb'))
+                    model = joblib.load('src/models/price_prediction_B.pkl')
                     break
             for element in np.subtract(min_array, data_array)[0]:
                 if element > 0:
-                    model = pickle.load(open('src/models/price_prediction_B.pkl', 'rb'))
+                    model = joblib.load('src/models/price_prediction_B.pkl')
                     break
                 
             # Prediction
