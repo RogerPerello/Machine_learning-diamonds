@@ -148,21 +148,17 @@ def predict_from_characteristics():
             data_array = np.array([[input_weight, slider_cut, slider_color, slider_clarity, depth_percentage, input_lenght, input_width, input_depth]])
 
             # Inflation webscrapping
-            #current_year = datetime.now().year
-            #try:
-            #    url = f'https://www.in2013dollars.com/Jewelry/price-inflation/2017-to-{current_year}'
-            #    r = requests.get(url)
-            #    soup = bs(r.text, 'html')
-            #    info = soup.find_all(class_='highlight')[0].text
-            #    inflation = float(re.search('^(.+)%', info)[0][:-1])
-            #except Exception:
-            #    inflation = (int(current_year) - 2017) * 1.78
             current_year = datetime.now().year
-            url = f'https://www.in2013dollars.com/Jewelry/price-inflation/2017-to-{current_year}'
-            r = requests.get(url)
-            soup = bs(r.text, 'html')
-            info = soup.find_all(class_='highlight')[0].text
-            inflation = float(re.search('^(.+)%', info)[0][:-1])
+            inflation_check = ' (inflation estimated)'
+            try:
+                url = f'https://www.in2013dollars.com/Jewelry/price-inflation/2017-to-{current_year}'
+                r = requests.get(url)
+                soup = bs(r.text, 'html')
+                info = soup.find_all(class_='highlight')[0].text
+                inflation = float(re.search('^(.+)%', info)[0][:-1])
+                inflation_check = None
+            except Exception:
+                inflation = (int(current_year) - 2017) * 1.78
 
             # Prediction
             model = joblib.load('src/models/price_prediction.pkl')
@@ -170,6 +166,5 @@ def predict_from_characteristics():
             inflated_prediction = ((prediction / 100) * inflation) + prediction
 
         # Prediction display
-        st.success('Prediction loaded:')
+        st.success(f'Prediction loaded{inflation_check}:')
         st.write(f'Your diamond costs {str(inflated_prediction).split(".")[0] + "." + str(inflated_prediction).split(".")[1][:2]} dollars approximately.')
-        st.write(f'prediction without inflation: {prediction}')
