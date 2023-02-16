@@ -3,7 +3,7 @@ import numpy as np
 import joblib
 
 
-def predict_from_characteristics():
+def predict_from_characteristics(inflation):
     # Title and subtitle
     st.header('Prediction from characteristics')
     st.write('Use the attributes of a diamond to predict its price.')
@@ -13,12 +13,12 @@ def predict_from_characteristics():
     with st.form('Diamond characteristics'):
         st.subheader('Primary values')
         st.write('Try to be precise when assigning key values.')
-        input_weight = st.number_input('Weight (carat)', min_value=0.01, max_value=10.0, step=0.01)
-        input_depth = st.number_input('Depth (millimeters)', min_value=0.01, max_value=50.0, step=0.01)
+        input_weight = st.number_input('Weight (carat)', min_value=0.01, max_value=6.0, step=0.01)
+        input_depth = st.number_input('Depth (millimeters)', min_value=0.01, max_value=60.0, step=0.01)
         st.write('----- Fill only the diameter, if your diamond is rounded, or the lenght/width if it is squared -----')
         st.write('- For squared diamonds:')
-        input_lenght = st.number_input('Lenght (millimeters)', min_value=0.0, max_value=80.0, step=0.01)
-        input_width = st.number_input('Width (millimeters)', min_value=0.0, max_value=80.0, step=0.01)
+        input_lenght = st.number_input('Lenght (millimeters)', min_value=0.0, max_value=60.0, step=0.01)
+        input_width = st.number_input('Width (millimeters)', min_value=0.0, max_value=60.0, step=0.01)
         st.write('- For rounded diamonds:')
         input_diameter = st.number_input('Diameter (millimeters)', min_value=0.0, max_value=60.0, step=0.01)
         st.subheader('Secondary values')
@@ -144,6 +144,8 @@ def predict_from_characteristics():
             # Prediction
             model = joblib.load('src/models/price_prediction.pkl')
             prediction = np.exp(model.predict(data_array)[0])
+            inflated_prediction = ((prediction / 100) * inflation) + prediction
         # Prediction display
         st.success('Prediction loaded:')
-        st.write(f'Your diamond costs {str(prediction).split(".")[0] + "." + str(prediction).split(".")[1][:2]} dollars approximately.')
+        st.write(f'Your diamond costs {str(inflated_prediction).split(".")[0] + "." + str(inflated_prediction).split(".")[1][:2]} dollars approximately.')
+        st.write(f'prediction without inflation: {prediction}')

@@ -1,9 +1,23 @@
 import streamlit as st
+from datetime import datetime
+import requests
+from bs4 import BeautifulSoup as bs
+import re
 
 from front_page import set_front_page
 from prediction_from_images_page import predict_from_images
 from prediction_from_characteristics_page import predict_from_characteristics
 
+# Inflation increase in percentage from 2017
+current_year = datetime.now().year
+try:
+    url = f'https://www.in2013dollars.com/Jewelry/price-inflation/2017-to-{current_year}'
+    r = requests.get(url)
+    soup = bs(r.text, 'html')
+    info = soup.find_all(class_='highlight')[0].text
+    inflation = float(re.search('^(.+)%', info)[0][:-1])
+except Exception:
+    inflation = (int(current_year) - 2017) * 1.78
 
 # Configuration
 st.set_page_config(page_title='Diamond APPraiser', layout='wide', page_icon='💠')
@@ -16,4 +30,4 @@ page_names_to_funcs = {'Introduction': set_front_page,
 
 selected_page = st.sidebar.selectbox('Sidebar menu', page_names_to_funcs.keys())
 
-page_names_to_funcs[selected_page]()
+page_names_to_funcs[selected_page](inflation)

@@ -4,7 +4,7 @@ from PIL import Image
 import pandas as pd
 
 
-def set_front_page():
+def set_front_page(inflation):
     # Title and subtitle
     st.header('Diamond APPraiser')
     st.write('by Roger Perelló Gumbau')
@@ -27,6 +27,7 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
     st.subheader('The answer')
     st.write('As a response to that question, the Diamond APPraiser detects the weight and dimensions of a diamond, as well as its clarity, color and cut.')
     st.write('Subsequently, uses those measures to predict an approximate price.')
+    st.write('Current inflation is also taken into account.')
     st.subheader('How it works')
     st.write('If you have a photo of a diamond, click on "Prediction from images" from the sidebar menu.')
     st.write('Otherwise, if you prefer to point its characteristics yourself, select "Prediction from characteristics".')
@@ -38,15 +39,15 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         st.write('If an image of a diamond is given, the app uses a deep learning model to obtain its characteristics.')
         st.write('The dataset used to train that first model can be found [here](https://www.kaggle.com/datasets/harshitlakhani/natural-diamonds-prices-images).')
         st.subheader('Images data sample')
-        st.write('The column "Id" represents each of the images. The column "price" is set aside before the training. The rest of the variables are the target')
-        df_images = pd.read_csv('src/data/processed/images_data_processed.csv')
+        st.write('The column "Id" represents each of the images. The rest of the variables are the target')
+        df_images = pd.read_csv('src/data/processed/images_data_processed.csv').drop(columns='price')
         data_sample_images = df_images.head(10)
         st.write(data_sample_images)
         st.header('Price prediction')
         st.write('Once the characteristics of the given diamond are determined, a supervised machine learning model trained with a larger pool of diamonds decides the appropiate price.')
         st.write('The dataset used to train that second model can be found [here](https://www.kaggle.com/datasets/swatikhedekar/price-prediction-of-diamond).')
         st.subheader('Prices data sample')
-        st.write('To evaluate the prediction at the end of the process, the resulting price is compared to the one reserved in the previous data frame.')
+        st.write('The column "price" is the target.')
         df_prices = pd.read_csv('src/data/processed/original_processed.csv')
         data_sample_prices = df_prices.head(10)
         st.write(data_sample_prices)
