@@ -168,3 +168,13 @@ def predict_from_characteristics():
         # Prediction display
         st.success(f'Prediction loaded{inflation_estimated}:')
         st.write(f'Your diamond costs {str(inflated_prediction).split(".")[0] + "." + str(inflated_prediction).split(".")[1][:2]} dollars approximately.')
+
+    # Limitations exposition
+    st.subheader('The limitations')
+    st.write('There are some factors that could increase or decrease the value of a diamond that are not considered:')
+    st.write('- Fluorescence: a diamond with strong fluorescence can appear hazy or milky, while a diamond with no fluorescence can appear more transparent and bright.')
+    st.write('- Shape: Such as round, princess, or pear. Some are more popular than others and may be more valuable, depending on market trends.')
+    st.write('- Symmetry and polish: which are ignored as they are, in general, dependant on cut quality.')
+    st.write('- Subjective appreciations: for example, colored diamonds tend to be less valuable. However, a diamond with a fancy color might be valued higher simply because it looks good, or due to current trends.')
+    st.write('Those factors can be usually neglected when inspecting small diamonds, but are more important for the bigger ones.')
+    st.write('Therefore, the smaller the diamond passed for evaluation, the better the prediction.')
