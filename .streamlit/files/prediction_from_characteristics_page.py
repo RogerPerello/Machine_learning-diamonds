@@ -153,7 +153,7 @@ def predict_from_characteristics():
             try:
                 url = f'https://www.in2013dollars.com/Jewelry/price-inflation/2017-to-{current_year}'
                 r = requests.get(url)
-                soup = bs(r.text, 'html')
+                soup = bs(r.text, 'html.parser')
                 info = soup.find_all(class_='highlight')[0].text
                 inflation = float(re.search('^(.+)%', info)[0][:-1])
                 inflation_estimated = ''
@@ -173,8 +173,8 @@ def predict_from_characteristics():
     st.subheader('The limitations')
     st.write('There are some factors that could increase or decrease the value of a diamond that are not considered:')
     st.write('- Fluorescence: a diamond with strong fluorescence can appear hazy or milky, while a diamond with no fluorescence can appear more transparent and bright.')
-    st.write('- Shape: Such as round, princess, or pear. Some are more popular than others and may be more valuable, depending on market trends.')
-    st.write('- Symmetry and polish: which are ignored as they are, in general, dependant on cut quality.')
+    st.write('- Shape: like round, princess or pear. Some are more popular than others and may be more valuable, depending on market trends.')
+    st.write('- Symmetry and polish: which are ignored, because they are dependant on cut quality in general.')
     st.write('- Subjective appreciations: for example, colored diamonds tend to be less valuable. However, a diamond with a fancy color might be valued higher simply because it looks good, or due to current trends.')
-    st.write('Those factors can be usually neglected when evaluating small diamonds; such is the case of the data set used to train the model.')
-    st.write('Therefore, the smaller the diamond passed, the better the prediction.')
+    st.write('These factors can be usually neglected when evaluating small diamonds; such is the case of the data set used to train the model.')
+    st.write('Therefore, the smaller the diamond, the better the prediction.')
