@@ -183,5 +183,4 @@ def predict_from_characteristics():
     st.write('- Shape: like round, princess or pear. Some are more popular than others and may be more valuable, depending on market trends.')
     st.write('- Symmetry and polish: which are ignored, because they are dependant on cut quality in general.')
     st.write('- Subjective appreciations: for example, colored diamonds tend to be less valuable. However, a diamond with a fancy color might be valued higher simply because it looks good, or due to current trends.')
-    st.write('These factors can be usually neglected when evaluating small diamonds; such is the case of the data set used to train the model.')
-    st.write('Therefore, the smaller the diamond, the better the prediction.')
+    st.write('These factors can be usually neglected when evaluating tiny diamonds. Therefore, the smaller the diamond, the better the prediction.')
