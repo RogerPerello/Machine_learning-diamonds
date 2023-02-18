@@ -9,7 +9,6 @@ from prediction_from_characteristics_page import predict_from_characteristics
 st.set_page_config(page_title='Diamond APPraiser', layout='wide', page_icon='💠')
 
 # Inflation variable
-inflation = None
 
 # Page selection and execution
 page_names_to_funcs = {'Introduction': set_front_page,
@@ -19,4 +18,4 @@ page_names_to_funcs = {'Introduction': set_front_page,
 
 selected_page = st.sidebar.selectbox('Sidebar menu', page_names_to_funcs.keys())
 
-page_names_to_funcs[selected_page](inflation)
+page_names_to_funcs[selected_page]()
