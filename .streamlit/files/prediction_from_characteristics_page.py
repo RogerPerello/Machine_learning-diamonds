@@ -148,25 +148,28 @@ def predict_from_characteristics():
             data_array = np.array([[input_weight, slider_cut, slider_color, slider_clarity, depth_percentage, input_lenght, input_width, input_depth]])
 
             # Inflation webscrapping
-            current_year = datetime.now().year
-            inflation_estimated = ' (inflation estimated)'
-            try:
-                url = f'https://www.in2013dollars.com/Jewelry/price-inflation/2017-to-{current_year}'
-                r = requests.get(url)
-                soup = bs(r.text, 'html.parser')
-                info = soup.find_all(class_='highlight')[0].text
-                inflation = float(re.search('^(.+)%', info)[0][:-1])
-                inflation_estimated = ''
-            except Exception:
-                inflation = (int(current_year) - 2017) * 1.78
+            if 'inflation' not in st.session_state:
+                current_year = datetime.now().year
+                inflation_estimated = ' using estimated inflation'
+                try:
+                    url = f'https://www.in2013dollars.com/Jewelry/price-inflation/2017-to-{current_year}'
+                    r = requests.get(url)
+                    soup = bs(r.text, 'html.parser')
+                    info = soup.find_all(class_='highlight')[0].text
+                    inflation = float(re.search('^(.+)%', info)[0][:-1])
+                    inflation_estimated = ''
+                except Exception:
+                    inflation = (int(current_year) - 2017) * 1.78
+                st.session_state.inflation = inflation
+                st.session_state.inflation_estimated = inflation_estimated
 
             # Prediction
             model = joblib.load('src/models/price_prediction.pkl')
             prediction = np.exp(model.predict(data_array)[0])
-            inflated_prediction = ((prediction / 100) * inflation) + prediction
+            inflated_prediction = ((prediction / 100) * st.session_state.inflation) + prediction
 
         # Prediction display
-        st.success(f'Prediction loaded{inflation_estimated}:')
+        st.success(f'Prediction loaded{st.session_state.inflation_estimated}:')
         st.write(f'Your diamond costs {str(inflated_prediction).split(".")[0] + "." + str(inflated_prediction).split(".")[1][:2]} dollars approximately.')
 
     # Limitations exposition
