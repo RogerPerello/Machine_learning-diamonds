@@ -8,8 +8,6 @@ from prediction_from_characteristics_page import predict_from_characteristics
 # Configuration
 st.set_page_config(page_title='Diamond APPraiser', layout='wide', page_icon='💠')
 
-# Inflation variable
-
 # Page selection and execution
 page_names_to_funcs = {'Introduction': set_front_page,
                        'Prediction from images': predict_from_images,
