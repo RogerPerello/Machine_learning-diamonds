@@ -99,6 +99,7 @@ def predict_from_characteristics():
     prediction_button = st.button('Begin prediction', type='primary', disabled=deactivated_button)
     if prediction_button:
         with st.spinner('Loading prediction...'):
+            time.sleep(1)
             if not input_diameter:
                 input_diameter = (input_lenght + input_width) / 2
             else:
@@ -171,11 +172,11 @@ def predict_from_characteristics():
             inflated_prediction = ((prediction / 100) * st.session_state.inflation) + prediction
 
         # Prediction display
-        time.sleep(1)
         st.success(f'Prediction loaded{st.session_state.inflation_estimated}:')
         st.write(f'Your diamond costs {str(inflated_prediction).split(".")[0] + "." + str(inflated_prediction).split(".")[1][:2]} dollars approximately.')
 
     # Limitations exposition
+    st.write('\n')
     st.subheader('The limitations')
     st.write('There are some factors that could increase or decrease the value of a diamond that are not considered:')
     st.write('- Fluorescence: a diamond with strong fluorescence can appear hazy or milky, while a diamond with no fluorescence can appear more transparent and bright.')
