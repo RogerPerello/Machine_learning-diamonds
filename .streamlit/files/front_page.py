@@ -8,6 +8,8 @@ def set_front_page():
     # Title and subtitle
     st.header('Diamond APPraiser')
     st.write('by Roger Perelló Gumbau')
+    global inflation
+    st.write(f'{inflation}')
 
     # Main image
     image = Image.open('.streamlit/images/front_picture.png').resize((1022, 400))
