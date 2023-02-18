@@ -2,11 +2,13 @@ import streamlit as st
 import numpy as np
 import joblib
 from datetime import datetime
+import time
 import requests
 from bs4 import BeautifulSoup as bs
 import re
 import sklearn
 import xgboost
+
 
 
 def predict_from_characteristics():
@@ -169,6 +171,7 @@ def predict_from_characteristics():
             inflated_prediction = ((prediction / 100) * st.session_state.inflation) + prediction
 
         # Prediction display
+        time.sleep(1)
         st.success(f'Prediction loaded{st.session_state.inflation_estimated}:')
         st.write(f'Your diamond costs {str(inflated_prediction).split(".")[0] + "." + str(inflated_prediction).split(".")[1][:2]} dollars approximately.')
 
