@@ -3,16 +3,20 @@
     <img src="/.streamlit/images/front_picture.png" width="1000">
 </p>
 
-## Objetivos
+## El resultado: Diamond APPraiser
+
+Para predecir el precio de tu diamante a partir de una foto o de sus características [haz clic aquí](https://rogerperello-machine-learning-diamon--streamlitfilesmain-bke5k8.streamlit.app/)
+
+## Los objetivos
 - Se tiene como objetivo inicial de este proyecto superar la cifra de la predicción ganadora de [una competición de Kaggle ya cerrada](https://www.kaggle.com/competitions/diamonds-part-datamad0122/).
 
 - El objetivo secundario es, mediante un segundo modelo que saque las características de un diamante a partir de su foto, obtener los datos necesarios para predecir el precio. [El "dataset" con las imágenes de los diamantes y sus características se obtiene, también, de Kaggle](https://www.kaggle.com/datasets/harshitlakhani/natural-diamonds-prices-images).
 
 - Se usa un tercer modelo en lugar del de la competición para obtener los precios a partir de esas características. Ese otro modelo se entrena con [el "dataset" original de diamantes](https://www.kaggle.com/datasets/swatikhedekar/price-prediction-of-diamond), pues su variable "target" es más precisa que la del torneo, dado que no se ha escalado ni redondeado.
 
-- Con el modelo que obtiene las características de los diamantes a partir de una foto y el modelo que predice los precios se crea, finalmente, [una "app" de Streamlit que les saca partido](https://rogerperello-machine-learning-diamon--streamlitfilesmain-bke5k8.streamlit.app/).
+- Con el modelo que obtiene las características de los diamantes a partir de una foto y el modelo que predice los precios se crea, finalmente, la "app".
 
-## Guía de carpetas
+## La guía de carpetas
 ### [.streamlit](/.streamlit)
 - Conjunto de carpetas y materiales necesarios para el funcionamiento de la "app". Puede lanzarse en local solo con ejecutar el "[launcher](/.streamlit/launcher.py)".
 ### [src](/src)
