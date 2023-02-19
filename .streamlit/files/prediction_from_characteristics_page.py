@@ -10,7 +10,6 @@ import sklearn
 import xgboost
 
 
-
 def predict_from_characteristics():
     # Title and subtitle
     st.header('Prediction from characteristics')
@@ -20,12 +19,12 @@ def predict_from_characteristics():
     # Form
     with st.form('Diamond characteristics'):
         st.subheader('Primary values')
-        st.write('Try to be precise when assigning key values.')
+        st.write('Try to be precise when assigning primary values.')
         input_weight = st.number_input('Weight (carat)', min_value=0.01, max_value=6.0, step=0.01)
         input_depth = st.number_input('Depth (millimeters)', min_value=0.01, max_value=60.0, step=0.01)
-        st.write('----- Fill only the diameter, if your diamond is rounded, or the lenght/width if it is squared -----')
+        st.write('----- Fill only the diameter, if your diamond is rounded, or the length/width if it is squared -----')
         st.write('- For squared diamonds:')
-        input_lenght = st.number_input('Lenght (millimeters)', min_value=0.0, max_value=60.0, step=0.01)
+        input_length = st.number_input('Length (millimeters)', min_value=0.0, max_value=60.0, step=0.01)
         input_width = st.number_input('Width (millimeters)', min_value=0.0, max_value=60.0, step=0.01)
         st.write('- For rounded diamonds:')
         input_diameter = st.number_input('Diameter (millimeters)', min_value=0.0, max_value=60.0, step=0.01)
@@ -72,28 +71,28 @@ def predict_from_characteristics():
                                             )
         submitted = st.form_submit_button('Submit')
         deactivated_button = True
-        if submitted and (input_diameter == 0 and input_lenght != 0 and input_width != 0):
+        if submitted and (input_diameter == 0 and input_length != 0 and input_width != 0):
             deactivated_button = False
-        elif submitted and (input_diameter != 0 and input_lenght == 0 and input_width == 0):
+        elif submitted and (input_diameter != 0 and input_length == 0 and input_width == 0):
             deactivated_button = False
-        elif submitted and (input_diameter == 0 and input_lenght == 0 and input_width == 0):
-            st.write('You assigned a value of zero to both diameter and lenght/width. Please, put a correct value to either one to ensure a proper prediction.')
-        elif submitted and (input_diameter != 0 and input_lenght != 0 and input_width != 0):
-            st.write('You assigned a value higher than zero to both diameter and lenght/width. Please, put a zero to either one to ensure a proper prediction.')
-        elif submitted and (input_diameter == 0 and input_lenght == 0 and input_width != 0):
-             st.write('You assigned a value of zero to lenght. Please, put a value higher than zero to ensure a proper prediction.')
-        elif submitted and (input_diameter == 0 and input_lenght != 0 and input_width == 0):
+        elif submitted and (input_diameter == 0 and input_length == 0 and input_width == 0):
+            st.write('You assigned a value of zero to both diameter and length/width. Please, put a correct value on either one to ensure a proper prediction.')
+        elif submitted and (input_diameter != 0 and input_length != 0 and input_width != 0):
+            st.write('You assigned a value higher than zero to both diameter and length/width. Please, put a zero on either one to ensure a proper prediction.')
+        elif submitted and (input_diameter == 0 and input_length == 0 and input_width != 0):
+             st.write('You assigned a value of zero to length. Please, put a value higher than zero to ensure a proper prediction.')
+        elif submitted and (input_diameter == 0 and input_length != 0 and input_width == 0):
              st.write('You assigned a value of zero to width. Please, put a value higher than zero to ensure a proper prediction.') 
-        elif submitted and (input_diameter != 0 and input_lenght != 0 and input_width == 0):
-             st.write('You assigned a value higher than zero to lenght. Please, put a zero to ensure a proper prediction.')
-        elif submitted and (input_diameter != 0 and input_lenght == 0 and input_width != 0):
+        elif submitted and (input_diameter != 0 and input_length != 0 and input_width == 0):
+             st.write('You assigned a value higher than zero to length. Please, put a zero to ensure a proper prediction.')
+        elif submitted and (input_diameter != 0 and input_length == 0 and input_width != 0):
              st.write('You assigned a value higher than zero to width. Please, put a zero to ensure a proper prediction.')
-        if submitted and input_diameter and not (input_lenght and input_width):
+        if submitted and input_diameter and not (input_length and input_width):
             st.write(f'Weight: {input_weight}. Depth: {input_depth}. Diameter: {input_diameter}. Cut: {slider_cut.lower()}. Color: {slider_color.lower()}. Clarity: {slider_clarity.lower()}.')
-        elif submitted and (input_lenght and input_width) and not input_diameter:
-            st.write(f'Weight: {input_weight}. Depth: {input_depth}. Lenght: {input_lenght}. Width: {input_width}. Cut: {slider_cut.lower()}. Color: {slider_color.lower()}. Clarity: {slider_clarity.lower()}.')
+        elif submitted and (input_length and input_width) and not input_diameter:
+            st.write(f'Weight: {input_weight}. Depth: {input_depth}. Length: {input_length}. Width: {input_width}. Cut: {slider_cut.lower()}. Color: {slider_color.lower()}. Clarity: {slider_clarity.lower()}.')
         elif submitted:
-            st.write(f'Weight: {input_weight}. Depth: {input_depth}. Diameter: {input_diameter}. Lenght: {input_lenght}. Width: {input_width}. Cut: {slider_cut.lower()}. Color: {slider_color.lower()}. Clarity: {slider_clarity.lower()}.')
+            st.write(f'Weight: {input_weight}. Depth: {input_depth}. Diameter: {input_diameter}. Length: {input_length}. Width: {input_width}. Cut: {slider_cut.lower()}. Color: {slider_color.lower()}. Clarity: {slider_clarity.lower()}.')
 
     # Prediction preparation
     prediction_button = st.button('Begin prediction', type='primary', disabled=deactivated_button)
@@ -101,10 +100,10 @@ def predict_from_characteristics():
         with st.spinner('Loading prediction...'):
             time.sleep(1)
             if not input_diameter:
-                input_diameter = (input_lenght + input_width) / 2
+                input_diameter = (input_length + input_width) / 2
             else:
-                input_lenght = input_diameter / 2
-                input_width = input_lenght
+                input_length = input_diameter / 2
+                input_width = input_length
             for key, value in {'Y-Z (light)': -12, 
                                 'W-X (light)': -11, 
                                 'W (light)': -10, 
@@ -147,8 +146,8 @@ def predict_from_characteristics():
                                 }.items():
                 if slider_clarity == key:
                     slider_clarity = value      
-            depth_percentage = (input_depth / ((input_lenght + input_width) / 2)) * 100
-            data_array = np.array([[input_weight, slider_cut, slider_color, slider_clarity, depth_percentage, input_lenght, input_width, input_depth]])
+            depth_percentage = (input_depth / ((input_length + input_width) / 2)) * 100
+            data_array = np.array([[input_weight, slider_cut, slider_color, slider_clarity, depth_percentage, input_length, input_width, input_depth]])
 
             # Inflation webscrapping
             if 'inflation' not in st.session_state:

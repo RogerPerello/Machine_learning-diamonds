@@ -256,7 +256,7 @@ Used after evaluate_metrics() or apply_and_evaluate_kfolds()
 
 
     def visualize(self, *metrics_selection):
-        '''Creates a lineplot with the metrics of the models. Has no return but shows a graphic for a jupiter notebook. Used after create_dataframe()
+        '''Creates a lineplot with the metrics of the models. Has no return but shows a graphic. Used after create_dataframe()
 
         Parameters
         ----------
@@ -426,17 +426,20 @@ Can use apply_models() + evaluate_metrics() instead if kfolds are not wanted
                                                             'mse': abs(np.mean(list(cross_val.values())[3:][1])), 
                                                             'mae': abs(np.mean(list(cross_val.values())[3:][2])), 
                                                             'r2_score': np.mean(list(cross_val.values())[3:][3]), 
-                                                            'mape': abs(np.mean(list(cross_val.values())[3:][4]))}
+                                                            'mape': abs(np.mean(list(cross_val.values())[3:][4]))
+                                                            }
             self.models_evaluated[model_name]['all_metrics'] = {'rmse': list(map(abs, list(cross_val.values())[3:][0])), 
-                                                            'mse': list(map(abs, list(cross_val.values())[3:][1])), 
-                                                            'mae': list(map(abs, list(cross_val.values())[3:][2])), 
-                                                            'r2_score': list(map(abs, list(cross_val.values())[3:][3])), 
-                                                            'mape': list(map(abs, list(cross_val.values())[3:][4]))}
+                                                                'mse': list(map(abs, list(cross_val.values())[3:][1])), 
+                                                                'mae': list(map(abs, list(cross_val.values())[3:][2])), 
+                                                                'r2_score': list(map(abs, list(cross_val.values())[3:][3])), 
+                                                                'mape': list(map(abs, list(cross_val.values())[3:][4]))
+                                                                }
             self.models_evaluated[model_name]['variance'] = {'rmse': np.var(list(cross_val.values())[3:][0]), 
-                                                            'mse': np.var(list(cross_val.values())[3:][1]), 
-                                                            'mae': np.var(list(cross_val.values())[3:][2]), 
-                                                            'r2_score': np.var(list(cross_val.values())[3:][3]), 
-                                                            'mape': np.var(list(cross_val.values())[3:][4])}
+                                                                'mse': np.var(list(cross_val.values())[3:][1]), 
+                                                                'mae': np.var(list(cross_val.values())[3:][2]), 
+                                                                'r2_score': np.var(list(cross_val.values())[3:][3]), 
+                                                                'mape': np.var(list(cross_val.values())[3:][4])
+                                                                }
             execution_time = time.time() - start_time
             total_time += execution_time
             print(f'- {model_name} done in {round(execution_time, 2)} sec(s). Total time: {round(total_time, 2)}')
@@ -663,15 +666,18 @@ Can use apply_models() + evaluate_metrics() instead if kfolds are not wanted
             self.models_evaluated[model_name]['metrics'] = {'accuracy': abs(np.mean(list(cross_val.values())[3:][0])), 
                                                             'recall': abs(np.mean(list(cross_val.values())[3:][1])), 
                                                             'precision': abs(np.mean(list(cross_val.values())[3:][2])), 
-                                                            'f1_score': np.mean(list(cross_val.values())[3:][3])}
+                                                            'f1_score': np.mean(list(cross_val.values())[3:][3])
+                                                            }
             self.models_evaluated[model_name]['all_metrics'] = {'accuracy': list(map(abs, list(cross_val.values())[3:][0])), 
-                                                            'recall': list(map(abs, list(cross_val.values())[3:][1])), 
-                                                            'precision': list(map(abs, list(cross_val.values())[3:][2])), 
-                                                            'f1_score': list(map(abs, list(cross_val.values())[3:][3]))}
+                                                                'recall': list(map(abs, list(cross_val.values())[3:][1])), 
+                                                                'precision': list(map(abs, list(cross_val.values())[3:][2])), 
+                                                                'f1_score': list(map(abs, list(cross_val.values())[3:][3]))
+                                                                }
             self.models_evaluated[model_name]['variance'] = {'accuracy': np.var(list(cross_val.values())[3:][0]), 
-                                                            'recall': np.var(list(cross_val.values())[3:][1]), 
-                                                            'precision': np.var(list(cross_val.values())[3:][2]), 
-                                                            'f1_score': np.var(list(cross_val.values())[3:][3])}
+                                                                'recall': np.var(list(cross_val.values())[3:][1]), 
+                                                                'precision': np.var(list(cross_val.values())[3:][2]), 
+                                                                'f1_score': np.var(list(cross_val.values())[3:][3])
+                                                                }
             execution_time = time.time() - start_time
             total_time += execution_time
             print(f'- {model_name} done in {round(execution_time, 2)} sec(s). Total time: {round(total_time, 2)}')
