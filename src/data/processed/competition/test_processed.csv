@@ -1,4 +1,4 @@
-id,weight (carat),cut quality,color quality,clarity quality,depth (percentage),table (percentage),lenght (millimeters),width (millimeters),depth (millimeters)
+id,weight (carat),cut quality,color quality,clarity quality,depth (percentage),table (percentage),length (millimeters),width (millimeters),depth (millimeters)
 0,0.32,4.0,1.0,2.0,60.5,58.0,4.43,4.49,2.7
 1,1.24,3.0,1.0,2.0,62.9,60.0,6.8,6.74,4.26
 2,1.66,3.0,6.0,2.0,62.0,59.0,7.55,7.6,4.7

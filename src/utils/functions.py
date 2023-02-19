@@ -7,9 +7,9 @@ from sklearn.metrics import mean_squared_error
 
 # Aviso: estas funciones, exceptuando "impute_boxplot_min_max" y "calculate_rmse", solo valen para este proyecto
 def remove_all(df, zeros_only=False):
-    '''Removes specific values from the diamonds dataframe'''
+    '''Removes specific values from the diamond dataframe'''
     df = df.drop(df[(df['width (millimeters)'] == 0)
-                    & (df['lenght (millimeters)'] == 0)
+                    & (df['length (millimeters)'] == 0)
                     & (df['depth (millimeters)'] == 0)
                     ].index
                 )
@@ -23,11 +23,11 @@ def remove_all(df, zeros_only=False):
 
 
 def assign_values(df, outlier=True):
-    '''Assigns especific values for the diamonds dataframe'''
-    df.loc[df['lenght (millimeters)'] == 0, 'lenght (millimeters)'] = df['width (millimeters)']
-    df.loc[df['depth (millimeters)'] == 0, 'depth (millimeters)'] = df['depth (percentage)'] / 100 * (df['lenght (millimeters)']+df['width (millimeters)']) / 2
+    '''Assigns especific values for the diamond dataframe'''
+    df.loc[df['length (millimeters)'] == 0, 'length (millimeters)'] = df['width (millimeters)']
+    df.loc[df['depth (millimeters)'] == 0, 'depth (millimeters)'] = df['depth (percentage)'] / 100 * (df['length (millimeters)']+df['width (millimeters)']) / 2
     if outlier:
-        df.loc[df['lenght (millimeters)'] > 10.7, 'lenght (millimeters)'] = 10.54
+        df.loc[df['length (millimeters)'] > 10.7, 'length (millimeters)'] = 10.54
     return df
 
 
@@ -45,14 +45,14 @@ def impute_boxplot_min_max(df, list_of_columns, min=True, max=True):
 
 
 def apply_ridge(df):
-    '''Uses ridge to impute a few outliers from the depth (millimeters) column of the diamonds dataframe'''
+    '''Uses ridge to impute a few outliers from the depth (millimeters) column of the diamond dataframe'''
     '''Requires pandas as pd, numpy as np and from sklearn.linear_model import Ridge'''
     q3, q1 = np.percentile(df['depth (millimeters)'], [75, 25])
     iqr = q3 - q1
     y_test = df[(df['depth (millimeters)'] > q3 + 1.5*iqr) | (df['depth (millimeters)'] < q1 - 1.5*iqr)]['depth (millimeters)']
     y_train = df.drop(y_test.index)['depth (millimeters)']
-    X_train = df.drop(y_test.index)[['weight (carat)', 'lenght (millimeters)', 'width (millimeters)']]
-    X_test = df[(df['depth (millimeters)'] > q3 + 1.5*iqr) | (df['depth (millimeters)'] < q1 - 1.5*iqr)][['weight (carat)', 'lenght (millimeters)', 'width (millimeters)']]
+    X_train = df.drop(y_test.index)[['weight (carat)', 'length (millimeters)', 'width (millimeters)']]
+    X_test = df[(df['depth (millimeters)'] > q3 + 1.5*iqr) | (df['depth (millimeters)'] < q1 - 1.5*iqr)][['weight (carat)', 'length (millimeters)', 'width (millimeters)']]
     ridge = Ridge()
     ridge.fit(X_train, y_train)
     y_pred = ridge.predict(X_test)
@@ -75,6 +75,6 @@ def impute_next_higher(df, log=True):
 
 
 def calculate_rmse(y_test, y_pred):
-    '''Returns rmse metric result'''
+    '''Returns root mean squared error'''
     '''Requires from sklearn.metrics import mean_squared_error'''
     return mean_squared_error(y_test, y_pred, squared=False)
