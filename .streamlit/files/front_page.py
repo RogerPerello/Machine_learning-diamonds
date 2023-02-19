@@ -27,7 +27,6 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
     st.subheader('The answer')
     st.write('As a response to that question, the Diamond APPraiser detects the weight and dimensions of a diamond, as well as its clarity, color and cut.')
     st.write('Subsequently, uses those measures to predict an approximate price.')
-    st.write('Current inflation is also taken into account thanks to [this calculator](https://www.in2013dollars.com/Jewelry/price-inflation).')
     st.subheader('How it works')
     st.write('If you have a photo of a diamond, click on "Prediction from images" from the sidebar menu.')
     st.write('Otherwise, if you prefer to point its characteristics yourself, select "Prediction from characteristics".')
@@ -35,6 +34,14 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
 
     # Additional information about the data
     with st.expander('A peek into the process'):
+        st.header('General information')
+        st.write('Current inflation is taken into account thanks to [this calculator](https://www.in2013dollars.com/Jewelry/price-inflation).')
+        st.write('There are some other factors that could increase or decrease the value of a diamond that are not considered when calculating the price:')
+        st.write('- Fluorescence: a diamond with strong fluorescence can appear hazy or milky, while a diamond with no fluorescence can appear more transparent and bright.')
+        st.write('- Shape: like round, princess or pear. Some are more popular than others and may be more valuable, depending on market trends.')
+        st.write('- Symmetry and polish: which are ignored, because they are dependant on cut quality in general.')
+        st.write('- Subjective appreciations: for example, colored diamonds tend to be less valuable. However, a diamond with a fancy color might be valued higher simply because it looks good, or due to current trends.')
+        st.write('These factors can be usually neglected when evaluating tiny diamonds. Therefore, the smaller the diamond, the better the prediction.')
         st.header('Image recognition')
         st.write('If an image of a diamond is given, the app uses a deep learning model to obtain its characteristics.')
         st.write('The dataset used to train that first model can be found [here](https://www.kaggle.com/datasets/harshitlakhani/natural-diamonds-prices-images).')
