@@ -17,7 +17,7 @@
 - Conjunto de carpetas y materiales necesarios para el funcionamiento de la "app". Puede lanzarse en local solo con ejecutar el "[launcher](/.streamlit/launcher.py)"
 ### [src](/src)
 - [data](/src/data), que contiene todos los documentos "csv" e imágenes utilizados, tanto en bruto como procesados
-- [kaggle_submission](/src/kaggle_submission), con la predicción que supera a la ganadora de la competición y una captura que lo demuestra
+- [kaggle_submission](/src/kaggle_submission), con la predicción que supera la ganadora de la competición y una captura que lo demuestra
 - [models](/src/models), donde se guardan tres modelos en formato "pickle": "[competition_only.pkl](/src/models/competition_only.pkl)", el que se usa para el torneo; "[price_prediction.pkl](/src/models/price_prediction.pkl)", el que predice los precios mejor; e "[image_prediction.pkl](/src/models/image_prediction.pkl)", el que detecta las características de un diamante a partir de la imagen correspondiente
 - [notebooks](/src/notebooks), con los "notebooks" de Jupiter numerados y documentados donde se lleva a cabo todo el proceso. Además, a modo de resumen completo, contiene un ["notebook" adicional](src/notebooks/project_resume.ipynb)
 - [utils](/src/utils), donde se almacenan las clases y funciones utilizadas
