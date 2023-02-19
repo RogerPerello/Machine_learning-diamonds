@@ -48,7 +48,7 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         st.write('The dataset used to train that first model can be found [here](https://www.kaggle.com/datasets/harshitlakhani/natural-diamonds-prices-images).')
         st.subheader('Images data sample')
         st.write('The column "Id" represents each of the images. The rest of the variables are the target.')
-        df_images = pd.read_csv('src/data/processed/images_data_processed.csv').drop(columns='price')
+        df_images = pd.read_csv('src/data/processed/images_data_processed.csv')
         data_sample_images = df_images.sample(100)
         st.write(data_sample_images)
         st.header('Price prediction')
