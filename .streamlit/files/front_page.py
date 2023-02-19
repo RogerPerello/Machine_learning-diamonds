@@ -36,7 +36,7 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
     with st.expander('A peek into the process'):
         st.header('General information')
         st.write('Current inflation is taken into account in real time thanks to [this calculator](https://www.in2013dollars.com/Jewelry/price-inflation).')
-        st.header('If the calculator stops working temporarily for some reason, such as website maintenance, inflation is estimated. If that happens, it will be notified upon prediction delivery.')
+        st.write('If the calculator stops working temporarily for some reason, such as website maintenance, inflation is estimated. If that happens, it will be notified upon prediction delivery.')
         st.write('There are some other factors that could increase or decrease the value of a diamond that are not considered when calculating the price:')
         st.write('- Fluorescence: a diamond with strong fluorescence can appear hazy or milky, while a diamond with no fluorescence can appear more transparent and bright.')
         st.write('- Shape: like "round", "princess" or "pear". Some categories are more popular than others and may be more valuable depending on market trends.')
