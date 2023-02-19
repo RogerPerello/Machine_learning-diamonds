@@ -10,7 +10,7 @@
 
 - Se usa un tercer modelo en lugar del de la competición para obtener los precios a partir de esas características. Ese otro modelo se entrena con [el "dataset" original de diamantes](https://www.kaggle.com/datasets/swatikhedekar/price-prediction-of-diamond), pues su variable "target" es más precisa que la del torneo, dado que no se ha escalado ni redondeado.
 
-- Con el modelo que obtiene las características de los diamantes a partir de una foto y el modelo que predice los precios se crea, además, [una "app" de Streamlit que les saca partido](https://rogerperello-machine-learning-diamon--streamlitfilesmain-bke5k8.streamlit.app/).
+- Con el modelo que obtiene las características de los diamantes a partir de una foto y el modelo que predice los precios se crea, finalmente, [una "app" de Streamlit que les saca partido](https://rogerperello-machine-learning-diamon--streamlitfilesmain-bke5k8.streamlit.app/).
 
 ## Guía de carpetas
 ### [.streamlit](/.streamlit)
