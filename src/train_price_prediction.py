@@ -50,6 +50,6 @@ execution_time = time.time() - start_time
 print(f'--- Training done in {round(execution_time, 2)} sec/s ---\n')
 
 # Serialization
-training.send_pickle(stacking, open('src/models/price_prediction.pkl', 'wb'))
+training.send_pickle(stacking, open('src/models/predict_from_variables/price_prediction.pkl', 'wb'))
 
 print('--- Serialization done ---')
