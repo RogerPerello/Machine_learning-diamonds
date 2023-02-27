@@ -26,7 +26,7 @@ def predict_from_images():
         st.write('If you are not sure, use the most precise scale you have at hand.')
         st.write('Then, select the metric you chose to measure it.')
         st.write('Write down the number you got from your measurements in the cell below:')
-        weight_metric = st.selectbox('How did your measure the weight?', options=['Carat', 'Grams', 'Centigrams', 'Milligrams'])
+        weight_metric = st.selectbox('How did your measure the weight?', options=['Carat', 'Grams', 'Centigrams', 'Milligrams', 'Ounces'])
         input_weight = st.number_input('Weight (carat)', min_value=0.0, max_value=6.0, step=0.01)
         st.subheader('Second step: upload')
         st.write('The image must be a .jpg file.')
@@ -46,6 +46,16 @@ def predict_from_images():
     if prediction_button:
         with st.spinner('Loading prediction...'):
             time.sleep(1)
+
+            # Weight adaptation
+            if weight_metric == 'Grams':
+                input_weight = input_weight / 0.2
+            if weight_metric == 'Centigrams':
+                input_weight = input_weight / 20
+            if weight_metric == 'Milligrams':
+                input_weight = input_weight / 200
+            if weight_metric == 'Ounces':
+                input_weight = input_weight / 0.00705479
 
             # Image resizing
             img = Image.open(image_submit)
@@ -75,7 +85,7 @@ def predict_from_images():
 
             # Second prediction
             model_knn = joblib.load('src/models/predict_from_images/price_image_prediction.pkl')
-            df_to_predict = pd.DataFrame(data={'estimated_price': first_prediction[0], 'weight': input_weight})
+            df_to_predict = pd.DataFrame(data={'predicted_price': first_prediction[0], 'weight (carat)': input_weight})
             second_prediction = model_knn.predict(df_to_predict)
 
             # Final prediction
