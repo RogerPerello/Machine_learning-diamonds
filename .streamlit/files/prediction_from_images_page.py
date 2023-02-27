@@ -97,8 +97,4 @@ def predict_from_images():
 
             # Prediction display
             st.success(f'Prediction loaded{st.session_state.inflation_estimated_2022}:')
-            st.write(f'{first_prediction}')
-            st.write(f'{second_prediction}')
-            st.write(f'{final_prediction}')
-            st.write(f'{inflated_prediction}')
             st.write(f'Your diamond costs {str(inflated_prediction).split(".")[0][2:] + "." + str(inflated_prediction).split(".")[1][:2]} dollars approximately.')
