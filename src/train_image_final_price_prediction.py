@@ -10,6 +10,7 @@ X_train, X_test, y_train, y_test = joblib.load(r'src\fixed_images_dataframe.pkl'
 
 X = np.concatenate([X_train, X_test])
 y = np.concatenate([y_train, y_test[:, 0]])
+print(X_train)
 
 # Training
 print('--- Training started ---')

@@ -10,7 +10,6 @@ import joblib
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 
-import tensorflow
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.models import load_model
 
@@ -23,7 +22,13 @@ def predict_from_images():
     
     # Form
     with st.form('Send your image'):
-        st.subheader('First step: how to upload')
+        st.subheader('First step: add the weight')
+        st.write('If you are not sure, use the most precise scale you have at hand.')
+        st.write('Then, select the metric you chose to measure it.')
+        st.write('Write down the number you got from your measurements in the cell below:')
+        weight_metric = st.selectbox('How did your measure the weight?', options=['Carat', 'Grams', 'Centigrams', 'Milligrams'])
+        input_weight = st.number_input('Weight (carat)', min_value=0.0, max_value=6.0, step=0.01)
+        st.subheader('Second step: upload')
         st.write('The image must be a .jpg file.')
         st.write('Put the diamond on a white paper and take the picture as close as you can without losing resolution.')
         st.write('The resulting photo should look as much as possible like this:')
@@ -32,12 +37,6 @@ def predict_from_images():
         st.image(image_array)
         image_submit = st.file_uploader('When you are ready, upload the image:', type='jpg')
         submitted = st.form_submit_button('Submit the image')
-        st.subheader('Second step: how to add the weight')
-        st.write('If you are not sure, use the most precise scale you have at hand.')
-        st.write('Select the chosen metric to measure it.')
-        st.write('Write down the number you get on the cell below:')
-        weight_metric = st.selectbox('How did your measure the weight?', options=['Carat', 'Grams', 'Centigrams', 'Milligrams'])
-        input_weight = st.number_input('Weight (carat)', min_value=0.0, max_value=5.0, step=0.01)
         deactivated_button = True
         if submitted and image_submit and weight_metric and input_weight > 0.0:
             deactivated_button = False
@@ -52,6 +51,7 @@ def predict_from_images():
             img = Image.open(image_submit)
             img = img.resize((224, 224))
             img_array = img_to_array(img)
+            img_array = np.expand_dims(img_array, axis=0)
 
             # Inflation webscrapping
             if 'inflation_2022' not in st.session_state:
@@ -75,15 +75,20 @@ def predict_from_images():
 
             # Second prediction
             model_knn = joblib.load('src/models/predict_from_images/price_image_prediction.pkl')
-            second_prediction = model_knn.predict(first_prediction)
+            df_to_predict = pd.DataFrame(data={'estimated_price': first_prediction[0], 'weight': input_weight})
+            second_prediction = model_knn.predict(df_to_predict)
 
             # Final prediction
             df_images_data = pd.read_csv('src/data/processed/images_data_processed.csv')
             scaler = StandardScaler()
             df_images_data['price'] = scaler.fit_transform(df_images_data[['price']])
-            final_prediction = scaler.inverse_transform(second_prediction)
+            final_prediction = scaler.inverse_transform(second_prediction.reshape(-1, 1))
             inflated_prediction = ((final_prediction / 100) * st.session_state.inflation_2022) + final_prediction
 
             # Prediction display
-            st.success(f'Prediction loaded{st.session_state.inflation_estimated_2017}:')
-            st.write(f'Your diamond costs {str(inflated_prediction).split(".")[0] + "." + str(inflated_prediction).split(".")[1][:2]} dollars approximately.')
+            st.success(f'Prediction loaded{st.session_state.inflation_estimated_2022}:')
+            st.write(f'{first_prediction}')
+            st.write(f'{second_prediction}')
+            st.write(f'{final_prediction}')
+            st.write(f'{inflated_prediction}')
+            st.write(f'Your diamond costs {str(inflated_prediction).split(".")[0][2:] + "." + str(inflated_prediction).split(".")[1][:2]} dollars approximately.')
