@@ -32,7 +32,7 @@ def predict_from_images():
         st.write('The image must be a .jpg file.')
         st.write('Put the diamond on a white paper and take the picture as close as you can without losing resolution.')
         st.write('The resulting photo should look as much as possible like this:')
-        image = Image.open('.streamlit/images/image_sample.JPG').resize((300, 300))
+        image = Image.open('.streamlit/images/image_sample.jpg').resize((300, 300))
         image_array = np.array(image)/255
         st.image(image_array)
         image_submit = st.file_uploader('When you are ready, upload the image:', type='jpg')
