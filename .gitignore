@@ -369,5 +369,7 @@ src.rar
 github_rep.txt
 
 # Raw/processed images
-*.jpg
-*.png
+src/data/processed/images/*.jpg
+src/data/processed/images/*.png
+src/data/raw/images/*.jpg
+src/data/raw/images/*.png
