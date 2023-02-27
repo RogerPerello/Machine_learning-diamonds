@@ -3,14 +3,15 @@ import joblib
 import time
 from sklearn.neighbors import KNeighborsRegressor
 
+from utils.classes import *
 
-# The dataframes are obtained using pickle
+# RENOVAR MODELO
+# The dataframe is obtained using pickle
 # If the image generator were to be used directly, the result would oscillate slightly
-X_train, X_test, y_train, y_test = joblib.load(r'src\fixed_images_dataframe.pkl')
+df_images_weight = joblib.load(r'src\fixed_images_dataframe.pkl')
 
-X = np.concatenate([X_train, X_test])
-y = np.concatenate([y_train, y_test[:, 0]])
-print(X_train)
+training = Regression(df_images_weight, 'original_price')
+X, y = training.split_dataframe(return_entire_Xy=True)
 
 # Training
 print('--- Training started ---')
@@ -32,6 +33,6 @@ execution_time = time.time() - start_time
 print(f'--- Training done in {round(execution_time, 2)} sec/s ---\n')
 
 # Serialization
-joblib.dump(model, open('src/models/predict_from_images/price_image_prediction.pkl', 'wb'))
+training.send_pickle(model, open('src/models/predict_from_images/price_image_prediction.pkl', 'wb'))
 
 print('--- Serialization done ---')
