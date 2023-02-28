@@ -18,26 +18,26 @@ start_time = time.time()
 training = Regression(df_diamonds, 'price')
 X, y = training.split_dataframe(return_entire_Xy=True)
 
-model_A = XGBRegressor(n_estimators=788, 
+model_A = XGBRegressor(n_estimators=1065, 
                         eta=0.15,
                         monotone_constraints={"weight (carat)": 1}, 
-                        subsample=0.8, 
-                        colsample_bytree=0.8, 
+                        subsample=1.0, 
+                        colsample_bytree=0.6, 
                         max_depth=6, 
-                        min_child_weight=4, 
+                        min_child_weight=8, 
                         max_delta_step=5,
                         gamma=0,
-                        reg_lambda=0.8,
-                        reg_alpha=0.6,
-                        num_parallel_tree=10
-                    )
+                        reg_lambda=1.0,
+                        reg_alpha=1.0,
+                        num_parallel_tree=9
+                        )
 
-model_B = KNeighborsRegressor(algorithm='ball_tree', 
-                            leaf_size=2,
-                            metric='cityblock', 
-                            n_neighbors=12, 
-                            weights='distance'
-                            )
+model_B = KNeighborsRegressor(algorithm='brute', 
+                                leaf_size=1,
+                                metric='cityblock', 
+                                n_neighbors=16, 
+                                weights='distance'
+                                )
 
 estimators = [('xgb', model_A), ('knn', model_B)]
 
