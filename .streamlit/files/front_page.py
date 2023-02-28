@@ -6,7 +6,7 @@ import pandas as pd
 
 def set_front_page():
     # Title and subtitle
-    st.header('Diamond APPraiser')
+    st.header('Diamond APPraiser (NOT FINISHED)')
     st.write('by Roger Perelló Gumbau')
 
     # Main image
