@@ -20,8 +20,10 @@ def predict_from_characteristics():
     with st.form('Diamond characteristics'):
         st.subheader('Primary values')
         st.write('Try to be precise when assigning primary values.')
+        st.write('Remember that the table is the flat facet on its surface, while diameter refers to the entire girdle.')
         input_weight = st.number_input('Weight (carat)', min_value=0.01, max_value=6.0, step=0.01)
         input_depth = st.number_input('Depth (millimeters)', min_value=0.01, max_value=60.0, step=0.01)
+        input_table = st.number_input('Table (millimeters)', min_value=0.01, max_value=60.0, step=0.01)
         st.write('----- Fill only the diameter, if your diamond is rounded, or the length/width if it is squared -----')
         st.write('- For squared diamonds:')
         input_length = st.number_input('Length (millimeters)', min_value=0.0, max_value=60.0, step=0.01)
@@ -147,7 +149,8 @@ def predict_from_characteristics():
                 if slider_clarity == key:
                     slider_clarity = value      
             depth_percentage = (input_depth / ((input_length + input_width) / 2)) * 100
-            data_array = np.array([[input_weight, slider_cut, slider_color, slider_clarity, depth_percentage, input_length, input_width, input_depth]])
+            input_table = (input_table * 100) / input_diameter
+            data_array = np.array([[input_weight, slider_cut, slider_color, slider_clarity, depth_percentage, input_table, input_length, input_width, input_depth]])
 
             # Inflation webscrapping
             if 'inflation_2017' not in st.session_state:
