@@ -96,6 +96,9 @@ def predict_from_characteristics():
         elif submitted:
             st.write(f'Weight: {input_weight}. Depth: {input_depth}. Diameter: {input_diameter}. Length: {input_length}. Width: {input_width}. Cut: {slider_cut.lower()}. Color: {slider_color.lower()}. Clarity: {slider_clarity.lower()}.')
 
+    # Model load
+    model = joblib.load('src/models/predict_from_variables/price_prediction.pkl')
+
     # Prediction preparation
     prediction_button = st.button('Begin prediction', type='primary', disabled=deactivated_button)
     if prediction_button:
@@ -169,7 +172,6 @@ def predict_from_characteristics():
                 st.session_state.inflation_estimated_2017 = inflation_estimated_2017
 
             # Prediction
-            model = joblib.load('src/models/predict_from_variables/price_prediction.pkl')
             prediction = np.exp(model.predict(data_array)[0])
             inflated_prediction = ((prediction / 100) * st.session_state.inflation_2017) + prediction
 
