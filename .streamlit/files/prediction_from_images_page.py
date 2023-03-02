@@ -40,6 +40,7 @@ def predict_from_images():
         st.image(image_sample)
         st.write('')
         st.write('You can try by dragging the above image to the uploader and setting the weight to 0.42 carat. To check the result, compare it with the real price of around 1812 dollars in the year 2023.')
+        st.write('This particular image comes from [77diamonds](https://www.77diamonds.com/diamonds/loose-diamonds).')
         st.write('')
         image_submit = st.file_uploader('When you are ready, upload the image:', type='jpg')
         submitted = st.form_submit_button('Submit the image')
