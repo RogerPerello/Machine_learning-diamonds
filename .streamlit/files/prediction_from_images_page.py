@@ -29,7 +29,7 @@ def predict_from_images():
         st.write('Then, select the metric you chose to measure it.')
         st.write('Write down the number you got from your measurements in the cell below:')
         weight_metric = st.selectbox('How did your measure the weight?', options=['Carat', 'Grams', 'Centigrams', 'Milligrams', 'Ounces'])
-        input_weight = st.number_input('Weight (carat)', min_value=0.0, max_value=6.0, step=0.01)
+        input_weight = st.number_input('Weight (carat)', min_value=0.0, step=0.01)
         st.subheader('Second step: upload')
         st.write('The image must be a .jpg file.')
         st.write('Put the diamond on a white paper and take the picture as close as you can without losing resolution.')
