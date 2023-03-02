@@ -55,7 +55,8 @@ train_generator = data_augmentation.flow_from_dataframe(dataframe=df_train,
                                                         x_col='Id',
                                                         y_col=list(df_images_data.columns[1:]),
                                                         seed=42,
-                                                        subset='training'
+                                                        subset='training',
+                                                        batch_size=256
                                                         )
 
 validation_generator = data_augmentation.flow_from_dataframe(dataframe=df_train,
@@ -66,7 +67,8 @@ validation_generator = data_augmentation.flow_from_dataframe(dataframe=df_train,
                                                                 x_col='Id',
                                                                 y_col=list(df_images_data.columns[1:]),
                                                                 seed=42,
-                                                                subset='validation'
+                                                                subset='validation',
+                                                                batch_size=256
                                                                 )
 
 test_generator = data_augmentation.flow_from_dataframe(dataframe=df_test,
@@ -77,6 +79,7 @@ test_generator = data_augmentation.flow_from_dataframe(dataframe=df_test,
                                                         x_col='Id',
                                                         y_col=list(df_images_data.columns[1:]),
                                                         seed=42,
+                                                        batch_size=256
                                                         )
 
 # Architecture
