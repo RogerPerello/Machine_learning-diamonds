@@ -34,7 +34,7 @@ def predict_from_images():
         st.write('The image must be a .jpg file.')
         st.write('Put the diamond on a white paper and take the picture as close as you can without losing resolution.')
         st.write('The resulting photo should look as much as possible like this:')
-        image_sample = Image.open('.streamlit/images/image_sample.jpg').resize((300, 300))
+        image_sample = Image.open('.streamlit/images/image_sample.jpg').resize((224, 224))
         st.image(image_sample)
         image_submit = st.file_uploader('When you are ready, upload the image:', type='jpg')
         submitted = st.form_submit_button('Submit the image')
@@ -68,7 +68,7 @@ def predict_from_images():
 
             # Image resizing
             img = Image.open(image_submit)
-            img = img.resize((255, 255))
+            img = img.resize((224, 224))
             img = preprocess_input(img)
             img_array = img_to_array(img)
             img_array = np.expand_dims(img_array, axis=0)
