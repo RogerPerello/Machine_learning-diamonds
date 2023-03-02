@@ -48,7 +48,7 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         # Image recognition information
         st.header('Image recognition')
         st.write('If an image of a diamond is given, the app uses a MobilenetV3Large transfer learning model to obtain an approximation its price.')
-        st.write('Then, a linear super vector machine alghoritm uses the weight of the diamond to further polish the result')
+        st.write('Afterwards, a linear support vector machine regression algorithm uses the weight of the diamond to refine the final result')
         st.write('The dataset used to train the models can be found [here](https://www.kaggle.com/datasets/harshitlakhani/natural-diamonds-prices-images).')
         st.subheader('Images data sample')
         st.write('The column "Id" represents each of the images. "Weight" is the variable added to the second model. The variable "price" is the target.')
@@ -65,7 +65,7 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         # Price prediction through caracteristics information
         st.header('Price prediction')
         st.write('If the characteristics of a diamond are passed, a supervised machine learning model trained with a large pool of diamonds decides the price.')
-        st.write('This model is created by stacking a k neighbours algorithm with an xgboost using linear regression.')
+        st.write('This model was created by stacking a k-nearest neighbors algorithm with XGBoost, using linear regression as the final estimator.')
         st.write('The dataset used to train that last model can be found [here](https://www.kaggle.com/datasets/swatikhedekar/price-prediction-of-diamond).')
         st.subheader('Prices data sample')
         st.write('The column "price" is the target.')
