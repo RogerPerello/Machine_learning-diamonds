@@ -94,7 +94,7 @@ def predict_from_characteristics():
         elif submitted and (input_length and input_width) and not input_diameter:
             st.write(f'Weight: {input_weight}. Depth: {input_depth}. Length: {input_length}. Width: {input_width}. Cut: {slider_cut.lower()}. Color: {slider_color.lower()}. Clarity: {slider_clarity.lower()}.')
         elif submitted:
-            st.write(f'Weight: {input_weight}. Depth: {input_depth}. Diameter: {input_diameter}. Length: {input_length}. Width: {input_width}. Cut: {slider_cut.lower()}. Color: {slider_color.lower()}. Clarity: {slider_clarity.lower()}.')
+            st.write(f'Weight: {input_weight}. Depth: {input_depth}. Table: {input_table}. Diameter: {input_diameter}. Length: {input_length}. Width: {input_width}. Cut: {slider_cut.lower()}. Color: {slider_color.lower()}. Clarity: {slider_clarity.lower()}.')
 
     # Model load
     model = joblib.load('src/models/predict_from_variables/price_prediction.pkl')
