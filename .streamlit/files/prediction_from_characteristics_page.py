@@ -14,7 +14,7 @@ def predict_from_characteristics():
     # Title and subtitle
     st.header('Prediction from characteristics')
     st.write('Use the attributes of a diamond to predict its price.')
-    st.write('If you prefer to simply upload a photo and write down the weight, click on "Prediction from image" from the sidebar menu.')
+    st.write('If you prefer to simply upload a photo and write down the weight, click on "Prediction from images" from the sidebar menu.')
 
     # Form
     with st.form('Diamond characteristics'):
@@ -23,16 +23,22 @@ def predict_from_characteristics():
         st.write('Remember that the table is the flat facet on its surface, while diameter refers to the entire girdle.')
         weight_metric = st.selectbox('How did your measure the weight?', options=['Carat', 'Grams', 'Centigrams', 'Milligrams', 'Ounces'])
         input_weight = st.number_input('Weight (carat)', min_value=0.01, step=0.01)
+        st.write('')
         depth_metric = st.selectbox('How did you measure the depth?', options=['Millimeters', 'Percentage'])
         input_depth = st.number_input('Depth', min_value=0.01, step=0.01)
+        st.write('')
         table_metric = st.selectbox('How did you measure the table?', options=['Millimeters', 'Percentage'])
         input_table = st.number_input('Table', min_value=0.01, step=0.01)
+        st.write('')
         st.write('----- Fill only the diameter, if your diamond is rounded, or the length/width if it is squared -----')
         st.write('- For squared diamonds:')
         input_length = st.number_input('Length (millimeters)', min_value=0.0, step=0.01)
+        st.write('')
         input_width = st.number_input('Width (millimeters)', min_value=0.0, step=0.01)
+        st.write('')
         st.write('- For rounded diamonds:')
         input_diameter = st.number_input('Diameter (millimeters)', min_value=0.0, step=0.01)
+        st.write('')
         st.subheader('Secondary values')
         st.write('Try to be precise, but if you do not know some of the secondary values, make a guess.')
         slider_cut = st.select_slider('Cut quality', options=['Fair (F)', 
@@ -42,6 +48,7 @@ def predict_from_characteristics():
                                                               'Ideal or Excelent (EX)'
                                                               ]
                                         )
+        st.write('')
         slider_color = st.select_slider('Color', options=['Y-Z (light)', 
                                                             'W-X (light)', 
                                                             'W (light)', 
@@ -63,6 +70,7 @@ def predict_from_characteristics():
                                                             'D (colorless)'
                                                             ]
                                         )
+        st.write('')
         slider_clarity = st.select_slider('Clarity (prevalence of inclusions)', options=['Included (I1)', 
                                                                                             'Slightly included 2 (SI2)', 
                                                                                             'Slightly included 1 (SI1)', 
@@ -74,6 +82,7 @@ def predict_from_characteristics():
                                                                                             'Flawless (FL)'
                                                                                         ]
                                             )
+        st.write('')
         submitted = st.form_submit_button('Submit')
         deactivated_button = True
         if submitted and (input_diameter == 0 and input_length != 0 and input_width != 0):
