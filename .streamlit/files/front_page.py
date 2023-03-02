@@ -64,7 +64,7 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
 
         # Price prediction through caracteristics information
         st.header('Price prediction')
-        st.write('If the characteristics of a diamond are passed, a supervised machine learning model trained with a large of diamonds decides the price.')
+        st.write('If the characteristics of a diamond are passed, a supervised machine learning model trained with a large pool of diamonds decides the price.')
         st.write('This model is created by stacking a k neighbours algorithm with an xgboost using linear regression.')
         st.write('The dataset used to train that last model can be found [here](https://www.kaggle.com/datasets/swatikhedekar/price-prediction-of-diamond).')
         st.subheader('Prices data sample')
