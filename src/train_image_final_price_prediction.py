@@ -18,13 +18,13 @@ print('--- Training started ---')
 
 start_time = time.time()
 
-model = KNeighborsRegressor(n_neighbors=6, 
-                            weights='distance',
-                            p=1,
-                            algorithm='brute', 
-                            metric='chebyshev', 
-                            leaf_size=1
-                            )
+model = SVR(C=4.6, 
+            epsilon=0.499,
+            gamma='scale',
+            kernel='linear', 
+            shrinking=False, 
+            tol=0.00012
+            )
 
 model.fit(X, y)
 

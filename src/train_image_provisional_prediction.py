@@ -8,11 +8,11 @@ from sklearn.model_selection import train_test_split
 from keras.preprocessing.image import ImageDataGenerator
 from keras.applications.mobilenet_v3 import MobileNetV3Large
 from keras.applications.mobilenet_v3 import preprocess_input as preprocess_input_mobilenet
-from keras.layers import Flatten, Dense, Conv2D, MaxPooling2D, Dropout, BatchNormalization
+from keras.layers import Dense, GlobalAveragePooling2D
 from keras.models import Model, save_model
 from keras.optimizers import Adam
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau
-from keras.regularizers import l2
+
 
 processed_images_path = 'src/data/processed/images'
 df_images_data= pd.read_csv('src/data/processed/images_data_processed.csv')
@@ -43,8 +43,10 @@ data_augmentation = ImageDataGenerator(rotation_range=20,
                                         zoom_range=0.1,
                                         horizontal_flip=True,
                                         vertical_flip=True,
-                                        preprocessing_function=preprocess_input_mobilenet,
                                         validation_split=0.3,
+                                        fill_mode='constant',
+                                        cval=(176+177+181) / 3,
+                                        preprocessing_function=preprocess_input_mobilenet
                                         )
 
 train_generator = data_augmentation.flow_from_dataframe(dataframe=df_train,
@@ -91,21 +93,32 @@ for layer in base_model.layers:
     layer.trainable = False
 
 top_model = base_model.output
-top_model = Conv2D(32, kernel_size=(3, 3), activation='relu', padding='same')(top_model)
-top_model = BatchNormalization()(top_model)
-top_model = MaxPooling2D(pool_size=(2, 2))(top_model)
-top_model = Flatten()(top_model)
+
+top_model = GlobalAveragePooling2D()(top_model)
+
+top_model = Dense(1024, activation='relu')(top_model)
+
+top_model = Dense(512, activation='relu')(top_model)
+
+top_model = Dense(256, activation='relu')(top_model)
+
+top_model = Dense(128, activation='relu')(top_model)
+
+top_model = Dense(64, activation='relu')(top_model)
+
+top_model = Dense(32, activation='relu')(top_model)
+
 top_model = Dense(16, activation='relu')(top_model)
-top_model = BatchNormalization()(top_model)
-top_model = Dropout(0.5)(top_model)
-top_model = Dense(4, activation='relu')(top_model)
-output_layer = Dense(1, activation='linear', kernel_regularizer=l2(0.0001))(top_model)
+
+top_model = Dense(8, activation='relu')(top_model)
+
+output_layer = Dense(1, activation='linear')(top_model)
 
 model = Model(inputs=base_model.input, outputs=output_layer)
-model.compile(optimizer=Adam(learning_rate=0.001, decay=0.001/50), loss='mse')
+model.compile(optimizer=Adam(learning_rate=0.001), loss='mse')
 
-early_stop = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
-reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=3, min_lr=0.00001)
+early_stop = EarlyStopping(monitor='val_loss', patience=6, restore_best_weights=True)
+reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=3, min_lr=0.00001)
 
 # Training
 print('--- Training started ---')
@@ -113,7 +126,7 @@ print('--- Training started ---')
 start_time = time.time()
 
 history = model.fit(train_generator,
-                    epochs=200,
+                    epochs=100,
                     batch_size=128,
                     validation_data=validation_generator,
                     callbacks=[early_stop, reduce_lr]
