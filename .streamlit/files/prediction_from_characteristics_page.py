@@ -22,8 +22,10 @@ def predict_from_characteristics():
         st.write('Try to be precise when assigning primary values.')
         st.write('Remember that the table is the flat facet on its surface, while diameter refers to the entire girdle.')
         input_weight = st.number_input('Weight (carat)', min_value=0.01, max_value=6.0, step=0.01)
-        input_depth = st.number_input('Depth (millimeters)', min_value=0.01, max_value=60.0, step=0.01)
-        input_table = st.number_input('Table (millimeters)', min_value=0.01, max_value=60.0, step=0.01)
+        depth_metric = st.selectbox('How did you measure the depth?', options=['Millimeters', 'Percentage'])
+        input_depth = st.number_input('Depth', min_value=0.01, max_value=60.0, step=0.01)
+        table_metric = st.selectbox('How did you measure the table?', options=['Millimeters', 'Percentage'])
+        input_table = st.number_input('Table', min_value=0.01, max_value=60.0, step=0.01)
         st.write('----- Fill only the diameter, if your diamond is rounded, or the length/width if it is squared -----')
         st.write('- For squared diamonds:')
         input_length = st.number_input('Length (millimeters)', min_value=0.0, max_value=60.0, step=0.01)
@@ -150,9 +152,14 @@ def predict_from_characteristics():
                                 'Flawless (FL)': 8
                                 }.items():
                 if slider_clarity == key:
-                    slider_clarity = value      
-            depth_percentage = (input_depth / ((input_length + input_width) / 2)) * 100
-            input_table = (input_table * 100) / input_diameter
+                    slider_clarity = value
+            if input_depth == 'Millimeters':
+                depth_percentage = (input_depth / input_diameter) * 100
+            if input_depth == 'Percentage':
+                depth_percentage = input_depth
+                input_depth = (input_depth * input_diameter) / 100
+            if table_metric == 'Millimeters':
+                input_table = (input_table * 100) / input_diameter
             data_array = np.array([[input_weight, slider_cut, slider_color, slider_clarity, depth_percentage, input_table, input_length, input_width, input_depth]])
 
             # Inflation webscrapping
