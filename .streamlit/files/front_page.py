@@ -47,18 +47,25 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         
         # Image recognition information
         st.header('Image recognition')
-        st.write('If an image of a diamond is given, the app uses a deep learning model to obtain an approximation its price.')
-        st.write('Then, a second machine learning model uses the weight of the diamond to further tune the target')
+        st.write('If an image of a diamond is given, the app uses a MobilenetV3Large transfer learning model to obtain an approximation its price.')
+        st.write('Then, a linear super vector machine alghoritm uses the weight of the diamond to further polish the result')
         st.write('The dataset used to train the models can be found [here](https://www.kaggle.com/datasets/harshitlakhani/natural-diamonds-prices-images).')
         st.subheader('Images data sample')
-        st.write('The column "Id" represents each of the images. "Weight (carat)" is the variable added to the second model. The variable "price" is the target.')
+        st.write('The column "Id" represents each of the images. "Weight" is the variable added to the second model. The variable "price" is the target.')
         df_images = pd.read_csv('src/data/processed/images_data_processed.csv')[['Weight','price']]
         data_sample_images = df_images.sample(100)
         st.write(data_sample_images)
-        
+        st.write('When split and tested with the "y_test", the model gives the following results:')
+        st.write('- Root mean squared error (rmse): 346.892')
+        st.write('- Mean squared error (mse): 120334.110')
+        st.write('- Mean absolute error (mae): 260.244')
+        st.write('- Mean absolute percentage error (mape): 0.175')
+        st.write('- R2 score: 0.619')
+
         # Price prediction through caracteristics information
         st.header('Price prediction')
         st.write('If the characteristics of a diamond are passed, a supervised machine learning model trained with a large of diamonds decides the price.')
+        st.write('This model is created by stacking a k neighbours algorithm with an xgboost using linear regression.')
         st.write('The dataset used to train that last model can be found [here](https://www.kaggle.com/datasets/swatikhedekar/price-prediction-of-diamond).')
         st.subheader('Prices data sample')
         st.write('The column "price" is the target.')
