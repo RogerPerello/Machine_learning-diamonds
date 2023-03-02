@@ -21,17 +21,18 @@ def predict_from_characteristics():
         st.subheader('Primary values')
         st.write('Try to be precise when assigning primary values.')
         st.write('Remember that the table is the flat facet on its surface, while diameter refers to the entire girdle.')
-        input_weight = st.number_input('Weight (carat)', min_value=0.01, max_value=6.0, step=0.01)
+        weight_metric = st.selectbox('How did your measure the weight?', options=['Carat', 'Grams', 'Centigrams', 'Milligrams', 'Ounces'])
+        input_weight = st.number_input('Weight (carat)', min_value=0.01, step=0.01)
         depth_metric = st.selectbox('How did you measure the depth?', options=['Millimeters', 'Percentage'])
-        input_depth = st.number_input('Depth', min_value=0.01, max_value=60.0, step=0.01)
+        input_depth = st.number_input('Depth', min_value=0.01, step=0.01)
         table_metric = st.selectbox('How did you measure the table?', options=['Millimeters', 'Percentage'])
-        input_table = st.number_input('Table', min_value=0.01, max_value=60.0, step=0.01)
+        input_table = st.number_input('Table', min_value=0.01, step=0.01)
         st.write('----- Fill only the diameter, if your diamond is rounded, or the length/width if it is squared -----')
         st.write('- For squared diamonds:')
-        input_length = st.number_input('Length (millimeters)', min_value=0.0, max_value=60.0, step=0.01)
-        input_width = st.number_input('Width (millimeters)', min_value=0.0, max_value=60.0, step=0.01)
+        input_length = st.number_input('Length (millimeters)', min_value=0.0, step=0.01)
+        input_width = st.number_input('Width (millimeters)', min_value=0.0, step=0.01)
         st.write('- For rounded diamonds:')
-        input_diameter = st.number_input('Diameter (millimeters)', min_value=0.0, max_value=60.0, step=0.01)
+        input_diameter = st.number_input('Diameter (millimeters)', min_value=0.0, step=0.01)
         st.subheader('Secondary values')
         st.write('Try to be precise, but if you do not know some of the secondary values, make a guess.')
         slider_cut = st.select_slider('Cut quality', options=['Fair (F)', 
@@ -92,9 +93,9 @@ def predict_from_characteristics():
         elif submitted and (input_diameter != 0 and input_length == 0 and input_width != 0):
              st.write('You assigned a value higher than zero to width. Please, put a zero to ensure a proper prediction.')
         if submitted and input_diameter and not (input_length and input_width):
-            st.write(f'Weight: {input_weight}. Depth: {input_depth}. Diameter: {input_diameter}. Cut: {slider_cut.lower()}. Color: {slider_color.lower()}. Clarity: {slider_clarity.lower()}.')
+            st.write(f'Weight: {input_weight}. Depth: {input_depth}. Table: {input_table}. Diameter: {input_diameter}. Cut: {slider_cut.lower()}. Color: {slider_color.lower()}. Clarity: {slider_clarity.lower()}.')
         elif submitted and (input_length and input_width) and not input_diameter:
-            st.write(f'Weight: {input_weight}. Depth: {input_depth}. Length: {input_length}. Width: {input_width}. Cut: {slider_cut.lower()}. Color: {slider_color.lower()}. Clarity: {slider_clarity.lower()}.')
+            st.write(f'Weight: {input_weight}. Depth: {input_depth}. Table: {input_table}. Length: {input_length}. Width: {input_width}. Cut: {slider_cut.lower()}. Color: {slider_color.lower()}. Clarity: {slider_clarity.lower()}.')
         elif submitted:
             st.write(f'Weight: {input_weight}. Depth: {input_depth}. Table: {input_table}. Diameter: {input_diameter}. Length: {input_length}. Width: {input_width}. Cut: {slider_cut.lower()}. Color: {slider_color.lower()}. Clarity: {slider_clarity.lower()}.')
 
@@ -153,14 +154,25 @@ def predict_from_characteristics():
                                 }.items():
                 if slider_clarity == key:
                     slider_clarity = value
-            if input_depth == 'Millimeters':
-                depth_percentage = (input_depth / input_diameter) * 100
-            if input_depth == 'Percentage':
+
+            # Units conversion
+            if weight_metric == 'Grams':
+                input_weight = input_weight / 0.2
+            if weight_metric == 'Centigrams':
+                input_weight = input_weight / 20
+            if weight_metric == 'Milligrams':
+                input_weight = input_weight / 200
+            if weight_metric == 'Ounces':
+                input_weight = input_weight / 0.00705479
+            if depth_metric == 'Millimeters':
+                depth_percentage = (input_depth/input_diameter) * 100
+            if depth_metric == 'Percentage':
                 depth_percentage = input_depth
-                input_depth = (input_depth * input_diameter) / 100
+                input_depth = (input_depth*input_diameter) / 100
             if table_metric == 'Millimeters':
-                input_table = (input_table * 100) / input_diameter
+                input_table = (input_table*100) / input_diameter
             data_array = np.array([[input_weight, slider_cut, slider_color, slider_clarity, depth_percentage, input_table, input_length, input_width, input_depth]])
+            st.write(data_array)
 
             # Inflation webscrapping
             if 'inflation_2017' not in st.session_state:

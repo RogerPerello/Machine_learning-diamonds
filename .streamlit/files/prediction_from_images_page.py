@@ -57,7 +57,7 @@ def predict_from_images():
         with st.spinner('Loading prediction...'):
             time.sleep(1)
 
-            # Weight adaptation
+            # Unit conversion
             if weight_metric == 'Grams':
                 input_weight = input_weight / 0.2
             if weight_metric == 'Centigrams':
