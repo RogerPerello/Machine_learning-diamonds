@@ -34,7 +34,7 @@ def predict_from_images():
         st.write('The image must be a .jpg file.')
         st.write('Place the diamond on a white paper and take the picture as close as you can without losing resolution.')
         st.write('The resulting photo should have a white/grey background and the diamond should be centered and well-lit, with no shadows or reflections obscuring its features:')
-        image_sample = Image.open('.streamlit/images/image_sample.jpg').resize((224, 224))
+        image_sample = Image.open('.streamlit/images/image_sample.jpg').resize((484, 380))
         st.image(image_sample)
         st.write('You can try by dragging the above image to the uploader and setting the weight to 0.42 carat. To check the result, compare it with the real price of around 1812 dollars in the year 2023.')
         image_submit = st.file_uploader('When you are ready, upload the image:', type='jpg')
