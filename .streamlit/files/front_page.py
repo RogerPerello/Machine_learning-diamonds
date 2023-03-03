@@ -51,9 +51,10 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         st.write('Afterwards, a linear support vector machine regression algorithm uses the weight of the diamond to refine the final result.')
         st.write('The dataset used to train the models can be found [here](https://www.kaggle.com/datasets/harshitlakhani/natural-diamonds-prices-images).')
         st.subheader('Images data sample')
-        st.write('The column "Id" represents each of the images. "Weight" is the variable added to the second model. The variable "price" is the target.')
+        st.write('The column "id" represents each of the images. "weight" is the variable added to the second model. The variable "price" is the target.')
         df_images = pd.read_csv('src/data/processed/images_data_processed.csv')[['Weight','price']]
-        df_images['Id'] = df_images.index
+        df_images['id'] = df_images.index
+        df_images = df_images.rename(columns={'Weight': 'weight'})
         df_images = df_images.reset_index()
         data_sample_images = df_images.sample(100)
         st.write(data_sample_images)
