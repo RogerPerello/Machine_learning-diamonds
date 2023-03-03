@@ -53,7 +53,8 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         st.subheader('Images data sample')
         st.write('The column "id" represents each of the images. "weight" is the variable added to the second model. The variable "price" is the target.')
         df_images = pd.read_csv('src/data/processed/images_data_processed.csv')[['Weight','price']]
-        df_images['id'] = df_images.index.apply(lambda x: x + '.jpg')
+        df_images['id'] = df_images.index
+        df_images['id'] = df_images['id'].apply(lambda x: x + '.jpg')
         df_images = df_images.rename(columns={'Weight': 'weight'})
         df_images = df_images.reset_index(drop=True)
         data_sample_images = df_images.sample(100)
