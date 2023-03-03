@@ -55,6 +55,7 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         df_images = pd.read_csv('src/data/processed/images_data_processed.csv')[['Weight','price']]
         data_sample_images = df_images.sample(100)
         st.write(data_sample_images)
+        st.subheader('Metrics')
         st.write('When split and tested with the "y_test", the model gives the following results:')
         st.write('- Root mean squared error (rmse): 346.892')
         st.write('- Mean squared error (mse): 120334.110')
@@ -72,7 +73,7 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         df_prices = pd.read_csv('src/data/processed/original_processed.csv')
         data_sample_prices = df_prices.sample(100)
         st.write(data_sample_prices)
-        st.subheader('Price prediction metrics')
+        st.subheader('Metrics')
         st.write('When split and tested with the "y_test", the model gives the following results:')
         st.write('- Root mean squared error (rmse): 514.513')
         st.write('- Mean squared error (mse): 264723.399')
