@@ -44,7 +44,7 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         st.write('- Symmetry and polish: which are ignored, because they are dependent on cut quality in general.')
         st.write('- Subjective appreciations: for example, colored diamonds tend to be less valuable. However, a diamond with a fancy color might be valued higher simply because it looks good, or due to current trends.')
         st.write('These factors can usually be neglected when evaluating tiny diamonds. Therefore, the smaller the diamond, the better the prediction.')
-        
+
         # Image recognition information
         st.header('Image recognition')
         st.write('If an image of a diamond is given, the app uses a MobilenetV3Large transfer learning model to obtain an approximation its price.')
@@ -53,9 +53,9 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         st.subheader('Images data sample')
         st.write('The column "id" represents each of the images. "weight" is the variable added to the second model. The variable "price" is the target.')
         df_images = pd.read_csv('src/data/processed/images_data_processed.csv')[['Weight','price']]
-        df_images['id'] = df_images.index
+        df_images['id'] = df_images.index.apply(lambda x: x + '.jpg')
         df_images = df_images.rename(columns={'Weight': 'weight'})
-        df_images = df_images.reset_index()
+        df_images = df_images.reset_index(drop=True)
         data_sample_images = df_images.sample(100)
         st.write(data_sample_images)
         st.subheader('Metrics')
