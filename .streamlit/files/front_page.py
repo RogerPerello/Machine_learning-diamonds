@@ -48,7 +48,7 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         # Image recognition information
         st.header('Image recognition')
         st.write('If an image of a diamond is given, the app uses a MobilenetV3Large transfer learning model to obtain an approximation its price.')
-        st.write('Afterwards, a linear support vector machine regression algorithm uses the weight of the diamond to refine the final result.')
+        st.write('Afterwards, a support vector machine regression algorithm (rbf) uses the weight of the diamond to refine the final result.')
         st.write('The dataset used to train the models can be found [here](https://www.kaggle.com/datasets/harshitlakhani/natural-diamonds-prices-images).')
         st.subheader('Images data sample')
         st.write('The column "id" represents each of the images. "weight" is the variable added to the second model. The variable "price" is the target.')
