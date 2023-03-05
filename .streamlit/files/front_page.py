@@ -35,7 +35,8 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
     with st.expander('A peek into the process'):
         # General information
         st.header('General Information')
-        st.write('The weight of the diamonds to be predicted is limited to 1.5 carats to ensure an optimal level of accuracy while still covering the majority of diamonds.')
+        st.write('[Here](https://github.com/RogerPerello/Machine_learning-diamonds) is the link to the repository in GitHub.')
+        st.write('The weight of the diamonds to be predicted is limited to 1 carat to ensure an optimal level of accuracy while still covering the majority of diamonds.')
         st.write('Current inflation is taken into account in real-time using [this calculator](https://www.in2013dollars.com/Jewelry/price-inflation).')
         st.write('If the calculator stops working temporarily due to website maintenance or other reasons, inflation is estimated, and you will be notified upon prediction delivery.')
         st.write('There are other factors that could increase or decrease the value of a diamond that are not considered when calculating the price:')
