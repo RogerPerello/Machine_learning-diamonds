@@ -34,7 +34,7 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
     # Additional information
     with st.expander('A peek into the process'):
         # General information
-        st.header('Prediction from Images')
+        st.header('General Information')
         st.write('The weight of the diamonds to be predicted is limited to 2 carats to ensure an optimal level of accuracy while still covering the majority of diamonds.')
         st.write('Current inflation is taken into account in real-time using [this calculator](https://www.in2013dollars.com/Jewelry/price-inflation).')
         st.write('If the calculator stops working temporarily due to website maintenance or other reasons, inflation is estimated, and you will be notified upon prediction delivery.')
@@ -46,7 +46,7 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         st.write('These factors can usually be neglected when evaluating tiny diamonds. Therefore, the smaller the diamond, the better the prediction.')
 
         # Image recognition information
-        st.header('Image Recognition')
+        st.header('Prediction from Images')
         st.write('If an image of a diamond is provided, the app uses a MobilenetV3Large transfer learning model to approximate its price.')
         st.write('Afterwards, a support vector machine regression algorithm (rbf) uses the weight of the diamond to refine the final result.')
         st.write('The dataset used to train the models can be found [here](https://www.kaggle.com/datasets/harshitlakhani/natural-diamonds-prices-images).')
