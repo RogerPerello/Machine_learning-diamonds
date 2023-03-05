@@ -17,12 +17,11 @@ print('--- Training started ---')
 
 start_time = time.time()
 
-model = SVR(C=5.088,
-                epsilon=0.25,
-                gamma='scale',
-                kernel='rbf',
-                shrinking=False,
-                tol=0.069
+model = SVR(C=3.02,
+            epsilon=0.516,
+            kernel='linear',
+            shrinking=True,
+            tol=0.04
             )
 
 model.fit(X, y)

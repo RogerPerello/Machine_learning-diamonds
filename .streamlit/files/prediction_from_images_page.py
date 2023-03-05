@@ -18,9 +18,9 @@ from tensorflow.keras.applications.efficientnet import preprocess_input
 def predict_from_images():
 
     # Title and subtitle
-    st.header('Prediction from images')
+    st.header('Prediction from Images')
     st.write('Use the photo of a diamond and its weight to predict the price.')
-    st.write('If you prefer to add its characteristics yourself, click on "Prediction from characteristics" from the sidebar menu.')
+    st.write('If you prefer to add its characteristics yourself, click on "Prediction from Characteristics" from the sidebar menu.')
     
     # Form
     with st.form('Send your image'):

@@ -10,8 +10,8 @@ st.set_page_config(page_title='Diamond APPraiser', layout='wide', page_icon='ðŸ’
 
 # Page selection and execution
 page_names_to_funcs = {'Introduction': set_front_page,
-                       'Prediction from images': predict_from_images,
-                       'Prediction from characteristics': predict_from_characteristics
+                       'Prediction from Images': predict_from_images,
+                       'Prediction from Characteristics': predict_from_characteristics
                         }
 
 selected_page = st.sidebar.selectbox('Sidebar menu', page_names_to_funcs.keys())

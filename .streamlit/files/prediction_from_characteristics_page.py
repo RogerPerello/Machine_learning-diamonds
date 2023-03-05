@@ -12,15 +12,15 @@ import xgboost
 
 def predict_from_characteristics():
     # Title and subtitle
-    st.header('Prediction from characteristics')
+    st.header('Prediction from Characteristics')
     st.write('Use the attributes of a diamond to predict its price.')
-    st.write('If you prefer to simply upload a photo and write down the weight, click on "Prediction from images" from the sidebar menu.')
+    st.write('Alternatively, if you prefer to simply upload a photo and write down the weight, click on "Prediction from Images" from the sidebar menu.')
 
     # Form
     with st.form('Diamond characteristics'):
         st.subheader('Primary values')
         st.write('Try to be precise when assigning primary values.')
-        st.write('Remember that the table is the flat facet on its surface, while diameter refers to the entire girdle.')
+        st.write("Remember that the table is the flat facet on the diamond's surface, while diameter refers to the entire girdle.")
         input_weight = st.number_input('Weight (carat)', min_value=0.01, max_value=2.00, step=0.01)
         st.write('')
         depth_metric = st.selectbox('How did you measure the depth?', options=['Millimeters', 'Percentage'])
