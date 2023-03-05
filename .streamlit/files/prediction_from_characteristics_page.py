@@ -164,14 +164,6 @@ def predict_from_characteristics():
                     slider_clarity = value
 
             # Units conversion
-            if weight_metric == 'Grams':
-                input_weight = input_weight / 0.2
-            if weight_metric == 'Centigrams':
-                input_weight = input_weight / 20
-            if weight_metric == 'Milligrams':
-                input_weight = input_weight / 200
-            if weight_metric == 'Ounces':
-                input_weight = input_weight / 0.00705479
             if depth_metric == 'Millimeters':
                 depth_percentage = (input_depth/input_diameter) * 100
             if depth_metric == 'Percentage':
