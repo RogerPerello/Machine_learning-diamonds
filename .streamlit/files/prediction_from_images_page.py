@@ -28,7 +28,7 @@ def predict_from_images():
         st.write('If you are not sure, use the most precise scale you have at hand.')
         st.write('Remember that 1 gram equals 5 carat.')
         st.write('Write down the number you got from your measurements in the cell below:')
-        input_weight = st.number_input('Weight (carat)', min_value=0.0, max_value=2.0, step=0.01)
+        input_weight = st.number_input('Weight (carat)', min_value=0.01, max_value=2.0, step=0.01)
         st.write('')
         st.subheader('Second step: upload')
         st.write('The image must be a .jpg file.')
