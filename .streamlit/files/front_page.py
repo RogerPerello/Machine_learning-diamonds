@@ -71,7 +71,7 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         st.header('Prediction from Characteristics')
         st.write('Given the characteristics of a diamond, the app uses a machine learning model to predict its price. The model is a supervised learning algorithm created by stacking a k-nearest neighbors algorithm with XGBoost and using linear regression as the final estimator.')
         st.write('The model was trained with a large dataset of diamonds and has been optimized to provide accurate predictions for diamonds up to 2 carats in weight.')
-        st.write('The dataset used to train the model can be found on Kaggle at the following link: [https://www.kaggle.com/datasets/swatikhedekar/price-prediction-of-diamond](https://www.kaggle.com/datasets/swatikhedekar/price-prediction-of-diamond).')
+        st.write('The dataset used to train the model can be found on Kaggle [here](https://www.kaggle.com/datasets/swatikhedekar/price-prediction-of-diamond).')
         st.subheader('Prices Data Sample')
         st.write('Here is a sample of the diamond data used to train the model. The "price" column is the target variable:')
         df_prices = pd.read_csv('src/data/processed/original_processed.csv')
