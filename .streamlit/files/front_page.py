@@ -34,7 +34,7 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
     # Additional information
     with st.expander('A peek into the process'):
         # General information
-        st.header('General Information')
+        st.header('Prediction from Images')
         st.write('The weight of the diamonds to be predicted is limited to 2 carats to ensure an optimal level of accuracy while still covering the majority of diamonds.')
         st.write('Current inflation is taken into account in real-time using [this calculator](https://www.in2013dollars.com/Jewelry/price-inflation).')
         st.write('If the calculator stops working temporarily due to website maintenance or other reasons, inflation is estimated, and you will be notified upon prediction delivery.')
@@ -67,8 +67,8 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         st.write('- Mean absolute percentage error (MAPE): 0.175')
         st.write('- R2 score: 0.619')
 
-        # Price prediction through caracteristics information
-        st.header('Price prediction')
+        # Price prediction through characteristics information
+        st.header('Prediction from Characteristics')
         st.write('Given the characteristics of a diamond, the app uses a machine learning model to predict its price. The model is a supervised learning algorithm created by stacking a k-nearest neighbors algorithm with XGBoost and using linear regression as the final estimator.')
         st.write('The model was trained with a large dataset of diamonds and has been optimized to provide accurate predictions for diamonds up to 2 carats in weight.')
         st.write('The dataset used to train the model can be found on Kaggle at the following link: [https://www.kaggle.com/datasets/swatikhedekar/price-prediction-of-diamond](https://www.kaggle.com/datasets/swatikhedekar/price-prediction-of-diamond).')
