@@ -28,7 +28,7 @@ Para predecir el precio de tu diamante a partir de una foto o de sus caracterís
 
 ### ¿Que solución se aporta?
 
-- Se ofrece una aproximación del precio de un diamante a partir de sus características o de su imagen, siempre y cuando este no supere los 2 quilates. Para los que son más grandes es recomendable acudir a un profesional; como el precio de venta del diamante será alto, saldrá a cuenta el servicio
+- Se ofrece una aproximación del precio de un diamante a partir de sus características o de su imagen, siempre y cuando este no supere los 1.5 quilates. Para los que son más grandes es recomendable acudir a un profesional; como el precio de venta del diamante será alto, saldrá a cuenta el servicio
 
 ### ¿Qué modelos se han probado?
 
