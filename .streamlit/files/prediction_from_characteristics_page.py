@@ -196,4 +196,4 @@ def predict_from_characteristics():
 
         # Prediction display
         st.success(f'Prediction loaded{st.session_state.inflation_estimated_2017}:')
-        st.write(f'That kind of diamond usually costs {str(inflated_prediction).split(".")[0] + "." + str(inflated_prediction).split(".")[1][:2]} dollars approximately.')
+        st.write(f'That kind of diamond usually costs around {str(inflated_prediction).split(".")[0] + "." + str(inflated_prediction).split(".")[1][:2]} dollars.')
