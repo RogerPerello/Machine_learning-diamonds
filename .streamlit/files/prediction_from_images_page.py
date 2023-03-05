@@ -26,10 +26,9 @@ def predict_from_images():
     with st.form('Send your image'):
         st.subheader('First step: add the weight')
         st.write('If you are not sure, use the most precise scale you have at hand.')
-        st.write('Then, select the metric you used to measure it.')
+        st.write('Remember that 1 gram equals 5 carat.')
         st.write('Write down the number you got from your measurements in the cell below:')
-        weight_metric = st.selectbox('How did your measure the weight?', options=['Carat', 'Grams', 'Centigrams', 'Milligrams', 'Ounces'])
-        input_weight = st.number_input('Weight', min_value=0.0, step=0.01)
+        input_weight = st.number_input('Weight (carat)', min_value=0.0, max_value=2.0, step=0.01)
         st.write('')
         st.subheader('Second step: upload')
         st.write('The image must be a .jpg file.')
@@ -45,7 +44,7 @@ def predict_from_images():
         image_submit = st.file_uploader('When you are ready, upload the image:', type='jpg')
         submitted = st.form_submit_button('Submit the image')
         deactivated_button = True
-        if submitted and image_submit and weight_metric and input_weight > 0.0:
+        if submitted and image_submit and input_weight > 0.0:
             deactivated_button = False
 
     # Loads
@@ -61,16 +60,6 @@ def predict_from_images():
     if prediction_button:
         with st.spinner('Loading prediction...'):
             time.sleep(1)
-
-            # Unit conversion
-            if weight_metric == 'Grams':
-                input_weight = input_weight / 0.2
-            if weight_metric == 'Centigrams':
-                input_weight = input_weight / 20
-            if weight_metric == 'Milligrams':
-                input_weight = input_weight / 200
-            if weight_metric == 'Ounces':
-                input_weight = input_weight / 0.00705479
 
             # Image resizing
             img = Image.open(image_submit)
