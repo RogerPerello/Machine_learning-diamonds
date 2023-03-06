@@ -10,9 +10,9 @@ import joblib
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 
-from tensorflow.keras.preprocessing.image import img_to_array
-from tensorflow.keras.models import load_model
-from tensorflow.keras.applications.efficientnet import preprocess_input
+from keras.preprocessing.image import img_to_array
+from keras.models import load_model
+from keras.applications.efficientnet import preprocess_input
 
 
 def predict_from_images():
@@ -49,11 +49,10 @@ def predict_from_images():
 
     # Loads
     model_cnn = load_model('src/models/predict_from_images/price_prediction_images.h5')
-    model_knn = joblib.load('src/models/predict_from_images/price_image_prediction.pkl')
+    model_svr = joblib.load('src/models/predict_from_images/price_image_prediction.pkl')
     df_images_data = pd.read_csv('src/data/processed/images_data_processed.csv')
     scaler = StandardScaler()
     df_images_data['price'] = scaler.fit_transform(df_images_data[['price']])
-
 
     # Prediction preparation
     prediction_button = st.button('Begin prediction', type='primary', disabled=deactivated_button)
@@ -89,7 +88,7 @@ def predict_from_images():
 
             # Second prediction
             df_to_predict = pd.DataFrame(data={'predicted_price': first_prediction[0], 'Weight': input_weight})
-            second_prediction = model_knn.predict(df_to_predict)
+            second_prediction = model_svr.predict(df_to_predict)
 
             # Final prediction
             final_prediction = scaler.inverse_transform(second_prediction.reshape(-1, 1))
