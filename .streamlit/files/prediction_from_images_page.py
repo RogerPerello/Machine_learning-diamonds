@@ -21,7 +21,7 @@ def predict_from_images():
     st.header('Prediction from Images')
     st.write('Use the photo of a diamond and its weight to predict the price.')
     st.write('If you prefer to add its characteristics yourself, click on "Prediction from Characteristics" from the sidebar menu.')
-    st.write('Please bear in mind that the outcome is a generalization, and the cost of diamonds possessing comparable features may fluctuate.')
+    st.write('Please bear in mind that the outcome is a generalization, and the cost of diamonds possessing comparable features may fluctuate. Refer to the introduction for clarification.')
     
     # Form
     with st.form('Send your image'):
