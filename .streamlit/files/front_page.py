@@ -30,6 +30,16 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
     st.write('If you have a photo of a diamond and its weight, click on "Prediction from Images" in the sidebar menu.')
     st.write('Otherwise, if you prefer to specify all its characteristics yourself, select "Prediction from Characteristics".')
     st.write('Through the dropdown below, you may check some of the inner workings of the app.')
+    st.subheader('Limitations')
+    st.write('The weight of the diamonds to be predicted is limited to 1 carat to ensure an optimal level of accuracy while still covering the majority of diamonds.')
+    st.write('There are other factors that could increase or decrease the value of a diamond that are not considered when calculating the price:')
+    st.write('- Fluorescence: a diamond with strong fluorescence can appear hazy or milky, while a diamond with no fluorescence can appear more transparent and bright.')
+    st.write('- Shape: categories like "round", "princess", or "pear" may be more valuable depending on scarcity.')
+    st.write('- Symmetry and polish: these are sometimes ignored because they depend on cut quality in general.')
+    st.write('- Market trends: colored diamonds tend to be less valuable. However, a diamond with a fancy color might be valued higher simply because it looks good, or due to current trends.')
+    st.write('- Subjective appreciations: for example, two 1 carat diamonds with the same attributes may differ in final price by 1000 dollars due to subjective appraisal.')
+    st.write('- Other factors, such as the size of the culet or other characteristics that can be observed by inspecting the back of the diamond, may not be considered, especially when predicting diamond characteristics from images.')
+    st.write('These factors can usually be neglected when evaluating tiny diamonds. Therefore, the smaller the diamond, the better the prediction.')
 
     # Additional information
     with st.expander('A peek into the process'):
@@ -37,14 +47,11 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         st.header('General Information')
         st.write('[Here](https://github.com/RogerPerello/Machine_learning-diamonds) is the link to the repository in GitHub.')
         st.write('The weight of the diamonds to be predicted is limited to 1 carat to ensure an optimal level of accuracy while still covering the majority of diamonds.')
+
+        # Inflation
+        st.header('About Inflation')
         st.write('Current inflation is taken into account in real-time using [this calculator](https://www.in2013dollars.com/Jewelry/price-inflation).')
         st.write('If the calculator stops working temporarily due to website maintenance or other reasons, inflation is estimated, and you will be notified upon prediction delivery.')
-        st.write('There are other factors that could increase or decrease the value of a diamond that are not considered when calculating the price:')
-        st.write('- Fluorescence: a diamond with strong fluorescence can appear hazy or milky, while a diamond with no fluorescence can appear more transparent and bright.')
-        st.write('- Shape: categories like "round", "princess", or "pear" may be more valuable depending on market trends.')
-        st.write('- Symmetry and polish: these are ignored because they depend on cut quality in general.')
-        st.write('- Subjective appreciations: for example, colored diamonds tend to be less valuable. However, a diamond with a fancy color might be valued higher simply because it looks good, or due to current trends.')
-        st.write('These factors can usually be neglected when evaluating tiny diamonds. Therefore, the smaller the diamond, the better the prediction.')
 
         # Image recognition information
         st.header('Prediction from Images')
