@@ -15,7 +15,7 @@ def predict_from_characteristics():
     st.header('Prediction from Characteristics')
     st.write('Use the attributes of a diamond to predict its price.')
     st.write('Alternatively, if you prefer to simply upload a photo and write down the weight, click on "Prediction from Images" from the sidebar menu.')
-    st.write('Keep in mind that the result is a generalization, and the price of diamonds with similar characteristics may oscilate a lot.')
+    st.write('Please bear in mind that the outcome is a generalization, and the cost of diamonds possessing comparable features may fluctuate.')
 
     # Form
     with st.form('Diamond characteristics'):
