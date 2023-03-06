@@ -10,9 +10,9 @@ import joblib
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 
-from keras.preprocessing.image import img_to_array
-from keras.models import load_model
-from keras.applications.efficientnet import preprocess_input
+from tensorflow.keras.preprocessing.image import img_to_array
+from tensorflow.keras.models import load_model
+from tensorflow.keras.applications.efficientnet import preprocess_input
 
 
 def predict_from_images():
