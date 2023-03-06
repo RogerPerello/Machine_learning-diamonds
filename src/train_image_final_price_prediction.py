@@ -7,7 +7,7 @@ from utils.classes import *
 
 # The dataframe is obtained using pickle
 # If the image generator were to be used directly, the result would oscillate slightly
-df_images_weight = joblib.load(r'src\fixed_images_dataframe_inverted.pkl')
+df_images_weight = joblib.load(r'src\fixed_images_dataframe.pkl')
 
 training = Regression(df_images_weight, 'original_price')
 X, y = training.split_dataframe(return_entire_Xy=True)
@@ -17,14 +17,12 @@ print('--- Training started ---')
 
 start_time = time.time()
 
-model = RandomForestRegressor(n_estimators=227,
-                                criterion='absolute_error',
-                                max_depth=6,
-                                min_samples_split=13,
-                                min_samples_leaf=1,
-                                max_features='log2',
-                                oob_score=False,
-                                )
+model = SVR(C=3.02,
+            epsilon=0.516,
+            kernel='linear',
+            shrinking=True,
+            tol=0.04
+            )
 
 model.fit(X, y)
 

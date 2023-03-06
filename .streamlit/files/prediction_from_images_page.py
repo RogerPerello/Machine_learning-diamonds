@@ -92,7 +92,8 @@ def predict_from_images():
             second_prediction = model_knn.predict(df_to_predict)
 
             # Final prediction
-            inflated_prediction = ((second_prediction / 100) * st.session_state.inflation_2022) + second_prediction
+            final_prediction = scaler.inverse_transform(second_prediction.reshape(-1, 1))
+            inflated_prediction = ((final_prediction / 100) * st.session_state.inflation_2022) + final_prediction
 
             # Prediction display
             st.success(f'Prediction loaded{st.session_state.inflation_estimated_2022}:')
