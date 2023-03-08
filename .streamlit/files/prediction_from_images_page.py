@@ -12,7 +12,7 @@ import pandas as pd
 
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.models import load_model
-from tensorflow.keras.applications.efficientnet import preprocess_input
+from tensorflow.keras.applications.mobilenet_v3 import preprocess_input
 
 
 def predict_from_images():
