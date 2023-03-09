@@ -68,11 +68,11 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         st.write(data_sample_images)
         st.subheader('Performance')
         st.write('The model was evaluated on a test dataset, and the following metrics were obtained:')
-        st.write('- Root mean squared error (RMSE): 346.892')
-        st.write('- Mean squared error (MSE): 120334.110')
-        st.write('- Mean absolute error (MAE): 260.244')
-        st.write('- Mean absolute percentage error (MAPE): 0.175')
-        st.write('- R2 score: 0.619')
+        st.write('- Root mean squared error (RMSE): 346.654')
+        st.write('- Mean squared error (MSE): 120169.250')
+        st.write('- Mean absolute error (MAE): 260.263')
+        st.write('- Mean absolute percentage error (MAPE): 0.176')
+        st.write('- R2 score: 0.620')
 
         # Price prediction through characteristics information
         st.header('Prediction from Characteristics')
