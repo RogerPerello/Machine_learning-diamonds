@@ -15,7 +15,7 @@ def predict_from_characteristics():
     st.header('Prediction from Characteristics')
     st.write('Use the attributes of a diamond to predict its price.')
     st.write('Alternatively, if you prefer to simply upload a photo and write down the weight, click on "Prediction from Images" from the sidebar menu.')
-    st.write('Please bear in mind that the outcome is a generalization, and the cost of diamonds possessing comparable features may fluctuate. Refer to the introduction for clarification.')
+    st.write('Please bear in mind that the outcome is a generalization, and the cost of diamonds possessing comparable features may fluctuate. All diamonds are considered to have excellent symmetry; otherwise, the price will look inflated. Refer to the introduction for clarification.')
 
     # Form
     with st.form('Diamond characteristics'):
@@ -192,8 +192,9 @@ def predict_from_characteristics():
 
             # Prediction
             prediction = np.exp(model.predict(data_array)[0])
-            inflated_prediction = ((prediction / 100) * st.session_state.inflation_2017) + prediction
+            # inflated_prediction = ((prediction / 100) * st.session_state.inflation_2017) + prediction
+            inflated_prediction = prediction
 
         # Prediction display
         st.success(f'Prediction loaded{st.session_state.inflation_estimated_2017}:')
-        st.write(f'A possible price for your diamond is {str(inflated_prediction).split(".")[0] + "." + str(inflated_prediction).split(".")[1][:2]} dollars.')
+        st.write(f'A possible price for your diamond, considering excellent symmetry, is {str(inflated_prediction).split(".")[0] + "." + str(inflated_prediction).split(".")[1][:2]} dollars.')
