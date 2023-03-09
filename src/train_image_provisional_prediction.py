@@ -19,7 +19,6 @@ df_images_data= pd.read_csv('src/data/processed/images_data_processed.csv')
 
 # CAUTION: The "generator" gives different images every time
 # It is unavoidable, so this model will be slightly different if loaded again
-# The final model on "streamlit" won't be altered, since is trained with de data from "fixed_images_dataframe.pkl"
 # Is not advisable to train this model without GPU, since it can be rather slow
 
 # Preprocessing

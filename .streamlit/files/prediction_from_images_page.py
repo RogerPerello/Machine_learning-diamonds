@@ -18,7 +18,7 @@ from tensorflow.keras.applications.mobilenet_v3 import preprocess_input
 def predict_from_images():
 
     # Title and subtitle
-    st.header('Prediction from Images (to be improved)')
+    st.header('Prediction from Images (alpha)')
     st.write('Use the photo of a diamond and its weight to predict the price.')
     st.write('If you prefer to add its characteristics yourself, click on "Prediction from Characteristics" from the sidebar menu.')
     st.write('Please bear in mind that the outcome is a generalization, and the cost of diamonds possessing comparable features may fluctuate. Refer to the introduction for clarification.')

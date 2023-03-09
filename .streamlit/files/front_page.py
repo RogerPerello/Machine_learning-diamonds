@@ -27,7 +27,7 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
     st.subheader('The Answer')
     st.write('The Diamond APPraiser detects the weight and dimensions of a diamond, as well as its clarity, color, and cut to predict an approximate price.')
     st.subheader('How It Works')
-    st.write('If you have a photo of a diamond and its weight, click on "Prediction from Images" in the sidebar menu.')
+    st.write('If you have a photo of a diamond and its weight, click on "Prediction from Images" in the sidebar menu (alpha).')
     st.write('Otherwise, if you prefer to specify all its characteristics yourself, select "Prediction from Characteristics".')
     st.write('Through the dropdown below, you may check some of the inner workings of the app.')
     st.subheader('Limitations')
