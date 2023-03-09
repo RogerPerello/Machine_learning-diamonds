@@ -18,7 +18,7 @@ from tensorflow.keras.applications.mobilenet_v3 import preprocess_input
 def predict_from_images():
 
     # Title and subtitle
-    st.header('Prediction from Images')
+    st.header('Prediction from Images (to be improved)')
     st.write('Use the photo of a diamond and its weight to predict the price.')
     st.write('If you prefer to add its characteristics yourself, click on "Prediction from Characteristics" from the sidebar menu.')
     st.write('Please bear in mind that the outcome is a generalization, and the cost of diamonds possessing comparable features may fluctuate. Refer to the introduction for clarification.')
@@ -97,4 +97,4 @@ def predict_from_images():
             # Prediction display
             st.success(f'Prediction loaded{st.session_state.inflation_estimated_2022}:')
             st.write(f'A possible price for your diamond is {str(inflated_prediction).split(".")[0][2:] + "." + str(inflated_prediction).split(".")[1][:2]} dollars.')
-            st.write('Keep in mind that characteristics that can be observed by inspecting the back of the diamond are not considered. Therefore, the price will change if those are relevant for your diamond.')
+            st.write('Keep in mind that characteristics that can be observed by inspecting the back of the diamond are not yet considered. Therefore, the price will change if those are relevant for your diamond.')
