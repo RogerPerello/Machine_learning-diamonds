@@ -33,13 +33,13 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
     st.subheader('Limitations')
     st.write('- Symmetry: for the "Prediction from Characteristics", every diamond is supposed to have excellent symmetry. If the characteristics of a diamond with a lower simmetry are passed, the result will be inflated.')
     st.write('- Taxes: the resulting price only includes taxes that were paid in the country of origin or any other taxes that are typically built into the cost of the diamond.')
-    st.write('- Other factors, such as the size of the culet or other characteristics that can be observed by inspecting the back of the diamond, are not considered for now when predicting diamond characteristics from images.')
+    st.write('- Other factors, such as the size of the culet or other characteristics that can be observed by inspecting the back of the diamond, are not considered for now when predicting diamond price from images. That is why that part of the app is still in alpha; there is room for improvement.')
     st.write('There are other factors that could increase or decrease the value of a diamond that are not considered when calculating the price:')
     st.write('- Fluorescence: a diamond with strong fluorescence can appear hazy or milky, while a diamond with no fluorescence can appear more transparent and bright.')
     st.write('- Shape: categories like "round", "princess", or "pear" may be more valuable depending on scarcity.')
     st.write('- Market trends: colored diamonds tend to be less valuable. However, a diamond with a fancy color might be valued higher simply because it looks good, or due to current trends.')
     st.write('- Subjective appreciations: for example, two 1 carat diamonds with the same attributes may differ in final price due to subjective appraisal.')
-    st.write('These factors can usually be neglected when evaluating tiny diamonds. Therefore, the smaller the diamond, the better the prediction.')
+    st.write('These factors can sometimes be neglected when evaluating tiny diamonds. Therefore, the smaller the diamond, the better the prediction.')
 
     # Additional information
     with st.expander('A peek into the process'):
@@ -78,7 +78,7 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
         # Price prediction through characteristics information
         st.header('Prediction from Characteristics')
         st.write('Given the characteristics of a diamond, the app uses a machine learning model to predict its price. The model is a supervised learning algorithm created by stacking a k-nearest neighbors algorithm with XGBoost and using linear regression as the final estimator.')
-        st.write('The model was trained with a large dataset of diamonds and has been optimized to provide accurate predictions for diamonds up to 1.5 carats in weight.')
+        st.write('The model was trained with a large dataset of diamonds and has been optimized to provide predictions for diamonds up to 1 carat in weight (with "excellent" simmetry).')
         st.write('The dataset used to train the model can be found on Kaggle [here](https://www.kaggle.com/datasets/swatikhedekar/price-prediction-of-diamond).')
         st.subheader('Prices Data Sample')
         st.write('Here is a sample of the diamond data used to train the model. The "price" column is the target variable:')
