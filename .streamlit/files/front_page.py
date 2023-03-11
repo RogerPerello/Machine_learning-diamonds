@@ -31,7 +31,7 @@ Those deposits are prospected and mined. Then, the diamonds are sliced, studied,
     st.write('Otherwise, if you prefer to specify all its characteristics yourself, select "Prediction from Characteristics".')
     st.write('Through the dropdown below, you may check some of the inner workings of the app.')
     st.subheader('Limitations')
-    st.write('- Symmetry: for the "Prediction from Characteristics", every diamond is supposed to have excellent symmetry. If the characteristics of a diamond with a lower simmetry are passed, the result will be inflated.')
+    st.write('- Symmetry: for the "Prediction from Characteristics", every diamond is expected to have excellent symmetry and near to no fluorescence. Otherwise, the result will be inflated.')
     st.write('- Taxes: the resulting price only includes taxes that were paid in the country of origin or any other taxes that are typically built into the cost of the diamond.')
     st.write('- Other factors, such as the size of the culet or other characteristics that can be observed by inspecting the back of the diamond, are not considered for now when predicting diamond price from images. That is why that part of the app is still in alpha; there is room for improvement.')
     st.write('There are other factors that could increase or decrease the value of a diamond that are not considered when calculating the price:')
