@@ -21,6 +21,21 @@ Para predecir el precio de tu diamante a partir de una foto o de sus caracterís
 
 - En cuanto al autor de las imágenes de los diamantes, también en Kaggle, [las ha obtenido con "webscrapping"](https://capitalwholesalediamonds.com/)
 
+## La guía de carpetas
+
+### [.streamlit](/.streamlit)
+- Conjunto de carpetas y materiales necesarios para el funcionamiento de la "app". Puede lanzarse en local solo con ejecutar el "[launcher](/.streamlit/launcher.py)"
+### [src](/src)
+- [data](/src/data), que contiene todos los documentos "csv" e imágenes utilizados, tanto en bruto como procesados
+- [kaggle_submission](/src/kaggle_submission), con la predicción que supera la ganadora de la competición y una captura que lo demuestra
+- [models](/src/models), donde se guardan cuatro modelos en formato comprimido en sus respectivas carpetas: [predict_from_variables](/src/models/predict_from_variables), que contiene el que se usa para el torneo (competition_only.pkl) y el que predice los precios en función de sus características para la "app" (price_prediction.pkl), y [predict_from_images](/src/models/predict_from_images), con el modelo de "transfer learning" que predice un precio provisional a partir de una imagen (price_prediction_images.h5) y el que mejora el resultado a partir de esa estimación y el peso de los diamantes (price_image_prediction.pkl)
+- [notebooks](/src/notebooks), con los "notebooks" de Jupiter numerados y documentados donde se lleva a cabo todo el proceso (carpeta project). Además, a modo de resumen completo, contiene un ["notebook" adicional](src/notebooks/project_resume.ipynb)
+- [resources](/src/resources), con "dashboards" (incompleto)
+- [utils](/src/utils), donde se almacenan las clases y funciones utilizadas
+- [train_competition_only.py](/src/train_competition_only.py), que entrena el mejor modelo para la competición
+- [train_price_prediction.py](/src/train_price_prediction.py), que entrena el mejor modelo para la predicción de precios a partir de características en la "app"
+- [train_image_provisional_prediction.py](/src/train_image_provisional_prediction.py), que entrena el mejor modelo para la predicción provisional de un precio de un diamante a partir de su foto
+- [train_image_final_price_prediction.py](/src/train_image_final_price_prediction.py), que entrena el mejor modelo para la mejora del resultado provisional al tener en cuenta el peso de los diamantes
 
 ## FAQ
 
@@ -69,18 +84,3 @@ Para predecir el precio a partir de las imágenes:
 - Añadiendo a cada imagen un punto de referencia, como un simple lápiz o un dedo, que sirviese al modelo para deducir el tamaño de los diamantes
 
 - Obteniendo una muestra mayor, que incluyese más diamantes con precios altos
-
-## La guía de carpetas
-### [.streamlit](/.streamlit)
-- Conjunto de carpetas y materiales necesarios para el funcionamiento de la "app". Puede lanzarse en local solo con ejecutar el "[launcher](/.streamlit/launcher.py)"
-### [src](/src)
-- [data](/src/data), que contiene todos los documentos "csv" e imágenes utilizados, tanto en bruto como procesados
-- [kaggle_submission](/src/kaggle_submission), con la predicción que supera la ganadora de la competición y una captura que lo demuestra
-- [models](/src/models), donde se guardan cuatro modelos en formato comprimido en sus respectivas carpetas: [predict_from_variables](/src/models/predict_from_variables), que contiene el que se usa para el torneo (competition_only.pkl) y el que predice los precios en función de sus características para la "app" (price_prediction.pkl), y [predict_from_images](/src/models/predict_from_images), con el modelo de "transfer learning" que predice un precio provisional a partir de una imagen (price_prediction_images.h5) y el que mejora el resultado a partir de esa estimación y el peso de los diamantes (price_image_prediction.pkl)
-- [notebooks](/src/notebooks), con los "notebooks" de Jupiter numerados y documentados donde se lleva a cabo todo el proceso (carpeta project). Además, a modo de resumen completo, contiene un ["notebook" adicional](src/notebooks/project_resume.ipynb)
-- [resources](/src/resources), con "dashboards" (incompleto)
-- [utils](/src/utils), donde se almacenan las clases y funciones utilizadas
-- [train_competition_only.py](/src/train_competition_only.py), que entrena el mejor modelo para la competición
-- [train_price_prediction.py](/src/train_price_prediction.py), que entrena el mejor modelo para la predicción de precios a partir de características en la "app"
-- [train_image_provisional_prediction.py](/src/train_image_provisional_prediction.py), que entrena el mejor modelo para la predicción provisional de un precio de un diamante a partir de su foto
-- [train_image_final_price_prediction.py](/src/train_image_final_price_prediction.py), que entrena el mejor modelo para la mejora del resultado provisional al tener en cuenta el peso de los diamantes
