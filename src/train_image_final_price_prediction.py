@@ -7,7 +7,7 @@ from utils.classes import *
 
 # The dataframe is obtained using pickle
 # If the image generator were to be used directly, the result would oscillate slightly
-df_images_weight = joblib.load(r'src\fixed_images_dataframe.pkl')
+df_images_weight = joblib.load('src/fixed_images_dataframe.pkl')
 
 training = Regression(df_images_weight, 'original_price')
 X, y = training.split_dataframe(return_entire_Xy=True)
