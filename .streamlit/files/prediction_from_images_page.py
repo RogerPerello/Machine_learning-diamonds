@@ -79,7 +79,7 @@ def predict_from_images():
                     inflation_2022 = float(re.search('^(.+)%', info)[0][:-1])
                     inflation_estimated_2022 = ''
                 except Exception:
-                    inflation_2022 = (int(current_year) - 2017) * 1.78
+                    inflation_2022 = (int(current_year) - 2022) * 7.37
                 st.session_state.inflation_2022 = inflation_2022
                 st.session_state.inflation_estimated_2022 = inflation_estimated_2022
 
