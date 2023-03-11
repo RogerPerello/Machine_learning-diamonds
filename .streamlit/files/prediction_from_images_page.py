@@ -97,4 +97,4 @@ def predict_from_images():
             # Prediction display
             st.success(f'Prediction loaded{st.session_state.inflation_estimated_2022}:')
             st.write(f'A possible price for your diamond is {str(inflated_prediction).split(".")[0][2:] + "." + str(inflated_prediction).split(".")[1][:2]} dollars.')
-            st.write('Keep in mind that characteristics that can be observed by inspecting the back of the diamond are not considered. Therefore, the price will change if those are relevant for your diamond.')
+            st.write(' Characteristics that can be observed by inspecting the back of the diamond are not considered. Therefore, the price will change if those are relevant for your diamond.')
