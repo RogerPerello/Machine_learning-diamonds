@@ -5,7 +5,7 @@
 
 ## El resultado: Diamond APPraiser
 
-Para predecir el precio de tu diamante a partir de una foto o de sus características [haz clic aquí](https://rogerperello-machine-learning-diamon--streamlitfilesmain-bke5k8.streamlit.app/)
+Para predecir el precio de tu diamante a partir de una foto o de sus características [haz clic aquí](https://rogerperello-machine-learning-diamon--streamlitfilesmain-3usi8k.streamlit.app/)
 
 ## Los objetivos
 
