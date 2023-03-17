@@ -30,7 +30,6 @@ Para predecir el precio de tu diamante a partir de una foto o de sus caracterís
 - [kaggle_submission](/src/kaggle_submission), con la predicción que supera la ganadora de la competición y una captura que lo demuestra
 - [models](/src/models), donde se guardan cuatro modelos en formato comprimido en sus respectivas carpetas: [predict_from_variables](/src/models/predict_from_variables), que contiene el que se usa para el torneo (competition_only.pkl) y el que predice los precios en función de sus características para la "app" (price_prediction.pkl), y [predict_from_images](/src/models/predict_from_images), con el modelo de "transfer learning" que predice un precio provisional a partir de una imagen (price_prediction_images.h5) y el que mejora el resultado a partir de esa estimación y el peso de los diamantes (price_image_prediction.pkl)
 - [notebooks](/src/notebooks), con los "notebooks" de Jupiter numerados y documentados donde se lleva a cabo todo el proceso (carpeta project). Además, a modo de resumen completo, contiene un ["notebook" adicional](src/notebooks/project_resume.ipynb)
-- [resources](/src/resources), con "dashboards" (incompleto)
 - [utils](/src/utils), donde se almacenan las clases y funciones utilizadas
 - [train_competition_only.py](/src/train_competition_only.py), que entrena el mejor modelo para la competición
 - [train_price_prediction.py](/src/train_price_prediction.py), que entrena el mejor modelo para la predicción de precios a partir de características en la "app"
