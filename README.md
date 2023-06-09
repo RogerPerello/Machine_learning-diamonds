@@ -15,7 +15,7 @@ Para predecir el precio de tu diamante a partir de una foto o de sus caracterís
 
 - El objetivo secundario, no esencial del proyecto y decidido a posteriori, es predecir el precio a partir de una imagen. Esto se hace con una combinación de modelos. [El "dataset" con las imágenes de los diamantes y sus características se obtiene, también, de Kaggle](https://www.kaggle.com/datasets/harshitlakhani/natural-diamonds-prices-images)
 
-- Con los modelos que obtienen el precio a partir de una foto y el que predice los precios a partir de sus características se crea, además, [una "app" de Streamlit que les saca partido](https://rogerperello-machine-learning-diamon--streamlitfilesmain-bke5k8.streamlit.app/). Como la predicción a partir de imágenes no es del todo eficaz, ya que solo se dispone de fotos de una cara de los diamantes, en la "app" ese apartado se marca como en fase "alpha"
+- Con los modelos que obtienen el precio a partir de una foto y el que predice los precios a partir de sus características se crea, además, [una "app" de Streamlit que les saca partido](https://rogerperello-machine-learning-diamon--streamlitfilesmain-3usi8k.streamlit.app/). Como la predicción a partir de imágenes no es del todo eficaz, ya que solo se dispone de fotos de una cara de los diamantes, en la "app" ese apartado se marca como en fase "alpha"
 
 - La fuente del "dataframe" de competición y el original, según señala el autor en Kaggle, es esta: "[Tiffany & Co's snapshot pricelist from 2017](https://www.chegg.com/homework-help/questions-and-answers/data-source-tiffany-co-s-snapshot-price-list-2017-data-detail-ofiginal-dataset-peblishod-t-q103429046)" 
 
